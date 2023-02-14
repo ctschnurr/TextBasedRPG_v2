@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
+
     internal class EventManager
     {
+
+
         static void MainMenu()
         {
             int next = 3;
