@@ -6,15 +6,44 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
-     
     internal class EventManager
     {
-        static void MainMenu()
+        static public MapManager atlas = new MapManager();
+
+        static public bool redraw = true;
+
+        public static int height = atlas.menuFrame.GetLength(0) + 2;
+        public static int width = atlas.menuFrame.GetLength(1) + 2;
+
+        public static void EventCheck(char destination, Character subject)
+        {
+            if (subject.type == "player")
+            {
+                switch (destination)
+                {
+                    case (char)2:
+                        // start a battle
+                        BattleSystem.Battle(subject, Program.enemy);
+                    break;
+
+                    case '▀':
+                        // heal spot
+                        break;
+                }
+            }
+
+            if (subject.type == "enemy")
+            {
+
+            }
+        }
+        public static void MainMenu()
         {
             int next = 3;
 
             RefreshWindow();
-            MapManager.DrawMap(Program.atlas.menuFrame);
+            MapManager.DrawMap(atlas.menuFrame);
+
             Console.SetCursorPosition(4, next);
             Console.WriteLine("WELCOME TO THE GRAVEYARD!");
             next += 2;
@@ -35,8 +64,11 @@ namespace TextBasedRPG_v2
             switch (choice.Key)
             {
                 default:
+
+                    // write up an Instructions .txt and treat it as a map in itself, so it can be brought up easily whenever player wants it
+
                     RefreshWindow();
-                    getMap.DrawMap(getMap.blank_frame);
+                    MapManager.DrawMap(atlas.menuFrame);
                     next = 5;
                     Console.SetCursorPosition(8, next);
                     Console.WriteLine("¡Θ¡");
@@ -59,16 +91,16 @@ namespace TextBasedRPG_v2
 
                     Console.SetCursorPosition(4, next);
                     Console.Write("Before we begin, please enter your name: ");
-                    player.name = Console.ReadLine();
+                    Program.player.name = Console.ReadLine();
 
                     break;
 
                 case ConsoleKey.Q:
-                    gameOver = true;
+                    Program.gameOver = true;
                     break;
             }
         }
-        static void RefreshWindow()
+        public static void RefreshWindow()
         {
             if (Console.WindowHeight != height || Console.WindowWidth != width)
             {
@@ -79,7 +111,7 @@ namespace TextBasedRPG_v2
         }
 
         // have this reference the tile the player is standing on/moving to, and if its the preset healer character, then heal. Take out the hard coded coords.
-        static void HealCheck(Character player)
+        public static void HealCheck(Character player)
         {
             if (player.x == 44 && player.y == 19)
             {

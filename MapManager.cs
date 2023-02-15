@@ -13,19 +13,19 @@ namespace TextBasedRPG_v2
         int mapwidth;
         int mapheight;
         public char[,] menuFrame;
-        char[,] overWorld;
+        public char[,] overWorld;
 
         public MapManager()
         {
             walkables = new char[] { ' ', '▒', '▀' };
 
-            mapData = System.IO.File.ReadAllLines(@"/Assets/menuFrame.txt");
+            mapData = System.IO.File.ReadAllLines("./Assets/menuFrame.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
 
             menuFrame = mapEater(mapData, mapheight, mapwidth);
 
-            mapData = System.IO.File.ReadAllLines(@"/Assets/overWorld.txt");
+            mapData = System.IO.File.ReadAllLines("./Assets/overWorld.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
 
@@ -38,14 +38,18 @@ namespace TextBasedRPG_v2
 
             for (int x = 0; x < data.Length; x++)
             {
-                char[] eatmap = data[x].ToCharArray();
-                Array.Copy(eatmap, 0, storage, x, eatmap.Length);
+                int next = 0;
+                foreach (char character in data[x])
+                {
+                    storage[x, next] = character;
+                    next++;
+                }
             }
 
             return storage;
         }
 
-        public void DrawMap(char[,] map)
+        static public void DrawMap(char[,] map)
         {
             Console.Clear();
             int mapHeight = map.GetLength(0);
@@ -66,7 +70,7 @@ namespace TextBasedRPG_v2
             }
         }
 
-        private void DrawTile(char tile)
+        public static void DrawTile(char tile)
         {
             switch (tile)
             {
