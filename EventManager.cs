@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
-
+     
     internal class EventManager
     {
-
-
         static void MainMenu()
         {
             int next = 3;
 
             RefreshWindow();
-            getMap.DrawMap(getMap.blank_frame);
+            MapManager.DrawMap(Program.atlas.menuFrame);
             Console.SetCursorPosition(4, next);
             Console.WriteLine("WELCOME TO THE GRAVEYARD!");
             next += 2;
@@ -70,7 +68,23 @@ namespace TextBasedRPG_v2
                     break;
             }
         }
+        static void RefreshWindow()
+        {
+            if (Console.WindowHeight != height || Console.WindowWidth != width)
+            {
+                Console.SetWindowSize(width, height);
+                Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
+                redraw = true;
+            }
+        }
+
+        // have this reference the tile the player is standing on/moving to, and if its the preset healer character, then heal. Take out the hard coded coords.
+        static void HealCheck(Character player)
+        {
+            if (player.x == 44 && player.y == 19)
+            {
+                player.health = player.healthMax;
+            }
+        }
     }
-
-
 }
