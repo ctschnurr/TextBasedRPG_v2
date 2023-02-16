@@ -17,9 +17,14 @@ namespace TextBasedRPG_v2
         public string type;
         public int[] spawn = new int[] { 0, 0 };
         public ConsoleColor color;
+        public char character;
 
         public int x;
         public int y;
+        public int lastX;
+        public int lastY;
+
+        // I'm building a better DrawCharacter() in MapManager, delete this once thats done
         public void Draw(int charX, int charY, char character)
         {
             Console.SetCursorPosition(charX, charY);

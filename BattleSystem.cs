@@ -150,7 +150,7 @@ namespace TextBasedRPG_v2
 
         static void ReDraw()
         {
-            MapManager.DrawMap(EventManager.atlas.menuFrame);
+            MapManager.DrawMenu(EventManager.atlas.menuFrame);
             Program.player.ShowHud();
             Program.enemy.ShowHud();
         }
@@ -195,7 +195,7 @@ namespace TextBasedRPG_v2
                 if (next > 36)
                 {
                     Console.Clear();
-                    MapManager.DrawMap(EventManager.atlas.menuFrame);
+                    MapManager.DrawMenu(EventManager.atlas.menuFrame);
                     next = 2;
                 }
 

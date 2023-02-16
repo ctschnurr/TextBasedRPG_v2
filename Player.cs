@@ -8,9 +8,9 @@ namespace TextBasedRPG_v2
 {
     internal class Player : Character
     {
-        public char character = (char)1;
         public Player()
         {
+            character = (char)1;
             name = "Player";
             healthMax = 100;
             health = healthMax;
@@ -29,10 +29,11 @@ namespace TextBasedRPG_v2
             Console.WriteLine(name.PadRight(name.Length + 1) + ": Health: " + hudHealth.PadRight(5) + "Lives: " + lives);
         }
 
-        public void Update(char[,] map, Character self)
+        public void Update(char[][,] input, Character self)
         {
             bool isWalkable;
             char destination = ' ';
+            char[,] map = input[0];
 
             ConsoleKeyInfo choice = Console.ReadKey(true);
 
@@ -53,6 +54,7 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        lastY = y;
                         y--;
                         break;
                     }
@@ -67,6 +69,7 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        lastY = y;
                         y++;
                         break;
                     }
@@ -81,6 +84,7 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        lastX = x;
                         x--;
                         break;
                     }
@@ -95,6 +99,7 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        lastX = x;
                         x++;
                         break;
                     }

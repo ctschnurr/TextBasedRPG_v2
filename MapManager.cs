@@ -13,7 +13,10 @@ namespace TextBasedRPG_v2
         int mapwidth;
         int mapheight;
         public char[,] menuFrame;
-        public char[,] overWorld;
+
+        public char[,] overWorld_map;
+        public char[,] overWorld_data;
+        public char[][,] overWorld;
 
         public MapManager()
         {
@@ -29,7 +32,13 @@ namespace TextBasedRPG_v2
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
 
-            overWorld = mapEater(mapData, mapheight, mapwidth);
+            overWorld_map = mapEater(mapData, mapheight, mapwidth);
+            overWorld_data = overWorld_map;
+
+            overWorld = new char[2][,];
+
+            overWorld[0] = overWorld_map;
+            overWorld[1] = overWorld_data;
         }
 
         private char[,] mapEater(string[] data, int height, int width)
@@ -49,9 +58,10 @@ namespace TextBasedRPG_v2
             return storage;
         }
 
-        static public void DrawMap(char[,] map)
+        static public void DrawMap(char[][,] input)
         {
             Console.Clear();
+            char[,] map = input[0];
             int mapHeight = map.GetLength(0);
             int mapWidth = map.GetLength(1);
 
@@ -65,6 +75,25 @@ namespace TextBasedRPG_v2
                     DrawTile(tile);
 
                     // Console.ResetColor();
+                }
+
+            }
+        }
+
+        static public void DrawMenu(char[,] input)
+        {
+            Console.Clear();
+            int mapHeight = input.GetLength(0);
+            int mapWidth = input.GetLength(1);
+
+            for (int mapX = 0; mapX < mapHeight; mapX++)
+            {
+                Console.SetCursorPosition(2, mapX + 1);
+                for (int mapY = 0; mapY < mapWidth; mapY++)
+                {
+                    char tile = input[mapX, mapY];
+
+                    DrawTile(tile);
                 }
 
             }
@@ -132,6 +161,32 @@ namespace TextBasedRPG_v2
             }
 
             return goTime;
+        }
+
+        public static void DrawCharacter(char[][,] input, Character subject)
+        {
+            char[,] map = input[0];
+            char[,] data = input[1];
+
+            // draw over character's last position on screen with the approapriate tile from the reference map
+            Console.SetCursorPosition(subject.lastY, subject.lastX);
+            char tile = map[subject.lastY, subject.lastX];
+            DrawTile(tile);
+
+            // make that same chance in the map data
+            data[subject.lastY, subject.lastX] = tile;
+
+            //draw the character on screen in the new position
+            Console.SetCursorPosition(subject.y, subject.x);
+            Console.ForegroundColor = subject.color;
+            Console.WriteLine(subject.character);
+            Console.ResetColor();
+
+            // save their new position in the map data
+            data[subject.y, subject.x] = subject.character;
+
+            // send that to the MapManager, I think?
+            input[1] = data;
         }
     }
 }

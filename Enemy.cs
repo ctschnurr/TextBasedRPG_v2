@@ -15,12 +15,12 @@ namespace TextBasedRPG_v2
             {"Monster","20","7" },
         };
 
-        public char character = (char)2;
         public Enemy()
         {
             Random rand = new Random();
             int roll = rand.Next(0, 3);
 
+            character = (char)2;
             name = enemies[roll, 0];
             type = "npc";
             health = Int32.Parse(enemies[roll, 1]);
@@ -37,10 +37,11 @@ namespace TextBasedRPG_v2
             Console.WriteLine("║ " + name.PadRight(name.Length + 1) + ": Health: " + hudHealth.PadRight(5));
         }
 
-        public void Update(int playerX, int playerY, char[,] map, Character self)
+        public void Update(int playerX, int playerY, char[][,] input, Character self)
         {
             bool isWalkable = true;
             char destination = ' ';
+            char[,] map = input[0];
 
             Console.SetCursorPosition(x + 2, y + 1);
             char tile = map[y, x];

@@ -42,7 +42,7 @@ namespace TextBasedRPG_v2
             int next = 3;
 
             RefreshWindow();
-            MapManager.DrawMap(atlas.menuFrame);
+            MapManager.DrawMenu(atlas.menuFrame);
 
             Console.SetCursorPosition(4, next);
             Console.WriteLine("WELCOME TO THE GRAVEYARD!");
@@ -68,7 +68,7 @@ namespace TextBasedRPG_v2
                     // write up an Instructions .txt and treat it as a map in itself, so it can be brought up easily whenever player wants it
 
                     RefreshWindow();
-                    MapManager.DrawMap(atlas.menuFrame);
+                    MapManager.DrawMenu(atlas.menuFrame);
                     next = 5;
                     Console.SetCursorPosition(8, next);
                     Console.WriteLine("¡Θ¡");
