@@ -30,23 +30,12 @@ namespace TextBasedRPG_v2
             y = rand.Next(25, 30);
             color = ConsoleColor.Red;
         }
-        public void ShowHud()
-        {
-            string hudHealth = health.ToString();
-            Console.SetCursorPosition(42, 40);
-            Console.WriteLine("║ " + name.PadRight(name.Length + 1) + ": Health: " + hudHealth.PadRight(5));
-        }
-
         public void Update(int playerX, int playerY, char[][,] input, Character self)
         {
             bool isWalkable = true;
             char destination = ' ';
-            char[,] map = input[0];
-
-            Console.SetCursorPosition(x + 2, y + 1);
-            char tile = map[y, x];
-
-            MapManager.DrawTile(tile);
+            char[,] map = input[1];
+            bool move = false;
 
             string choice = "blank";
 
@@ -120,6 +109,9 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        move = true;
+                        lastY = y;
+                        lastX = x;
                         x--;
                         break;
                     }
@@ -134,6 +126,9 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        move = true;
+                        lastY = y;
+                        lastX = x;
                         x++;
                         break;
                     }
@@ -148,6 +143,9 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        move = true;
+                        lastY = y;
+                        lastX = x;
                         y--;
                         break;
                     }
@@ -162,6 +160,9 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        move = true;
+                        lastY = y;
+                        lastX = x;
                         y++;
                         break;
                     }
@@ -171,7 +172,11 @@ namespace TextBasedRPG_v2
                     }
             }
 
-            EventManager.EventCheck(destination, self);
+            if (move)
+            {
+                EventManager.EventCheck(destination, self);
+                MapManager.DrawCharacter(MapManager.overWorld, self);
+            }
         }
     }
 }

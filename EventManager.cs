@@ -27,17 +27,19 @@ namespace TextBasedRPG_v2
                     break;
 
                     case '▀':
-                        // heal spot
+                        Heal(subject);
+                        Console.SetCursorPosition(42, 40);
+                        Console.WriteLine("║ Player Healed!"); // write a HudMessage() method that displays the message for a few turns then clears
                         break;
                 }
             }
 
-            if (subject.type == "enemy")
+            if (subject.type == "npc")
             {
-
+                if(destination == (char)1) BattleSystem.Battle(subject, Program.player);
             }
         }
-        public static void MainMenu()
+        public static void MainMenu() // MenuManager Class?
         {
             int next = 3;
 
@@ -111,12 +113,9 @@ namespace TextBasedRPG_v2
         }
 
         // have this reference the tile the player is standing on/moving to, and if its the preset healer character, then heal. Take out the hard coded coords.
-        public static void HealCheck(Character player)
+        public static void Heal(Character player)
         {
-            if (player.x == 44 && player.y == 19)
-            {
-                player.health = player.healthMax;
-            }
+            player.health = player.healthMax;
         }
     }
 }

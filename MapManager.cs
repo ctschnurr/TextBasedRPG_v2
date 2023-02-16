@@ -12,15 +12,19 @@ namespace TextBasedRPG_v2
         static char[] walkables;
         int mapwidth;
         int mapheight;
+        static bool firstTurn = true;
+        
         public char[,] menuFrame;
 
         public char[,] overWorld_map;
         public char[,] overWorld_data;
-        public char[][,] overWorld;
+        public static char[][,] overWorld;
+
+
 
         public MapManager()
         {
-            walkables = new char[] { ' ', '▒', '▀' };
+            walkables = new char[] { ' ', '▒', '▀', (char)2, (char)1 };
 
             mapData = System.IO.File.ReadAllLines("./Assets/menuFrame.txt");
             mapwidth = mapData[0].Length;
@@ -33,7 +37,7 @@ namespace TextBasedRPG_v2
             mapheight = mapData.Count();
 
             overWorld_map = mapEater(mapData, mapheight, mapwidth);
-            overWorld_data = overWorld_map;
+            overWorld_data = mapEater(mapData, mapheight, mapwidth);
 
             overWorld = new char[2][,];
 
@@ -95,7 +99,6 @@ namespace TextBasedRPG_v2
 
                     DrawTile(tile);
                 }
-
             }
         }
 
@@ -168,25 +171,30 @@ namespace TextBasedRPG_v2
             char[,] map = input[0];
             char[,] data = input[1];
 
-            // draw over character's last position on screen with the approapriate tile from the reference map
-            Console.SetCursorPosition(subject.lastY, subject.lastX);
-            char tile = map[subject.lastY, subject.lastX];
-            DrawTile(tile);
+            if (firstTurn == false)
+            {
+                // draw over character's last position on screen with the approapriate tile from the reference map
+                Console.SetCursorPosition(subject.lastX + 2, subject.lastY + 1);
+                char tile = map[subject.lastY, subject.lastX];
+                DrawTile(tile);
 
-            // make that same chance in the map data
-            data[subject.lastY, subject.lastX] = tile;
+                // make that same change in the map data
+                data[subject.lastY, subject.lastX] = tile;
 
-            //draw the character on screen in the new position
-            Console.SetCursorPosition(subject.y, subject.x);
+                // send that to the MapManager, I think?
+                input[1] = data;
+            }
+
+            //draw the character on screen in set position
+            Console.SetCursorPosition(subject.x + 2, subject.y + 1);
             Console.ForegroundColor = subject.color;
-            Console.WriteLine(subject.character);
+            Console.Write(subject.character);
             Console.ResetColor();
 
             // save their new position in the map data
             data[subject.y, subject.x] = subject.character;
 
-            // send that to the MapManager, I think?
-            input[1] = data;
+            firstTurn = false;
         }
     }
 }

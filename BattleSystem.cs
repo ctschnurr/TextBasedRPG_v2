@@ -11,21 +11,23 @@ namespace TextBasedRPG_v2
         public static bool battleOver;
         public static Character loser;
         public static int next;
+
         public static void Battle(Character first, Character second)
         {
-            battleOver = true;
             int turn = 1;
             ConsoleKeyInfo choice;
 
             battleOver = false;
-            ReDraw();
+            MapManager.DrawMenu(EventManager.atlas.menuFrame);
+            first.ShowHud();
+            second.ShowHud();
 
             Random rand = new Random();
-            next = 3;
             int swing;
             int damage;
+            next = 3;
 
-            Character loser = null; 
+            loser = null; 
 
             while (battleOver == false)
             {
@@ -36,21 +38,15 @@ namespace TextBasedRPG_v2
                     next += 2;
 
                     battleOver = Attack(first, second);
+                    if (battleOver == true) loser = second;
                     turn++;
                 }
 
                 if (battleOver == false && second.type == "player")
                 {
-
                     Console.SetCursorPosition(4, next);
                     Console.Write("(A)ttack   (R)un : ");
                     next += 2;
-
-                    if (next > 36)
-                    {
-                        ReDraw();
-                        next = 3;
-                    }
 
                     choice = Console.ReadKey(true); // build playerChoice()?;
                     switch (choice.Key)
@@ -66,15 +62,11 @@ namespace TextBasedRPG_v2
                             Console.WriteLine("You don't know how to run yet!");
                             next += 2;
 
-                            if (next > 36)
-                            {
-                                ReDraw();
-                                next = 3;
-                            }
-
                             Console.ReadKey(true);
                             break;
                     }
+
+                    ReDrawCheck(first, second);
                 }
 
                 if (battleOver == false && first.type == "npc")
@@ -95,12 +87,6 @@ namespace TextBasedRPG_v2
                     Console.Write("(A)ttack   (R)un : ");
                     next += 2;
 
-                    if (next > 36)
-                    {
-                        ReDraw();
-                        next = 3;
-                    }
-
                     choice = Console.ReadKey(true); // build playerChoice()?;
                     switch (choice.Key)
                     {
@@ -115,15 +101,11 @@ namespace TextBasedRPG_v2
                             Console.WriteLine("You don't know how to run yet!");
                             next += 2;
 
-                            if (next > 36)
-                            {
-                                ReDraw();
-                                next = 3;
-                            }
-
                             Console.ReadKey(true);
                             break;
                     }
+
+                    ReDrawCheck(first, second);
                 }
             }
 
@@ -140,19 +122,26 @@ namespace TextBasedRPG_v2
                     loser.y = loser.spawn[1];
                 }
 
-                else
+                if (loser.type == "npc")
                 {
-                    Program.enemy = new Enemy();
+                    loser.health = loser.healthMax;
+                    loser.x = rand.Next(25, 30);
+                    loser.y = rand.Next(25, 30);
+                    MapManager.DrawCharacter(MapManager.overWorld, loser);
                 }
 
             }
         }
 
-        static void ReDraw()
+        static void ReDrawCheck(Character A, Character B)
         {
-            MapManager.DrawMenu(EventManager.atlas.menuFrame);
-            Program.player.ShowHud();
-            Program.enemy.ShowHud();
+            if (next > 36)
+            {
+                MapManager.DrawMenu(EventManager.atlas.menuFrame);
+                A.ShowHud();
+                B.ShowHud();
+                next = 3;
+            }
         }
 
         static bool Attack(Character attacker, Character victim)
@@ -167,13 +156,7 @@ namespace TextBasedRPG_v2
                 Console.WriteLine(attacker.name + " missed!");
                 next += 2;
 
-                Console.ReadKey(true);
-
-                if (next > 36)
-                {
-                    ReDraw();
-                    next = 2;
-                }
+                if (attacker.type == "player") Console.ReadKey(true);
 
                 return false;
             }
@@ -187,17 +170,13 @@ namespace TextBasedRPG_v2
                 next += 2;
 
                 victim.health -= damage;
-                Program.player.ShowHud();
-                Program.enemy.ShowHud();
+                if (victim.health <= 0) victim.health = 0;
+                attacker.ShowHud();
+                victim.ShowHud();
 
-                Console.ReadKey(true);
+                if (attacker.type == "player") Console.ReadKey(true);
 
-                if (next > 36)
-                {
-                    Console.Clear();
-                    MapManager.DrawMenu(EventManager.atlas.menuFrame);
-                    next = 2;
-                }
+                // if (attacker.type == "npc") ReDrawCheck();
 
                 if (victim.health <= 0)
                 {

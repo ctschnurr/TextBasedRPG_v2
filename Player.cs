@@ -16,31 +16,22 @@ namespace TextBasedRPG_v2
             health = healthMax;
             lives = 3;
             x = 5;
+            lastX = 5;
             y = 5;
+            lastY = 5;
             spawn[0] = 5;
             spawn[1] = 5;
             type = "player";
             color = ConsoleColor.Green;
         }
-        public void ShowHud()
-        {
-            string hudHealth = health.ToString();
-            Console.SetCursorPosition(4, 40);
-            Console.WriteLine(name.PadRight(name.Length + 1) + ": Health: " + hudHealth.PadRight(5) + "Lives: " + lives);
-        }
-
         public void Update(char[][,] input, Character self)
         {
             bool isWalkable;
             char destination = ' ';
-            char[,] map = input[0];
+            char[,] map = input[1];
+            bool move = false;
 
             ConsoleKeyInfo choice = Console.ReadKey(true);
-
-            Console.SetCursorPosition(x + 2, y + 1);
-            char tile = map[y, x];
-
-            MapManager.DrawTile(tile);
 
             switch (choice.Key)
             {
@@ -54,7 +45,9 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        move = true;
                         lastY = y;
+                        lastX = x;
                         y--;
                         break;
                     }
@@ -69,7 +62,9 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        move = true;
                         lastY = y;
+                        lastX = x;
                         y++;
                         break;
                     }
@@ -84,6 +79,8 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        move = true;
+                        lastY = y;
                         lastX = x;
                         x--;
                         break;
@@ -99,6 +96,8 @@ namespace TextBasedRPG_v2
 
                     if (isWalkable == true)
                     {
+                        move = true;
+                        lastY = y;
                         lastX = x;
                         x++;
                         break;
@@ -113,7 +112,11 @@ namespace TextBasedRPG_v2
                     }
             }
 
-            EventManager.EventCheck(destination, self);
+            if (move)
+            {
+                EventManager.EventCheck(destination, self);
+                MapManager.DrawCharacter(MapManager.overWorld, self);
+            }
         }
     }
 }

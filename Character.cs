@@ -32,5 +32,16 @@ namespace TextBasedRPG_v2
             Console.WriteLine(character);
             Console.ResetColor();
         }
+
+        public void ShowHud()
+        {
+            if(type == "player") Console.SetCursorPosition(4, 40);
+            if(type == "npc") Console.SetCursorPosition(42, 40);
+
+            string hudHealth = health.ToString();
+            Console.Write(name.PadRight(name.Length + 1) + ": Health: " + hudHealth.PadRight(5));
+
+            if (type == "player") Console.Write("Lives: " + lives);
+        }
     }
 }
