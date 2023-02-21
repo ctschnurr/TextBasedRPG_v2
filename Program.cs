@@ -11,10 +11,9 @@ namespace TextBasedRPG_v2
 
         static public Player player = new Player();
         static public EventManager e_manager = new EventManager();
-        static public Enemy enemy = new Enemy();
-
-        // make a multiple enemy system
-        static public Enemy enemyB = new Enemy();
+        
+        static public Enemy enemyA;
+        static public Enemy enemyB;
         //static public Enemy enemyC = new Enemy();
 
         static public List<Enemy> enemies;
@@ -25,7 +24,7 @@ namespace TextBasedRPG_v2
         public static string messageContent = null;
         public static bool messageNew = false;
 
-        static int turn = 0;
+        static int turn = 1;
 
         static void Main(string[] args)
         {
@@ -43,13 +42,14 @@ namespace TextBasedRPG_v2
                     DrawEnemies();
                     EventManager.redraw = false;
                 }
+                
+                GenerateEnemy();
 
                 player.ShowHud();
                 player.Update(MapManager.overWorld, player);
-                UpdateEnemies();
                 EventManager.RefreshWindow();
+                UpdateEnemies();
                 MapMessage();
-                GenerateEnemy();
                 turn++;
             }
 
@@ -65,35 +65,69 @@ namespace TextBasedRPG_v2
 
         static void UpdateEnemies()
         {
-            foreach (Enemy enemy in enemies)
+            if (enemies.Count != 0)
             {
-                enemy.Update(player.x, player.y, MapManager.overWorld, enemy);
+                foreach (Enemy enemy in enemies)
+                {
+                    enemy.Update(player.x, player.y, MapManager.overWorld, enemy);
+                }
             }
+
+
         }
 
         static void MapMessage()
         {
             if (messageNew == true)
             {
-                messageCount = 5;
+                messageCount = 10;
                 messageNew = false;
             }
 
-            if (messageCount != 0)
+            if (messageCount > 0)
             {
-                Console.SetCursorPosition(42, 40);
+                Console.SetCursorPosition(46, 40);
                 Console.Write(messageContent);
                 messageCount--;
+            }
+
+            if (messageCount == 0)
+            {
+                Console.SetCursorPosition(45, 40);
+                Console.Write("                          ");
             }
         }
 
         static void GenerateEnemy()
         {
-            if (turn == 10 || turn == 20 || turn == 30) // write this better, like if the turn is a multiple of another number
-            {
+            bool spawnTime;
+            bool spawned = false;
 
-                enemies.Find(enemy)
+            spawnTime = turn % 30 == 0;
+
+            if (spawnTime)
+            {
+                if (enemies.Exists(x => enemies.Contains(enemyA)) ==  false)
+                {
+                    enemyA = new Enemy();
+                    enemies.Add(enemyA);
+                    spawned = true;
+                }
+
+                else if (enemies.Exists(x => enemies.Contains(enemyB)) == false)
+                {
+                    enemyB = new Enemy();
+                    enemies.Add(enemyB);
+                    spawned = true;
+                }
             }
+
+            if (spawned)
+            {
+                messageContent = "A new enemy has spawned!";
+                messageNew = true;
+            }
+
         }
     }
 }

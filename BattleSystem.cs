@@ -124,10 +124,13 @@ namespace TextBasedRPG_v2
 
                 if (loser.type == "npc")
                 {
-                    loser.health = loser.healthMax;
-                    loser.x = rand.Next(25, 30);
-                    loser.y = rand.Next(25, 30);
-                    MapManager.DrawCharacter(MapManager.overWorld, loser);
+                    Enemy placeholder = null;
+                    foreach (Enemy enemy in Program.enemies)
+                    {
+                        if (enemy.x == loser.x && enemy.y == loser.y) placeholder = enemy;
+                    }
+
+                    Program.enemies.Remove(placeholder);
                 }
 
             }

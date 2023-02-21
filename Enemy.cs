@@ -28,7 +28,9 @@ namespace TextBasedRPG_v2
             lives = 100;
             x = rand.Next(25, 30);
             y = rand.Next(25, 30);
-            color = ConsoleColor.Red;
+            if (roll == 0) color = ConsoleColor.Green;
+            if (roll == 1) color = ConsoleColor.White;
+            if (roll == 2) color = ConsoleColor.Red;
         }
         public void Update(int playerX, int playerY, char[][,] input, Character self)
         {

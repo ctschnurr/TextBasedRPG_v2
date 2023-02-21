@@ -23,7 +23,14 @@ namespace TextBasedRPG_v2
                 {
                     case (char)2:
                         // start a battle
-                        BattleSystem.Battle(subject, Program.enemy);
+                        Enemy victim = null;
+
+                        foreach (Enemy enemy in Program.enemies)
+                        {
+                            if (enemy.x == subject.x && enemy.y == subject.y) victim = enemy;
+                        }
+
+                        BattleSystem.Battle(subject, victim);
                     break;
 
                     case '▀':
