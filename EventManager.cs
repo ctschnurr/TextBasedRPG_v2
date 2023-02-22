@@ -15,100 +15,44 @@ namespace TextBasedRPG_v2
         public static int height = atlas.menuFrame.GetLength(0) + 2;
         public static int width = atlas.menuFrame.GetLength(1) + 2;
 
+        static int messageCount = 0;
+        public static string messageContent = null;
+        public static bool messageNew = false;
+
         public static void EventCheck(char destination, Character subject)
         {
             if (subject.type == "player")
             {
+                bool fight = false;
+                Enemy victim = null;
+                
+                foreach (Enemy enemy in Enemy.enemies)
+                {
+                    if (enemy.x == subject.x && enemy.y == subject.y)
+                    {
+                        victim = enemy;
+                        fight = true;
+                    }
+                }
+
+                if (fight) BattleSystem.Battle(subject, victim);
+
                 switch (destination)
                 {
-                    case (char)2:
-                        // start a battle
-                        Enemy victim = null;
-
-                        foreach (Enemy enemy in Program.enemies)
-                        {
-                            if (enemy.x == subject.x && enemy.y == subject.y) victim = enemy;
-                        }
-
-                        BattleSystem.Battle(subject, victim);
-                    break;
-
                     case '▀':
                         Heal(subject);
-                        Console.SetCursorPosition(42, 40);
-                        Console.WriteLine("║ Player Healed!"); // write a HudMessage() method that displays the message for a few turns then clears
+                        messageContent = "Your health has been restored!";
+                        messageNew = true;
                         break;
                 }
             }
 
             if (subject.type == "npc")
             {
-                if(destination == (char)1) BattleSystem.Battle(subject, Program.player);
+                if (subject.x == Program.player.x && subject.y == Program.player.y) BattleSystem.Battle(subject, Program.player);
             }
         }
-        public static void MainMenu() // MenuManager Class?
-        {
-            int next = 3;
-
-            RefreshWindow();
-            MapManager.DrawMenu(atlas.menuFrame);
-
-            Console.SetCursorPosition(4, next);
-            Console.WriteLine("WELCOME TO THE GRAVEYARD!");
-            next += 2;
-
-            Console.SetCursorPosition(4, next);
-            Console.WriteLine("Please choose from the following options:");
-
-            Console.SetCursorPosition(4, 7);
-            Console.WriteLine("(N)ew Game");
-            Console.SetCursorPosition(4, 8);
-            Console.WriteLine("(Q)uit Game");
-
-            Console.SetCursorPosition(4, 40);
-            Console.WriteLine("By Chris Schnurr");
-
-            ConsoleKeyInfo choice = Console.ReadKey(true);
-
-            switch (choice.Key)
-            {
-                default:
-
-                    // write up an Instructions .txt and treat it as a map in itself, so it can be brought up easily whenever player wants it
-
-                    RefreshWindow();
-                    MapManager.DrawMenu(atlas.menuFrame);
-                    next = 5;
-                    Console.SetCursorPosition(8, next);
-                    Console.WriteLine("¡Θ¡");
-                    next++;
-                    Console.SetCursorPosition(8, next);
-                    Console.WriteLine("╤═╤     Visit the shrine to heal!");
-                    next++;
-                    Console.SetCursorPosition(8, next);
-                    Console.WriteLine("┴▀┴");
-                    next += 2;
-                    Console.SetCursorPosition(9, next);
-                    Console.WriteLine((char)2 + "     Watch out for the Undead!");
-                    next += 2;
-                    Console.SetCursorPosition(8, next);
-                    Console.WriteLine("Press escape from the map to quit!");
-                    next += 6;
-
-                    Console.SetCursorPosition(4, 40);
-                    Console.WriteLine("By Chris Schnurr");
-
-                    Console.SetCursorPosition(4, next);
-                    Console.Write("Before we begin, please enter your name: ");
-                    Program.player.name = Console.ReadLine();
-
-                    break;
-
-                case ConsoleKey.Q:
-                    Program.gameOver = true;
-                    break;
-            }
-        }
+        
         public static void RefreshWindow()
         {
             if (Console.WindowHeight != height || Console.WindowWidth != width)
@@ -123,6 +67,28 @@ namespace TextBasedRPG_v2
         public static void Heal(Character player)
         {
             player.health = player.healthMax;
+        }
+
+        public static void MapMessage()
+        {
+            if (messageNew == true)
+            {
+                messageCount = 10;
+                messageNew = false;
+            }
+
+            if (messageCount > 0)
+            {
+                Console.SetCursorPosition(46, 40);
+                Console.Write(messageContent);
+                messageCount--;
+            }
+
+            if (messageCount == 0)
+            {
+                Console.SetCursorPosition(45, 40);
+                Console.Write("                          ");
+            }
         }
     }
 }

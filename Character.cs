@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// mid april to end of may - by june for summer job
+
 namespace TextBasedRPG_v2
 {
     internal class Character
@@ -26,6 +28,9 @@ namespace TextBasedRPG_v2
         public int lastX;
         public int lastY;
 
+        public int worldX;
+        public int worldY;
+
         // I'm building a better DrawCharacter() in MapManager, delete this once thats done
         public void Draw(int charX, int charY, char character)
         {
@@ -37,8 +42,9 @@ namespace TextBasedRPG_v2
 
         public void ShowHud()
         {
-            if(type == "player") Console.SetCursorPosition(4, 40);
-            if(type == "npc") Console.SetCursorPosition(46, 40);
+
+            if (type == "player") Console.SetCursorPosition(4, 40);
+            if (type == "npc") Console.SetCursorPosition(46, 40);
 
             string hudHealth = health.ToString();
             Console.Write(name.PadRight(name.Length + 1) + ": Health: " + hudHealth.PadRight(5));

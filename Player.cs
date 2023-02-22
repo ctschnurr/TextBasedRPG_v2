@@ -10,25 +10,27 @@ namespace TextBasedRPG_v2
     {
         public Player()
         {
-            character = (char)1;
+            character = (char)2;
             name = "Player";
             healthMax = 100;
             health = healthMax;
             lives = 3;
+
             x = 5;
             lastX = 5;
             y = 5;
             lastY = 5;
+
             spawn[0] = 5;
             spawn[1] = 5;
             type = "player";
-            color = ConsoleColor.Green;
+            color = ConsoleColor.White;
         }
-        public void Update(char[][,] input, Character self)
+        public void Update(Character self)
         {
             bool isWalkable;
             char destination = ' ';
-            char[,] map = input[1];
+            char[,] map = MapManager.world[MapManager.worldY, MapManager.worldX];
             bool move = false;
 
             ConsoleKeyInfo choice = Console.ReadKey(true);
@@ -112,10 +114,38 @@ namespace TextBasedRPG_v2
                     }
             }
 
+            if (y == 0)
+            {
+                MapManager.worldY --;
+                y = 35;
+                EventManager.redraw = true;
+            }
+
+            if (y == 36)
+            {
+                MapManager.worldY++;
+                y = 1;
+                EventManager.redraw = true;
+            }
+
+            if (x == 0)
+            {
+                MapManager.worldX--;
+                x = 87;
+                EventManager.redraw = true;
+            }
+
+            if (x == 88)
+            {
+                MapManager.worldX++;
+                x = 1;
+                EventManager.redraw = true;
+            }
+
             if (move)
             {
                 EventManager.EventCheck(destination, self);
-                MapManager.DrawCharacter(MapManager.overWorld, self);
+                MapManager.DrawCharacter(self);
             }
 
         }

@@ -87,6 +87,9 @@ namespace TextBasedRPG_v2
                     next += 2;
 
                     choice = Console.ReadKey(true); // build playerChoice()?;
+
+                    ReDrawCheck(first, second);
+
                     switch (choice.Key)
                     {
                         case ConsoleKey.A:
@@ -113,27 +116,27 @@ namespace TextBasedRPG_v2
                 if (loser.type == "player")
                 {
                     Console.SetCursorPosition(4, next);
-                    Console.WriteLine("I guess you suck, but I'll restore and respawn you!");
+                    Console.WriteLine("I'm afraid you have died! We'll restore and respawn you.");
                     Console.ReadKey(true);
                     loser.health = loser.healthMax;
-                    // loser.lives -= 1;
+                    loser.lives --;
                     loser.x = loser.spawn[0];
                     loser.y = loser.spawn[1];
+                    MapManager.worldX = 1;
+                    MapManager.worldY = 1;
                 }
 
                 if (loser.type == "npc")
                 {
-                    Enemy placeholder = null;
-                    foreach (Enemy enemy in Program.enemies)
+                    Enemy convert = null;
+                    foreach (Enemy enemy in Enemy.enemies)
                     {
-                        if (enemy.x == loser.x && enemy.y == loser.y) placeholder = enemy;
+                        if (enemy.x == loser.x && enemy.y == loser.y) convert = enemy;
                     }
 
-                    //Program.enemies.Remove(placeholder);
-                    Program.deadEnemies.Add(placeholder);
-                    placeholder.state = "dead";
+                    Enemy.deadEnemies.Add(convert);
                 }
-
+                EventManager.redraw = true;
             }
         }
 

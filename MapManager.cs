@@ -16,35 +16,80 @@ namespace TextBasedRPG_v2
         static bool firstTurn = true;
         
         public char[,] menuFrame;
+        public char[,] instructions;
 
-        public char[,] overWorld_map;
-        public char[,] overWorld_data;
-        public static char[][,] overWorld;
+        public static char[,][,] world;
 
+        public char[,] center_map;
+        public char[,] north_map;
+        public char[,] south_map;
+        public char[,] east_map;
+        public char[,] northeast_map;
 
+        public static int worldX;
+        public static int worldY;
 
+        public static ConsoleColor tilecolor;
+
+        // 148 176 ░ 177 ▒ 178 ▓
+        // 179 │ 180 ┤ 191 ┐ 192 └ 193 ┴ 194 ┬ 195 ├ 196 ─ 197 ┼ 217 ┘ 218 ┌
+        // 185 ╣ 186 ║ 187 ╗ 188 ╝ 200 ╚ 201 ╔ 202 ╩ 203 ╦ 204 ╠ 205 ═ 206 ╬ 207 ╧ 208 ╨ 209 ╤ 210 ╥ 211 ╙ 212 ╘ 213 ╒ 214 ╓ 215 ╫ 216 ╪ 217 ┘ 218 ┌
+        // 219 █ 220 ▄ 223 ▀ 254 ■ 
         public MapManager()
         {
-            walkables = new char[] { ' ', '▒', '▀', (char)2 };
-            enemyWalkables = new char[] { (char)1 };
+            worldX = 1;
+            worldY = 1;
+
+            walkables = new char[] { ' ', '░', '▀', '▓', (char)1 };
+            enemyWalkables = new char[] { (char)2 };
+
+            // menu related maps
 
             mapData = System.IO.File.ReadAllLines("./Assets/menuFrame.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-
             menuFrame = mapEater(mapData, mapheight, mapwidth);
 
-            mapData = System.IO.File.ReadAllLines("./Assets/overWorld.txt");
+            mapData = System.IO.File.ReadAllLines("./Assets/instructions.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
+            instructions = mapEater(mapData, mapheight, mapwidth);
 
-            overWorld_map = mapEater(mapData, mapheight, mapwidth);
-            overWorld_data = mapEater(mapData, mapheight, mapwidth);
+            // world maps
 
-            overWorld = new char[2][,];
+            mapData = System.IO.File.ReadAllLines("./Assets/center_map.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            center_map = mapEater(mapData, mapheight, mapwidth);
 
-            overWorld[0] = overWorld_map;
-            overWorld[1] = overWorld_data;
+            mapData = System.IO.File.ReadAllLines("./Assets/north_map.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            north_map = mapEater(mapData, mapheight, mapwidth);
+
+            mapData = System.IO.File.ReadAllLines("./Assets/south_map.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            south_map = mapEater(mapData, mapheight, mapwidth);
+
+            mapData = System.IO.File.ReadAllLines("./Assets/east_map.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            east_map = mapEater(mapData, mapheight, mapwidth);
+
+            mapData = System.IO.File.ReadAllLines("./Assets/northeast_map.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            northeast_map = mapEater(mapData, mapheight, mapwidth);
+
+            world = new char[3,3][,];
+
+            world[1, 1] = center_map;
+            world[0, 1] = north_map;
+            world[2, 1] = south_map;
+            world[1, 2] = east_map;
+            world[0, 2] = northeast_map;
+
         }
 
         private char[,] mapEater(string[] data, int height, int width)
@@ -64,10 +109,11 @@ namespace TextBasedRPG_v2
             return storage;
         }
 
-        static public void DrawMap(char[][,] input)
+        static public void DrawMap()
         {
             Console.Clear();
-            char[,] map = input[0];
+            char[,] map = world[worldY, worldX];
+
             int mapHeight = map.GetLength(0);
             int mapWidth = map.GetLength(1);
 
@@ -80,10 +126,13 @@ namespace TextBasedRPG_v2
 
                     DrawTile(tile);
 
-                    // Console.ResetColor();
                 }
-
             }
+
+            Console.SetCursorPosition(3, 40);
+            Console.Write("                                         ");
+            Console.SetCursorPosition(45, 40);
+            Console.Write("                                             ");
         }
 
         static public void DrawMenu(char[,] input)
@@ -99,60 +148,103 @@ namespace TextBasedRPG_v2
                 {
                     char tile = input[mapX, mapY];
 
-                    DrawTile(tile);
+                    Console.Write(tile);
                 }
             }
         }
 
-        public static void DrawTile(char tile)
+        public static string[] GetTileColor(char tile)
         {
-            switch (tile)
+            string[] instance = new string[2];
+            Random rand = new Random();
+            int roll;
+
+            instance[0] = "Gray"; // foreground
+            instance[1] = "Black"; // background
+
+            if (worldX == 2 && worldY == 0)
             {
-                case '█':
-                case '▄':
-                    Random rand = new Random();
-                    int roll = rand.Next(1, 3);
-                    if (roll == 1)
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                    }
-                    if (roll == 2)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Gray;
-                    }
-                    Console.Write(tile);
-                    break;
-                case '▀':
-                    //Console.BackgroundColor = ConsoleColor.Green;
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.Write(tile);
-                    break;
+                switch (tile)
+                {
+                    case ' ':
+                        instance[1] = "DarkYellow";
+                        break;
 
-                case '▒':
-                    Console.BackgroundColor = ConsoleColor.DarkYellow;
-                    //Console.ForegroundColor = ConsoleColor.DarkBlue;
-                    Console.Write(tile);
-                    break;
+                    case '▲':
+                        instance[0] = "DarkGray";
+                        instance[1] = "DarkYellow";
+                        break;
 
-                case '~':
-                    Console.BackgroundColor = ConsoleColor.Blue;
-                    Console.ForegroundColor = ConsoleColor.DarkBlue;
-                    Console.Write(tile);
-                    break;
+                    case '♠':
+                        instance[0] = "DarkGreen";
+                        instance[1] = "DarkYellow";
+                        break;
 
-                case '┼':
-                    Console.BackgroundColor = ConsoleColor.DarkYellow;
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write(tile);
-                    break;
+                    case '■':
+                        instance[0] = "Gray";
+                        instance[1] = "DarkYellow";
+                        break;
 
-                default:
-                    Console.Write(tile);
-                    break;
+                    case '░':
+                        instance[0] = "Gray";
+                        instance[1] = "DarkYellow";
+                        break;
+                }
+
 
             }
+            else
+            {
+                switch (tile)
+                {
+                    case ' ':
+                        instance[1] = "Green";
+                        break;
+
+                    case '♠':
+                        instance[0] = "DarkGreen";
+                        instance[1] = "Green";
+                        break;
+
+                    case '░':
+                        instance[1] = "DarkYellow";
+                        break;
+
+                    case '█':
+                    case '▄':
+                        instance[0] = "DarkGreen";
+                        instance[1] = "Green";
+                        break;
+
+                    case '╨':
+                        instance[0] = "DarkYellow";
+                        instance[1] = "Green";
+                        break;
+
+                    case '▲':
+                        instance[0] = "DarkGray";
+                        instance[1] = "Green";
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+            return instance;
+
+        }
+
+        public static void DrawTile(char tile)
+        {
+            string[] tileColor = GetTileColor(tile);
+
+            Console.ForegroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), tileColor[0]);
+            Console.BackgroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), tileColor[1]);
+
+            Console.Write(tile);
             Console.ResetColor();
         }
+
         public static bool CheckWalkable(char destination, Character walker)
         {
             bool goTime = false;
@@ -179,33 +271,30 @@ namespace TextBasedRPG_v2
             return goTime;
         }
 
-        public static void DrawCharacter(char[][,] input, Character subject)
+        public static void DrawCharacter(Character subject)
         {
-            char[,] map = input[0];
-            char[,] data = input[1];
+            char[,] map = world[worldY, worldX];
+            char tile;
+            string[] colorDat;
 
             if (firstTurn == false)
             {
                 // draw over character's last position on screen with the approapriate tile from the reference map
+
                 Console.SetCursorPosition(subject.lastX + 2, subject.lastY + 1);
-                char tile = map[subject.lastY, subject.lastX];
+                tile = map[subject.lastY, subject.lastX];
                 DrawTile(tile);
 
-                // make that same change in the map data
-                data[subject.lastY, subject.lastX] = tile;
-
-                // send that to the MapManager, I think?
-                input[1] = data;
             }
 
             //draw the character on screen in set position
             Console.SetCursorPosition(subject.x + 2, subject.y + 1);
+            tile = map[subject.y, subject.x];
+            colorDat = GetTileColor(tile);
+            Console.BackgroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), colorDat[1]);
             Console.ForegroundColor = subject.color;
             Console.Write(subject.character);
             Console.ResetColor();
-
-            // save their new position in the map data
-            data[subject.y, subject.x] = subject.character;
 
             firstTurn = false;
         }

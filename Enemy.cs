@@ -8,12 +8,21 @@ namespace TextBasedRPG_v2
 {
     internal class Enemy : Character
     {
-        public string[,] enemies = new string[,]
+        public string[,] enemyTemplate = new string[,]
         {
             {"Zombie","10","3", "Green" },
-            {"Skeleton","15","5", "White"},
+            {"Skeleton","15","5", "Gray"},
             {"Monster","20","7", "Red" },
         };
+
+        static public Enemy enemyA;
+        static public Enemy enemyB;
+        static public Enemy enemyC;
+
+        static public List<Enemy> enemies;
+        static public List<Enemy> deadEnemies;
+
+        public bool onMap;
 
         public enum Behavior
         {
@@ -28,26 +37,51 @@ namespace TextBasedRPG_v2
             Random rand = new Random();
             int roll = rand.Next(0, 3);
 
-            name = enemies[roll, 0];
-            health = Int32.Parse(enemies[roll, 1]);
+            name = enemyTemplate[roll, 0];
+            health = Int32.Parse(enemyTemplate[roll, 1]);
             // strength = enemies[roll, 2]
-            color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), enemies[roll, 3]);
+            color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), enemyTemplate[roll, 3]);
 
             behavior = (Behavior)rand.Next(0, 2);
 
-            character = (char)2;
+            character = (char)1;
             type = "npc";
             healthMax = health;
 
             x = rand.Next(25, 30);
             y = rand.Next(25, 30);
 
+            worldX = 1;
+            worldY = 0;
         }
-        public void Update(Character player, char[][,] input, Character self)
+
+        public static void initEnemies()
+        {
+            enemies = new List<Enemy>();
+            deadEnemies = new List<Enemy>();
+        }
+
+        public static void Check()
+        {
+            if (MapManager.worldX == 2 && MapManager.worldY == 0)
+            {
+                GenerateEnemy();
+                foreach (Enemy enemy in Enemy.enemies)
+                {
+                    MapManager.DrawCharacter(enemy);
+                }
+
+                UpdateEnemies();
+
+            }
+        }
+
+        
+        public void Update(Character player, Character self)
         {
             bool isWalkable;
             char destination = ' ';
-            char[,] map = input[1];
+            char[,] map = MapManager.world[MapManager.worldY, MapManager.worldX];
             bool move = false;
             int walk;
             Random rnd = new Random();
@@ -203,8 +237,74 @@ namespace TextBasedRPG_v2
             if (move)
             {
                 EventManager.EventCheck(destination, self);
-                MapManager.DrawCharacter(MapManager.overWorld, self);
+                MapManager.DrawCharacter(self);
             }
         }
+
+        public static void GenerateEnemy()
+        {
+            bool spawnTime;
+            bool spawned = false;
+            string name = "baddie";
+
+            spawnTime = Program.turn % 30 == 0;
+
+            if (spawnTime)
+            {
+                if (enemies.Exists(x => enemies.Contains(enemyA)) == false)
+                {
+                    enemyA = new Enemy();
+                    enemies.Add(enemyA);
+                    name = enemyA.name;
+                    spawned = true;
+                }
+
+                else if (enemies.Exists(x => enemies.Contains(enemyB)) == false)
+                {
+                    enemyB = new Enemy();
+                    enemies.Add(enemyB);
+                    name = enemyB.name;
+                    spawned = true;
+                }
+
+                else if (enemies.Exists(x => enemies.Contains(enemyC)) == false)
+                {
+                    enemyC = new Enemy();
+                    enemies.Add(enemyC);
+                    name = enemyC.name;
+                    spawned = true;
+                }
+            }
+
+            if (spawned)
+            {
+                EventManager.messageContent = "A " + name + " has spawned!";
+                EventManager.messageNew = true;
+            }
+
+        }
+
+        public static void UpdateEnemies()
+        {
+            if (enemies.Count != 0)
+            {
+                foreach (Enemy enemy in enemies)
+                {
+                    enemy.Update(Program.player, enemy);
+                }
+            }
+
+            foreach (Enemy enemy in deadEnemies)
+            {
+                enemies.Remove(enemy);
+            }
+
+            deadEnemies.Clear();
+        }
+
+
+
+
+
     }
 }
