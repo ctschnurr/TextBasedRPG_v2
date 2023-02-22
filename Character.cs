@@ -10,10 +10,12 @@ namespace TextBasedRPG_v2
     {
         public int health;
         public int healthMax;
-        public int lives;
-        public int strength = 10;
+
+        // public int strength;
         public string name;
-        bool living = true;
+        public int lives;
+        public string state = "alive";
+
         public string type;
         public int[] spawn = new int[] { 0, 0 };
         public ConsoleColor color;

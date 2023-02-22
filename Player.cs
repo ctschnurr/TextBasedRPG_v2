@@ -41,7 +41,7 @@ namespace TextBasedRPG_v2
 
                 case ConsoleKey.W:
                     destination = map[y - 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination);
+                    isWalkable = MapManager.CheckWalkable(destination, self);
 
                     if (isWalkable == true)
                     {
@@ -58,7 +58,7 @@ namespace TextBasedRPG_v2
 
                 case ConsoleKey.S:
                     destination = map[y + 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination);
+                    isWalkable = MapManager.CheckWalkable(destination, self);
 
                     if (isWalkable == true)
                     {
@@ -75,7 +75,7 @@ namespace TextBasedRPG_v2
 
                 case ConsoleKey.A:
                     destination = map[y, x - 1];
-                    isWalkable = MapManager.CheckWalkable(destination);
+                    isWalkable = MapManager.CheckWalkable(destination, self);
 
                     if (isWalkable == true)
                     {
@@ -92,7 +92,7 @@ namespace TextBasedRPG_v2
 
                 case ConsoleKey.D:
                     destination = map[y, x + 1];
-                    isWalkable = MapManager.CheckWalkable(destination);
+                    isWalkable = MapManager.CheckWalkable(destination, self);
 
                     if (isWalkable == true)
                     {
@@ -117,6 +117,7 @@ namespace TextBasedRPG_v2
                 EventManager.EventCheck(destination, self);
                 MapManager.DrawCharacter(MapManager.overWorld, self);
             }
+
         }
     }
 }

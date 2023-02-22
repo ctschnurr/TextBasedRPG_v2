@@ -23,8 +23,7 @@ namespace TextBasedRPG_v2
             second.ShowHud();
 
             Random rand = new Random();
-            int swing;
-            int damage;
+            // int damage;
             next = 3;
 
             loser = null; 
@@ -130,7 +129,9 @@ namespace TextBasedRPG_v2
                         if (enemy.x == loser.x && enemy.y == loser.y) placeholder = enemy;
                     }
 
-                    Program.enemies.Remove(placeholder);
+                    //Program.enemies.Remove(placeholder);
+                    Program.deadEnemies.Add(placeholder);
+                    placeholder.state = "dead";
                 }
 
             }

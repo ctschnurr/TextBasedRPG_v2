@@ -10,6 +10,7 @@ namespace TextBasedRPG_v2
     {
         string[] mapData;
         static char[] walkables;
+        static char[] enemyWalkables;
         int mapwidth;
         int mapheight;
         static bool firstTurn = true;
@@ -24,7 +25,8 @@ namespace TextBasedRPG_v2
 
         public MapManager()
         {
-            walkables = new char[] { ' ', '▒', '▀', (char)2, (char)1 };
+            walkables = new char[] { ' ', '▒', '▀', (char)2 };
+            enemyWalkables = new char[] { (char)1 };
 
             mapData = System.IO.File.ReadAllLines("./Assets/menuFrame.txt");
             mapwidth = mapData[0].Length;
@@ -151,7 +153,7 @@ namespace TextBasedRPG_v2
             }
             Console.ResetColor();
         }
-        public static bool CheckWalkable(char destination)
+        public static bool CheckWalkable(char destination, Character walker)
         {
             bool goTime = false;
 
@@ -160,6 +162,17 @@ namespace TextBasedRPG_v2
                 if (destination == walkable)
                 {
                     goTime = true;
+                }
+            }
+
+            if (walker.type == "npc")
+            {
+                foreach (char walkable in enemyWalkables)
+                {
+                    if (destination == walkable)
+                    {
+                        goTime = true;
+                    }
                 }
             }
 

@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
+
+    // TO DO:
+    // Map - better maps/levels. different areas
+    // Enemies - impliment different movement types. ask about attacking powers?
+    // Items - 3 items. Potion, Coin, Shield?
+    // ask about GameManager class, can be Program? -> clean up code into Classes better
     internal class Program
     {
 
@@ -14,9 +20,10 @@ namespace TextBasedRPG_v2
         
         static public Enemy enemyA;
         static public Enemy enemyB;
-        //static public Enemy enemyC = new Enemy();
+        static public Enemy enemyC;
 
         static public List<Enemy> enemies;
+        static public List<Enemy> deadEnemies;
 
         public static bool gameOver = false;
 
@@ -29,6 +36,7 @@ namespace TextBasedRPG_v2
         static void Main(string[] args)
         {
             enemies = new List<Enemy>();
+            deadEnemies = new List<Enemy>();
 
             Console.CursorVisible = false;
             EventManager.MainMenu();
@@ -39,12 +47,10 @@ namespace TextBasedRPG_v2
                 {
                     MapManager.DrawMap(MapManager.overWorld);
                     MapManager.DrawCharacter(MapManager.overWorld, player);
-                    DrawEnemies();
                     EventManager.redraw = false;
                 }
                 
                 GenerateEnemy();
-
                 player.ShowHud();
                 player.Update(MapManager.overWorld, player);
                 EventManager.RefreshWindow();
@@ -55,13 +61,7 @@ namespace TextBasedRPG_v2
 
         }
 
-        static void DrawEnemies()
-        {
-            foreach (Character enemy in enemies)
-            {
-                MapManager.DrawCharacter(MapManager.overWorld, enemy);
-            }
-        }
+
 
         static void UpdateEnemies()
         {
@@ -69,11 +69,16 @@ namespace TextBasedRPG_v2
             {
                 foreach (Enemy enemy in enemies)
                 {
-                    enemy.Update(player.x, player.y, MapManager.overWorld, enemy);
+                    enemy.Update(player, MapManager.overWorld, enemy);
                 }
             }
 
+            foreach (Enemy enemy in deadEnemies)
+            {
+                enemies.Remove(enemy);
+            }
 
+            deadEnemies.Clear();
         }
 
         static void MapMessage()
@@ -102,6 +107,7 @@ namespace TextBasedRPG_v2
         {
             bool spawnTime;
             bool spawned = false;
+            string name = "baddie";
 
             spawnTime = turn % 30 == 0;
 
@@ -111,6 +117,7 @@ namespace TextBasedRPG_v2
                 {
                     enemyA = new Enemy();
                     enemies.Add(enemyA);
+                    name = enemyA.name;
                     spawned = true;
                 }
 
@@ -118,13 +125,22 @@ namespace TextBasedRPG_v2
                 {
                     enemyB = new Enemy();
                     enemies.Add(enemyB);
+                    name = enemyB.name;
+                    spawned = true;
+                }
+
+                else if (enemies.Exists(x => enemies.Contains(enemyC)) == false)
+                {
+                    enemyC = new Enemy();
+                    enemies.Add(enemyC);
+                    name = enemyC.name;
                     spawned = true;
                 }
             }
 
             if (spawned)
             {
-                messageContent = "A new enemy has spawned!";
+                messageContent = "A " + name + " has spawned!";
                 messageNew = true;
             }
 
