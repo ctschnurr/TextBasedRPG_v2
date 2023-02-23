@@ -10,6 +10,7 @@ namespace TextBasedRPG_v2
     {
         public static bool hasKey;
         public static int gold;
+
         public Player()
         {
             character = (char)2;
@@ -19,16 +20,17 @@ namespace TextBasedRPG_v2
             lives = 3;
             gold = 0;
 
-            x = 5;
-            lastX = 5;
-            y = 5;
-            lastY = 5;
+            x = 10;
+            lastX = 10;
+            y = 10;
+            lastY = 10;
 
             spawn[0] = 5;
             spawn[1] = 5;
             type = "player";
             color = ConsoleColor.White;
             hasKey = false;
+            
         }
         public void Update(Character self)
         {

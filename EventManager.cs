@@ -9,28 +9,30 @@ namespace TextBasedRPG_v2
 {
     internal class EventManager
     {
+        // game fundamentals
         static public MapManager atlas = new MapManager();
-
         static public bool redraw = true;
 
         public static int height = atlas.menuFrame.GetLength(0) + 2;
         public static int width = atlas.menuFrame.GetLength(1) + 2;
 
+        // pop up message variables
         static int messageCount = 0;
         public static string messageContent = null;
         public static bool messageNew = false;
-
-        public static bool gateLocked = true;
         public static string taskMessage = "Explore!";
 
+        // gate and task message
+        public static bool gateLocked = true;
 
+        //this handles the pickups and battle detection
         public static void EventCheck(char destination, Character subject)
         {
             if (subject.type == "player")
             {
                 bool fight = false;
                 Enemy victim = null;
-                
+
                 foreach (Enemy enemy in Enemy.enemies)
                 {
                     if (enemy.x == subject.x && enemy.y == subject.y)
@@ -60,9 +62,52 @@ namespace TextBasedRPG_v2
                         EventManager.redraw = true;
                     }
                 }
+
+                if (destination == 'ō')
+                {
+                    if (Program.player.health == Program.player.healthMax)
+                    {
+                        messageContent = "You found a potion, but health is full!";
+                        messageNew = true;
+                    }
+
+                    if (Program.player.health != Program.player.healthMax)
+                    {
+                        messageContent = "You found a potion, health is restored!";
+                        messageNew = true;
+
+                        Program.player.health = Program.player.healthMax;
+
+                        char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
+                        holder[Program.player.y, Program.player.x] = ' ';
+                    }
+                }
+
+                if (destination == '┼')
+                {
+                        messageContent = "You found a sword! You deal 3 more damage!";
+                        messageNew = true;
+
+                        Program.player.strength += 3;
+
+                        char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
+                        holder[Program.player.y, Program.player.x] = ' ';                   
+                }
+
+                if (destination == '°')
+                {
+                        messageContent = "You found a gold coin!";
+                        messageNew = true;
+
+                        Player.gold += 1;
+
+                        char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
+                        holder[Program.player.y, Program.player.x] = ' ';
+                 
+                }
+
+
             }
-
-
 
             if (subject.type == "npc")
             {
@@ -70,6 +115,7 @@ namespace TextBasedRPG_v2
             }
         }
 
+        // this handles things you can interact with, but not pickup
         public static void Triggers(char destination)
         {
             switch (destination)
@@ -99,25 +145,35 @@ namespace TextBasedRPG_v2
                     {
                         if (Player.hasKey == false)
                         {
-                            messageContent = "\'I'll trade 100 gold for the key\'";
-                            taskMessage = "Bring the witch 100 gold!";
-                            messageNew = true;
+                            if (Player.gold < 100)
+                            {
+                                messageContent = "\'I'll trade 100 gold for the key!\'";
+                                taskMessage = "Bring the witch 100 gold!";
+                                messageNew = true;
+                            }
+
+                            if (Player.gold > 100)
+                            {
+                                messageContent = "\'Here is your key!\'";
+                                taskMessage = "Use the key on the gate!";
+                                messageNew = true;
+                                Player.hasKey = true;
+                                Player.gold -= 100;
+                            }
                         }
 
                         if (Player.hasKey)
                         {
-                            messageContent = "You unlocked the gate!";
+                            messageContent = "\'You have your key! Now begone!\'";
                             messageNew = true;
-                            MapManager.walkables.Add(destination);
-                            gateLocked = false;
                         }
                     }
                     break;
 
-
             }
         }
         
+        // this detects if the window size has been tampered with, and resets it
         public static void RefreshWindow()
         {
             if (Console.WindowHeight != height || Console.WindowWidth != width)
@@ -128,12 +184,7 @@ namespace TextBasedRPG_v2
             }
         }
 
-        // have this reference the tile the player is standing on/moving to, and if its the preset healer character, then heal. Take out the hard coded coords.
-        public static void Heal(Character player)
-        {
-            player.health = player.healthMax;
-        }
-
+        // this handles the map's mini message
         public static void MapMessage()
         {
             if (messageNew == true)

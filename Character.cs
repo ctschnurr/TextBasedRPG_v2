@@ -13,7 +13,7 @@ namespace TextBasedRPG_v2
         public int health;
         public int healthMax;
 
-        // public int strength;
+        public int strength;
         public string name;
         public int lives;
         public string state = "alive";
@@ -32,15 +32,6 @@ namespace TextBasedRPG_v2
         public int worldY;
 
         public bool stunned;
-
-        // I'm building a better DrawCharacter() in MapManager, delete this once thats done
-        public void Draw(int charX, int charY, char character)
-        {
-            Console.SetCursorPosition(charX, charY);
-            Console.ForegroundColor = color;
-            Console.WriteLine(character);
-            Console.ResetColor();
-        }
 
         public void ShowHud()
         {

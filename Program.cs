@@ -31,6 +31,7 @@ namespace TextBasedRPG_v2
 
             while (gameOver == false)
             {
+                // this redraws the map and characters when redraw is true
                 if (EventManager.redraw)
                 {
                     MapManager.DrawMap();
@@ -39,7 +40,8 @@ namespace TextBasedRPG_v2
                     MapManager.DrawCharacter(player);
                     EventManager.redraw = false;
                 }
-                
+
+                // this is the primary game loop essentials
                 player.ShowHud();
                 player.Update(player);
                 Enemy.Check();

@@ -80,18 +80,48 @@ namespace TextBasedRPG_v2
                 if (loser.type == "player")
                 {
                     Console.SetCursorPosition(4, next);
-                    Console.WriteLine("I'm afraid you have died! We'll restore and respawn you.");
+                    Console.WriteLine("You are critically injured!");
+                    next += 2;
+
                     Console.ReadKey(true);
                     loser.health = loser.healthMax;
                     loser.lives --;
-                    loser.x = loser.spawn[0];
-                    loser.y = loser.spawn[1];
-                    MapManager.worldX = 1;
-                    MapManager.worldY = 1;
+
+                    if (loser.lives != 0)
+                    {
+                        Console.SetCursorPosition(4, next);
+                        Console.WriteLine("You lost conciousness!");
+                        next += 2;
+
+                        Console.ReadKey(true);
+
+                        loser.x = 33;
+                        loser.y = 10;
+                        MapManager.worldX = 2;
+                        MapManager.worldY = 2;
+
+                        EventManager.messageContent = "\'I saved you! Please be careful!\'";
+                        EventManager.messageNew = true;
+                        EventManager.redraw = true;
+                    }
+
+                    else
+                    {
+                        Console.SetCursorPosition(4, next);
+                        Console.WriteLine("You have DIED!");
+
+                        Console.ReadKey(true);
+
+                        MenuManager.GameOver();
+                    }
                 }
 
                 if (loser.type == "npc")
                 {
+                    Console.SetCursorPosition(4, next);
+                    Console.WriteLine(loser.name + " has DIED!");
+                    next += 2;
+
                     Enemy convert = null;
                     foreach (Enemy enemy in Enemy.enemies)
                     {
@@ -99,7 +129,7 @@ namespace TextBasedRPG_v2
                     }
 
                     Enemy.deadEnemies.Add(convert);
-
+                    
                     int winnings = rand.Next(3, 13);
                     Player.gold += winnings;
                     Console.SetCursorPosition(4, next);
@@ -129,8 +159,13 @@ namespace TextBasedRPG_v2
                     }
                 }
             }
-            Program.player.x = Program.player.lastX;
-            Program.player.y = Program.player.lastY;
+            
+            if (flee)
+            {
+                Program.player.x = Program.player.lastX;
+                Program.player.y = Program.player.lastY;
+            }
+
             EventManager.redraw = true;
         }
 
@@ -205,6 +240,7 @@ namespace TextBasedRPG_v2
             else
             {
                 damage = rand.Next(1, 11);
+                damage += attacker.strength;
 
                 Console.SetCursorPosition(4, next);
                 Console.WriteLine(attacker.name + " hit " + victim.name + " for " + damage + " damage!");
@@ -221,10 +257,6 @@ namespace TextBasedRPG_v2
 
                 if (victim.health <= 0)
                 {
-                    Console.SetCursorPosition(4, next);
-                    Console.WriteLine(victim.name + " has DIED!");
-                    next += 2;
-                    Console.ReadKey(true);
                     EventManager.redraw = true;
                     return true;
                 }

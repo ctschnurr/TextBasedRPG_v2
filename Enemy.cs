@@ -10,9 +10,9 @@ namespace TextBasedRPG_v2
     {
         public string[,] enemyTemplate = new string[,]
         {
-            {"Zombie","10","3", "Green" },
-            {"Skeleton","15","5", "Gray"},
-            {"Monster","20","7", "Red" },
+            {"Zombie","10","0", "Green" },
+            {"Skeleton","15","1", "Gray"},
+            {"Monster","20","3", "Red" },
         };
 
         static public Enemy enemyA;
@@ -26,8 +26,6 @@ namespace TextBasedRPG_v2
         static public List<Enemy> enemies;
         static public List<Enemy> deadEnemies;
 
-        public bool onMap;
-
         public enum Behavior
         {
             chase,
@@ -35,6 +33,7 @@ namespace TextBasedRPG_v2
         }
 
         public Behavior behavior;
+
         public Enemy()
         {
             Random rand = new Random();
@@ -42,7 +41,7 @@ namespace TextBasedRPG_v2
 
             name = enemyTemplate[roll, 0];
             health = Int32.Parse(enemyTemplate[roll, 1]);
-            // strength = enemies[roll, 2]
+            strength = Int32.Parse(enemyTemplate[roll, 2]);
             color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), enemyTemplate[roll, 3]);
 
             behavior = (Behavior)rand.Next(0, 2);
@@ -66,6 +65,15 @@ namespace TextBasedRPG_v2
             deadEnemies = new List<Enemy>();
         }
 
+        public static void DrawEnemies()
+        {
+            if (MapManager.worldX == 2 && MapManager.worldY == 0)
+                foreach (Enemy enemy in Enemy.enemies)
+                {
+                    MapManager.DrawCharacter(enemy);
+                }
+        }
+
         public static void Check()
         {
             if (MapManager.worldX == 2 && MapManager.worldY == 0)
@@ -73,18 +81,9 @@ namespace TextBasedRPG_v2
                 GenerateEnemy();
                 DrawEnemies();
                 UpdateEnemies();
-
+                CleanupEnemies();
             }
         }
-
-        public static void DrawEnemies()
-        {
-            foreach (Enemy enemy in Enemy.enemies)
-            {
-                MapManager.DrawCharacter(enemy);
-            }
-        }
-
         
         public void Update(Character player, Character self)
         {
@@ -303,16 +302,18 @@ namespace TextBasedRPG_v2
                     else if (enemy.stunned == false) enemy.Update(Program.player, enemy);
                 }
             }
+        }
 
+        public static void CleanupEnemies()
+        {
             foreach (Enemy enemy in deadEnemies)
             {
                 enemies.Remove(enemy);
             }
 
             deadEnemies.Clear();
+
         }
-
-
 
 
 

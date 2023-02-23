@@ -1,16 +1,16 @@
 ╔═══════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                       ║
+║   Your goal is to unlock the gate in the first area.                                  ║
+║                                                                                       ║
+║   Press escape from the map to reach the menu.                                        ║
 ║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║
-║          ¡Θ¡                                                                          ║
-║          ╤═╤     Visit the shrine to heal!                                            ║
-║          ┴▀┴                                                                          ║
 ║                                                                                       ║
 ║                                                                                       ║
-║           ☻      Watch out for the Undead!                                            ║
 ║                                                                                       ║
-║                  Press escape from the map to quit!                                   ║
+║                                                                                       ║
+║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║

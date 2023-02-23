@@ -14,10 +14,12 @@ namespace TextBasedRPG_v2
         int mapwidth;
         int mapheight;
         static bool firstTurn = true;
-        
+
+        public char[,] titleScreen;
         public char[,] menuFrame;
         public char[,] instructions;
         public char[,] pauseMenu;
+        public char[,] gameOver;
 
         public static char[,][,] world;
 
@@ -36,16 +38,21 @@ namespace TextBasedRPG_v2
         // 148 176 ░ 177 ▒ 178 ▓
         // 179 │ 180 ┤ 191 ┐ 192 └ 193 ┴ 194 ┬ 195 ├ 196 ─ 197 ┼ 217 ┘ 218 ┌
         // 185 ╣ 186 ║ 187 ╗ 188 ╝ 200 ╚ 201 ╔ 202 ╩ 203 ╦ 204 ╠ 205 ═ 206 ╬ 207 ╧ 208 ╨ 209 ╤ 210 ╥ 211 ╙ 212 ╘ 213 ╒ 214 ╓ 215 ╫ 216 ╪ 217 ┘ 218 ┌
-        // 219 █ 220 ▄ 223 ▀ 254 ■ 
+        // 219 █ 220 ▄ 223 ▀ 254 ■ Ø æ
         public MapManager()
         {
             worldX = 1;
             worldY = 1;
 
-            walkables = new List<char> { ' ', '░', '▀', '▓', (char)1 };
-            enemyWalkables = new char[] { (char)2 };
+            walkables = new List<char> { 'ō', ' ', '░', '▀', '▓', (char)1, '┼', '°' };
+            enemyWalkables = new char[] { 'x' };
 
             // menu related maps
+
+            mapData = System.IO.File.ReadAllLines("./Assets/titleScreen.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            titleScreen = mapEater(mapData, mapheight, mapwidth);
 
             mapData = System.IO.File.ReadAllLines("./Assets/menuFrame.txt");
             mapwidth = mapData[0].Length;
@@ -61,6 +68,11 @@ namespace TextBasedRPG_v2
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
             pauseMenu = mapEater(mapData, mapheight, mapwidth);
+
+            mapData = System.IO.File.ReadAllLines("./Assets/gameOver.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            gameOver = mapEater(mapData, mapheight, mapwidth);
 
             // world maps
 
@@ -202,6 +214,21 @@ namespace TextBasedRPG_v2
                         instance[0] = "Gray";
                         instance[1] = "DarkYellow";
                         break;
+
+                    case 'ō':
+                        instance[0] = "Blue";
+                        instance[1] = "DarkYellow";
+                        break;
+
+                    case '┼':
+                        instance[0] = "Gray";
+                        instance[1] = "DarkYellow";
+                        break;
+
+                    case '°':
+                        instance[0] = "Yellow";
+                        instance[1] = "DarkYellow";
+                        break;
                 }
             }
 
@@ -244,6 +271,16 @@ namespace TextBasedRPG_v2
                     case '░':
                         instance[1] = "DarkYellow";
                         break;
+
+                    case 'ō':
+                        instance[0] = "Blue";
+                        instance[1] = "Green";
+                        break;
+
+                    case '°':
+                        instance[0] = "Yellow";
+                        instance[1] = "Green";
+                        break;
                 }
             }
 
@@ -277,16 +314,11 @@ namespace TextBasedRPG_v2
                 }
             }
 
-            if (worldX == 1 && worldY == 1)
+            if ((worldX == 1 && worldY == 1) || (worldX == 1 && worldY == 0))
             {
                 switch (tile)
                 {
                     case ' ':
-                        instance[1] = "Green";
-                        break;
-
-                    case '♠':
-                        instance[0] = "DarkGreen";
                         instance[1] = "Green";
                         break;
 
@@ -296,6 +328,7 @@ namespace TextBasedRPG_v2
 
                     case '█':
                     case '▄':
+                    case '♠':
                         instance[0] = "DarkGreen";
                         instance[1] = "Green";
                         break;
@@ -307,6 +340,23 @@ namespace TextBasedRPG_v2
 
                     case '▲':
                         instance[0] = "DarkGray";
+                        instance[1] = "Green";
+                        break;
+
+                    case '─':
+                    case '(':
+                    case ')':
+                        instance[0] = "Black";
+                        instance[1] = "Green";
+                        break;
+
+                    case 'ō':
+                        instance[0] = "Blue";
+                        instance[1] = "Green";
+                        break;
+
+                    case '°':
+                        instance[0] = "Yellow";
                         instance[1] = "Green";
                         break;
 
