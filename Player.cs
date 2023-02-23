@@ -8,6 +8,8 @@ namespace TextBasedRPG_v2
 {
     internal class Player : Character
     {
+        public static bool hasKey;
+        public static int gold;
         public Player()
         {
             character = (char)2;
@@ -15,6 +17,7 @@ namespace TextBasedRPG_v2
             healthMax = 100;
             health = healthMax;
             lives = 3;
+            gold = 0;
 
             x = 5;
             lastX = 5;
@@ -25,6 +28,7 @@ namespace TextBasedRPG_v2
             spawn[1] = 5;
             type = "player";
             color = ConsoleColor.White;
+            hasKey = false;
         }
         public void Update(Character self)
         {
@@ -44,6 +48,7 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.W:
                     destination = map[y - 1, x];
                     isWalkable = MapManager.CheckWalkable(destination, self);
+                    EventManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {
@@ -61,6 +66,7 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.S:
                     destination = map[y + 1, x];
                     isWalkable = MapManager.CheckWalkable(destination, self);
+                    EventManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {
@@ -78,6 +84,7 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.A:
                     destination = map[y, x - 1];
                     isWalkable = MapManager.CheckWalkable(destination, self);
+                    EventManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {
@@ -95,6 +102,7 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.D:
                     destination = map[y, x + 1];
                     isWalkable = MapManager.CheckWalkable(destination, self);
+                    EventManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {

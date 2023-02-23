@@ -8,7 +8,7 @@ namespace TextBasedRPG_v2
 {
 
     // TO DO:
-    // Map - better maps/levels. different areas
+    // Map - finalize map areas
     // Items - 3 items. Potion, Coin, Shield?
 
     internal class Program
@@ -34,6 +34,7 @@ namespace TextBasedRPG_v2
                 if (EventManager.redraw)
                 {
                     MapManager.DrawMap();
+                    EventManager.MapMessage();
                     MapManager.DrawCharacter(player);
                     Enemy.Check();
                     EventManager.redraw = false;

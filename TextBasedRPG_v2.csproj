@@ -60,6 +60,9 @@
     <Content Include="Assets\east_map.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Assets\pauseMenu.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\northeast_map.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

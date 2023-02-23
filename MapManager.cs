@@ -9,7 +9,7 @@ namespace TextBasedRPG_v2
     internal class MapManager
     {
         string[] mapData;
-        static char[] walkables;
+        public static List<char> walkables;
         static char[] enemyWalkables;
         int mapwidth;
         int mapheight;
@@ -40,7 +40,7 @@ namespace TextBasedRPG_v2
             worldX = 1;
             worldY = 1;
 
-            walkables = new char[] { ' ', '░', '▀', '▓', (char)1 };
+            walkables = new List<char> { ' ', '░', '▀', '▓', (char)1 };
             enemyWalkables = new char[] { (char)2 };
 
             // menu related maps
@@ -156,8 +156,8 @@ namespace TextBasedRPG_v2
         public static string[] GetTileColor(char tile)
         {
             string[] instance = new string[2];
-            Random rand = new Random();
-            int roll;
+            // Random rand = new Random();
+            // int roll;
 
             instance[0] = "Gray"; // foreground
             instance[1] = "Black"; // background

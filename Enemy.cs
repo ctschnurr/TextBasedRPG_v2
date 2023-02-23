@@ -19,6 +19,10 @@ namespace TextBasedRPG_v2
         static public Enemy enemyB;
         static public Enemy enemyC;
 
+        static public Enemy enemysave1;
+        static public Enemy enemysave2;
+        static public Enemy enemysave3;
+
         static public List<Enemy> enemies;
         static public List<Enemy> deadEnemies;
 

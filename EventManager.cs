@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace TextBasedRPG_v2
 {
@@ -18,6 +19,8 @@ namespace TextBasedRPG_v2
         static int messageCount = 0;
         public static string messageContent = null;
         public static bool messageNew = false;
+
+        public static bool gateLocked = true;
 
         public static void EventCheck(char destination, Character subject)
         {
@@ -44,12 +47,46 @@ namespace TextBasedRPG_v2
                         messageContent = "Your health has been restored!";
                         messageNew = true;
                         break;
+
                 }
             }
 
             if (subject.type == "npc")
             {
                 if (subject.x == Program.player.x && subject.y == Program.player.y) BattleSystem.Battle(subject, Program.player);
+            }
+        }
+
+        public static void Triggers(char destination)
+        {
+            switch (destination)
+            {
+                case '─':
+                    if (MapManager.worldY == 1 && MapManager.worldX == 1 && gateLocked == true)
+                    {
+                        if (Player.hasKey == false)
+                        {
+                            messageContent = "The gate is locked.. find the key!";
+                            messageNew = true;
+                        }
+                        
+                        if (Player.hasKey)
+                        {
+                            messageContent = "You unlocked the gate!";
+                            messageNew = true;
+                            MapManager.walkables.Add(destination);
+                            gateLocked = false;
+                        }
+                    }
+                    break;
+
+                case 'Ø':
+                    messageContent = "You got the key!";
+                    messageNew = true;
+                    Player.hasKey = true;
+                    break;
+
+
             }
         }
         
@@ -87,7 +124,7 @@ namespace TextBasedRPG_v2
             if (messageCount == 0)
             {
                 Console.SetCursorPosition(45, 40);
-                Console.Write("                          ");
+                Console.Write("                                             ");
             }
         }
     }

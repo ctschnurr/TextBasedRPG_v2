@@ -135,6 +135,17 @@ namespace TextBasedRPG_v2
                     }
 
                     Enemy.deadEnemies.Add(convert);
+
+                    int winnings = rand.Next(3, 13);
+                    Player.gold += winnings;
+                    Console.SetCursorPosition(4, next);
+                    Console.WriteLine("You got " + winnings + " gold!");
+                    Console.ReadKey(true);
+
+                    if (Enemy.enemysave1 == null)
+                    {
+                        convert = Enemy.enemysave1;
+                    }
                 }
                 EventManager.redraw = true;
             }
