@@ -57,6 +57,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\witchHut.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\east_map.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -42,7 +42,8 @@ namespace TextBasedRPG_v2
             switch (choice.Key)
             {
                 case ConsoleKey.Escape:
-                    Program.gameOver = true;
+                    MenuManager.PauseMenu();
+                    EventManager.redraw = true;
                     break;
 
                 case ConsoleKey.W:

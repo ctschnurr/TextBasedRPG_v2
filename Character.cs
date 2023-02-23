@@ -31,6 +31,8 @@ namespace TextBasedRPG_v2
         public int worldX;
         public int worldY;
 
+        public bool stunned;
+
         // I'm building a better DrawCharacter() in MapManager, delete this once thats done
         public void Draw(int charX, int charY, char character)
         {

@@ -21,6 +21,8 @@ namespace TextBasedRPG_v2
         public static bool messageNew = false;
 
         public static bool gateLocked = true;
+        public static string taskMessage = "Explore!";
+
 
         public static void EventCheck(char destination, Character subject)
         {
@@ -40,16 +42,27 @@ namespace TextBasedRPG_v2
 
                 if (fight) BattleSystem.Battle(subject, victim);
 
-                switch (destination)
+                if (destination == '▀')
                 {
-                    case '▀':
-                        Heal(subject);
-                        messageContent = "Your health has been restored!";
-                        messageNew = true;
-                        break;
+                    if (MapManager.worldY == 1 && MapManager.worldX == 2)
+                    {
+                        MapManager.worldY = 2;
+                        Program.player.y = 14;
+                        Program.player.x = 42;
+                        EventManager.redraw = true;
+                    }
 
+                    else if (MapManager.worldY == 2 && MapManager.worldX == 2)
+                    {
+                        MapManager.worldY = 1;
+                        Program.player.y = 23;
+                        Program.player.x = 51;
+                        EventManager.redraw = true;
+                    }
                 }
             }
+
+
 
             if (subject.type == "npc")
             {
@@ -67,6 +80,7 @@ namespace TextBasedRPG_v2
                         if (Player.hasKey == false)
                         {
                             messageContent = "The gate is locked.. find the key!";
+                            taskMessage = "Find the key!";
                             messageNew = true;
                         }
                         
@@ -80,10 +94,24 @@ namespace TextBasedRPG_v2
                     }
                     break;
 
-                case 'Ø':
-                    messageContent = "You got the key!";
-                    messageNew = true;
-                    Player.hasKey = true;
+                case '☻':
+                    if (MapManager.worldY == 2 && MapManager.worldX == 2)
+                    {
+                        if (Player.hasKey == false)
+                        {
+                            messageContent = "\'I'll trade 100 gold for the key\'";
+                            taskMessage = "Bring the witch 100 gold!";
+                            messageNew = true;
+                        }
+
+                        if (Player.hasKey)
+                        {
+                            messageContent = "You unlocked the gate!";
+                            messageNew = true;
+                            MapManager.walkables.Add(destination);
+                            gateLocked = false;
+                        }
+                    }
                     break;
 
 

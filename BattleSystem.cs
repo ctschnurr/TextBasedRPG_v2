@@ -11,6 +11,8 @@ namespace TextBasedRPG_v2
         public static bool battleOver;
         public static Character loser;
         public static int next;
+        static Random rand = new Random();
+        static bool flee;
 
         public static void Battle(Character first, Character second)
         {
@@ -18,11 +20,11 @@ namespace TextBasedRPG_v2
             ConsoleKeyInfo choice;
 
             battleOver = false;
+            flee = false;
             MapManager.DrawMenu(EventManager.atlas.menuFrame);
             first.ShowHud();
             second.ShowHud();
 
-            Random rand = new Random();
             // int damage;
             next = 3;
 
@@ -44,28 +46,8 @@ namespace TextBasedRPG_v2
                 if (battleOver == false && second.type == "player")
                 {
                     Console.SetCursorPosition(4, next);
-                    Console.Write("(A)ttack   (R)un : ");
-                    next += 2;
 
-                    choice = Console.ReadKey(true); // build playerChoice()?;
-                    switch (choice.Key)
-                    {
-                        case ConsoleKey.A:
-                            battleOver = Attack(second, first);
-                            if (battleOver == true) loser = first;
-                            break;
-
-                        case ConsoleKey.R:
-                            // build run option
-                            Console.SetCursorPosition(4, next);
-                            Console.WriteLine("You don't know how to run yet!");
-                            next += 2;
-
-                            Console.ReadKey(true);
-                            break;
-                    }
-
-                    ReDrawCheck(first, second);
+                    PlayerChoice(second, first);
                 }
 
                 if (battleOver == false && first.type == "npc")
@@ -83,35 +65,17 @@ namespace TextBasedRPG_v2
                 if (battleOver == false && first.type == "player")
                 {
                     Console.SetCursorPosition(4, next);
-                    Console.Write("(A)ttack   (R)un : ");
-                    next += 2;
 
-                    choice = Console.ReadKey(true); // build playerChoice()?;
-
-                    ReDrawCheck(first, second);
-
-                    switch (choice.Key)
-                    {
-                        case ConsoleKey.A:
-                            battleOver = Attack(first, second);
-                            if (battleOver == true) loser = second;
-                            break;
-
-                        case ConsoleKey.R:
-                            // build run option
-                            Console.SetCursorPosition(4, next);
-                            Console.WriteLine("You don't know how to run yet!");
-                            next += 2;
-
-                            Console.ReadKey(true);
-                            break;
-                    }
+                    PlayerChoice(first, second);
 
                     ReDrawCheck(first, second);
                 }
             }
 
-            if (battleOver == true && turn != 1)
+            if (flee == true && first.type == "npc") first.stunned = true;
+            if (flee == true && second.type == "npc") second.stunned = true;
+
+            if (battleOver == true && turn != 1 && flee == false)
             {
                 if (loser.type == "player")
                 {
@@ -144,10 +108,69 @@ namespace TextBasedRPG_v2
 
                     if (Enemy.enemysave1 == null)
                     {
-                        convert = Enemy.enemysave1;
+                        Enemy.enemysave1 = convert;
+                    }
+
+                    else if (Enemy.enemysave2 == null)
+                    {
+                        Enemy.enemysave2 = convert;
+                    }
+
+                    else if (Enemy.enemysave3 == null)
+                    {
+                        Enemy.enemysave3 = convert;
+                    }
+
+                    else
+                    {
+                        Enemy.enemysave3 = Enemy.enemysave2;
+                        Enemy.enemysave2 = Enemy.enemysave1;
+                        Enemy.enemysave1 = convert;
                     }
                 }
-                EventManager.redraw = true;
+            }
+            Program.player.x = Program.player.lastX;
+            Program.player.y = Program.player.lastY;
+            EventManager.redraw = true;
+        }
+
+        static void PlayerChoice(Character first, Character second)
+        {
+            Console.Write("(A)ttack   (R)un : ");
+            next += 2;
+
+            ConsoleKeyInfo choice = Console.ReadKey(true); // build playerChoice()?;
+
+            ReDrawCheck(first, second);
+
+            switch (choice.Key)
+            {
+                case ConsoleKey.A:
+                    battleOver = Attack(first, second);
+                    if (battleOver == true) loser = second;
+                    break;
+
+                case ConsoleKey.R:
+                    Console.SetCursorPosition(4, next);
+
+                    int run = rand.Next(1, 4);
+                    if (run != 1)
+                    {
+                        Console.SetCursorPosition(4, next);
+                        Console.WriteLine("You couldn't get away!");
+                        next += 2;
+                    }
+
+                    else
+                    {
+                        Console.SetCursorPosition(4, next);
+                        Console.WriteLine("You flee from battle!");
+                        battleOver = true;
+                        flee = true;
+                        next += 2;
+                        Console.ReadKey(true);
+                    }
+                    break;
             }
         }
 

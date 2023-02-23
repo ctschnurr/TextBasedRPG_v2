@@ -35,7 +35,6 @@ namespace TextBasedRPG_v2
         }
 
         public Behavior behavior;
-
         public Enemy()
         {
             Random rand = new Random();
@@ -57,6 +56,8 @@ namespace TextBasedRPG_v2
 
             worldX = 1;
             worldY = 0;
+
+            stunned = false;
         }
 
         public static void initEnemies()
@@ -70,13 +71,17 @@ namespace TextBasedRPG_v2
             if (MapManager.worldX == 2 && MapManager.worldY == 0)
             {
                 GenerateEnemy();
-                foreach (Enemy enemy in Enemy.enemies)
-                {
-                    MapManager.DrawCharacter(enemy);
-                }
-
+                DrawEnemies();
                 UpdateEnemies();
 
+            }
+        }
+
+        public static void DrawEnemies()
+        {
+            foreach (Enemy enemy in Enemy.enemies)
+            {
+                MapManager.DrawCharacter(enemy);
             }
         }
 
@@ -294,7 +299,8 @@ namespace TextBasedRPG_v2
             {
                 foreach (Enemy enemy in enemies)
                 {
-                    enemy.Update(Program.player, enemy);
+                    if (enemy.stunned == true) enemy.stunned = false;
+                    else if (enemy.stunned == false) enemy.Update(Program.player, enemy);
                 }
             }
 

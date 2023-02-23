@@ -35,8 +35,8 @@ namespace TextBasedRPG_v2
                 {
                     MapManager.DrawMap();
                     EventManager.MapMessage();
+                    Enemy.DrawEnemies();
                     MapManager.DrawCharacter(player);
-                    Enemy.Check();
                     EventManager.redraw = false;
                 }
                 

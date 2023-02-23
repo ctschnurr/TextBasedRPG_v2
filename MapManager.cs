@@ -17,6 +17,7 @@ namespace TextBasedRPG_v2
         
         public char[,] menuFrame;
         public char[,] instructions;
+        public char[,] pauseMenu;
 
         public static char[,][,] world;
 
@@ -25,6 +26,7 @@ namespace TextBasedRPG_v2
         public char[,] south_map;
         public char[,] east_map;
         public char[,] northeast_map;
+        public char[,] witchHut;
 
         public static int worldX;
         public static int worldY;
@@ -55,6 +57,11 @@ namespace TextBasedRPG_v2
             mapheight = mapData.Count();
             instructions = mapEater(mapData, mapheight, mapwidth);
 
+            mapData = System.IO.File.ReadAllLines("./Assets/pauseMenu.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            pauseMenu = mapEater(mapData, mapheight, mapwidth);
+
             // world maps
 
             mapData = System.IO.File.ReadAllLines("./Assets/center_map.txt");
@@ -82,6 +89,11 @@ namespace TextBasedRPG_v2
             mapheight = mapData.Count();
             northeast_map = mapEater(mapData, mapheight, mapwidth);
 
+            mapData = System.IO.File.ReadAllLines("./Assets/witchHut.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            witchHut = mapEater(mapData, mapheight, mapwidth);
+
             world = new char[3,3][,];
 
             world[1, 1] = center_map;
@@ -89,6 +101,7 @@ namespace TextBasedRPG_v2
             world[2, 1] = south_map;
             world[1, 2] = east_map;
             world[0, 2] = northeast_map;
+            world[2, 2] = witchHut;
 
         }
 
@@ -190,10 +203,81 @@ namespace TextBasedRPG_v2
                         instance[1] = "DarkYellow";
                         break;
                 }
-
-
             }
-            else
+
+            if (worldX == 2 && worldY == 1)
+            {
+                switch (tile)
+                {
+                    case ' ':
+                        instance[1] = "Green";
+                        break;
+
+                    case '▲':
+                        instance[0] = "DarkGray";
+                        instance[1] = "Green";
+                        break;
+
+                    case '♠':
+                        instance[0] = "DarkGreen";
+                        instance[1] = "Green";
+                        break;
+
+                    case '▄':
+                    case '█':
+                    case '▀':
+                        instance[0] = "DarkYellow";
+                        instance[1] = "Green";
+                        break;
+
+                    case '│':
+                    case '└':
+                    case '┴':
+                    case '─':
+                    case '┘':
+                    case '┌':
+                    case '┐':
+                        instance[0] = "DarkGray";
+                        instance[1] = "Green";
+                        break;
+
+                    case '░':
+                        instance[1] = "DarkYellow";
+                        break;
+                }
+            }
+
+            if (worldX == 2 && worldY == 2)
+            {
+                switch (tile)
+                {
+                    case ' ':
+                        instance[1] = "Black";
+                        break;
+
+                    case '▀':
+                        instance[0] = "DarkGray";
+                        instance[1] = "Green";
+                        break;
+
+                    case '▄':
+                    case '█':
+                        instance[0] = "DarkGray";
+                        instance[1] = "Black";
+                        break;
+
+                    case '░':
+                        instance[1] = "DarkYellow";
+                        break;
+
+                    case '☻':
+                        instance[0] = "Blue";
+                        instance[1] = "DarkYellow";
+                        break;
+                }
+            }
+
+            if (worldX == 1 && worldY == 1)
             {
                 switch (tile)
                 {
