@@ -50,8 +50,8 @@ namespace TextBasedRPG_v2
             type = "npc";
             healthMax = health;
 
-            x = rand.Next(25, 30);
-            y = rand.Next(25, 30);
+            x = rand.Next(20, 50);
+            y = rand.Next(15, 35);
 
             worldX = 1;
             worldY = 0;

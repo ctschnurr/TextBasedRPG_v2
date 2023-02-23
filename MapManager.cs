@@ -347,7 +347,7 @@ namespace TextBasedRPG_v2
                     case '(':
                     case ')':
                         instance[0] = "Black";
-                        instance[1] = "Green";
+                        instance[1] = "DarkYellow";
                         break;
 
                     case 'ō':
@@ -421,7 +421,8 @@ namespace TextBasedRPG_v2
 
             }
 
-            //draw the character on screen in set position
+            // draw the character on screen in set position
+
             Console.SetCursorPosition(subject.x + 2, subject.y + 1);
             tile = map[subject.y, subject.x];
             colorDat = GetTileColor(tile);
