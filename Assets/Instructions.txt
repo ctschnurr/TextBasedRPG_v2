@@ -2,17 +2,17 @@
 ║                                                                                       ║
 ║   Your goal is to unlock the gate in the first area.                                  ║
 ║                                                                                       ║
+║   Use WASD to move.                                                                   ║
+║                                                                                       ║
 ║   Press escape from the map to reach the menu.                                        ║
 ║                                                                                       ║
+║   Keep an eye out for:                                                                ║
 ║                                                                                       ║
+║   ō Potions                                                                           ║
 ║                                                                                       ║
+║   ° Coins                                                                             ║
 ║                                                                                       ║
-║                                                                                       ║
-║                                                                                       ║
-║                                                                                       ║
-║                                                                                       ║
-║                                                                                       ║
-║                                                                                       ║
+║   ┼ Weapons                                                                           ║
 ║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║

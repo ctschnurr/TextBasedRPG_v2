@@ -15,6 +15,7 @@ namespace TextBasedRPG_v2
         {
             character = (char)2;
             name = "Player";
+            power = "punches";
             healthMax = 100;
             health = healthMax;
             lives = 3;
@@ -24,6 +25,9 @@ namespace TextBasedRPG_v2
             lastX = 10;
             y = 10;
             lastY = 10;
+
+            worldX = 1;
+            worldY = 1;
 
             spawn[0] = 5;
             spawn[1] = 5;
@@ -45,7 +49,7 @@ namespace TextBasedRPG_v2
             {
                 case ConsoleKey.Escape:
                     MenuManager.PauseMenu();
-                    EventManager.redraw = true;
+                    MapManager.redraw = true;
                     break;
 
                 case ConsoleKey.W:
@@ -128,29 +132,33 @@ namespace TextBasedRPG_v2
             if (y == 0)
             {
                 MapManager.worldY --;
+                worldY--;
                 y = 35;
-                EventManager.redraw = true;
+                MapManager.redraw = true;
             }
 
             if (y == 36)
             {
                 MapManager.worldY++;
+                worldY++;
                 y = 1;
-                EventManager.redraw = true;
+                MapManager.redraw = true;
             }
 
             if (x == 0)
             {
                 MapManager.worldX--;
+                worldX--;
                 x = 87;
-                EventManager.redraw = true;
+                MapManager.redraw = true;
             }
 
             if (x == 88)
             {
                 MapManager.worldX++;
+                worldX--;
                 x = 1;
-                EventManager.redraw = true;
+                MapManager.redraw = true;
             }
 
             if (move)

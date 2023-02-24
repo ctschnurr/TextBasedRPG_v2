@@ -11,7 +11,8 @@ namespace TextBasedRPG_v2
     {
         // game fundamentals
         static public MapManager atlas = new MapManager();
-        static public bool redraw = true;
+        
+        // static public bool redraw = true;
 
         public static int height = atlas.menuFrame.GetLength(0) + 2;
         public static int width = atlas.menuFrame.GetLength(1) + 2;
@@ -21,9 +22,6 @@ namespace TextBasedRPG_v2
         public static string messageContent = null;
         public static bool messageNew = false;
         public static string taskMessage = "Explore!";
-
-        // gate and task message
-        public static bool gateLocked = true;
 
         //this handles the pickups and battle detection
         public static void EventCheck(char destination, Character subject)
@@ -35,7 +33,7 @@ namespace TextBasedRPG_v2
 
                 foreach (Enemy enemy in Enemy.enemies)
                 {
-                    if (enemy.x == subject.x && enemy.y == subject.y)
+                    if (enemy.x == subject.x && enemy.y == subject.y && enemy.worldX == subject.worldX && enemy.worldY == subject.worldY)
                     {
                         victim = enemy;
                         fight = true;
@@ -51,7 +49,7 @@ namespace TextBasedRPG_v2
                         MapManager.worldY = 2;
                         Program.player.y = 14;
                         Program.player.x = 42;
-                        EventManager.redraw = true;
+                        MapManager.redraw = true;
                     }
 
                     else if (MapManager.worldY == 2 && MapManager.worldX == 2)
@@ -59,7 +57,7 @@ namespace TextBasedRPG_v2
                         MapManager.worldY = 1;
                         Program.player.y = 23;
                         Program.player.x = 51;
-                        EventManager.redraw = true;
+                        MapManager.redraw = true;
                     }
                 }
 
@@ -89,6 +87,7 @@ namespace TextBasedRPG_v2
                         messageNew = true;
 
                         Program.player.strength += 3;
+                    Program.player.power = "slashes";
 
                         char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
                         holder[Program.player.y, Program.player.x] = ' ';                   
@@ -121,7 +120,7 @@ namespace TextBasedRPG_v2
             switch (destination)
             {
                 case '─':
-                    if (MapManager.worldY == 1 && MapManager.worldX == 1 && gateLocked == true)
+                    if (MapManager.worldY == 1 && MapManager.worldX == 1 && MapManager.gateLocked == true)
                     {
                         if (Player.hasKey == false)
                         {
@@ -135,7 +134,7 @@ namespace TextBasedRPG_v2
                             messageContent = "You unlocked the gate!";
                             messageNew = true;
                             MapManager.walkables.Add(destination);
-                            gateLocked = false;
+                            MapManager.gateLocked = false;
                         }
                     }
                     break;
@@ -180,7 +179,7 @@ namespace TextBasedRPG_v2
             {
                 Console.SetWindowSize(width, height);
                 Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
-                redraw = true;
+                MapManager.redraw = true;
             }
         }
 
@@ -191,6 +190,9 @@ namespace TextBasedRPG_v2
             {
                 messageCount = 10;
                 messageNew = false;
+
+                Console.SetCursorPosition(45, 40);
+                Console.Write("                                             ");
             }
 
             if (messageCount > 0)

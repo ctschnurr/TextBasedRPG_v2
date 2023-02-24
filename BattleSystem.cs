@@ -14,10 +14,10 @@ namespace TextBasedRPG_v2
         static Random rand = new Random();
         static bool flee;
 
+        // battle handler and mini game loop
         public static void Battle(Character first, Character second)
         {
             int turn = 1;
-            ConsoleKeyInfo choice;
 
             battleOver = false;
             flee = false;
@@ -25,7 +25,6 @@ namespace TextBasedRPG_v2
             first.ShowHud();
             second.ShowHud();
 
-            // int damage;
             next = 3;
 
             loser = null; 
@@ -35,7 +34,7 @@ namespace TextBasedRPG_v2
                 if (turn == 1)
                 {
                     Console.SetCursorPosition(4, next);
-                    Console.WriteLine(first.name + " started a fight! " + first.name + " goes first!");
+                    Console.WriteLine(first.name + " attacks " + second.name + "! " + first.name + " goes first!");
                     next += 2;
 
                     battleOver = Attack(first, second);
@@ -71,9 +70,13 @@ namespace TextBasedRPG_v2
                     ReDrawCheck(first, second);
                 }
             }
+            
+            // if the player successfully flees, it is caught here
 
             if (flee == true && first.type == "npc") first.stunned = true;
             if (flee == true && second.type == "npc") second.stunned = true;
+
+            // if the battle ends without the player fleeing it is handled here
 
             if (battleOver == true && turn != 1 && flee == false)
             {
@@ -102,7 +105,7 @@ namespace TextBasedRPG_v2
 
                         EventManager.messageContent = "\'I saved you! Please be careful!\'";
                         EventManager.messageNew = true;
-                        EventManager.redraw = true;
+                        MapManager.redraw = true;
                     }
 
                     else
@@ -159,22 +162,28 @@ namespace TextBasedRPG_v2
                     }
                 }
             }
-            
+
             if (flee)
             {
                 Program.player.x = Program.player.lastX;
                 Program.player.y = Program.player.lastY;
             }
 
-            EventManager.redraw = true;
+            MapManager.redraw = true;
         }
 
+        // this handles the player's turn and their choice to attack or flee
         static void PlayerChoice(Character first, Character second)
         {
             Console.Write("(A)ttack   (R)un : ");
             next += 2;
 
-            ConsoleKeyInfo choice = Console.ReadKey(true); // build playerChoice()?;
+            ConsoleKeyInfo choice = Console.ReadKey(true);
+
+            while (choice.Key != ConsoleKey.A && choice.Key != ConsoleKey.R)
+            {
+                choice = Console.ReadKey(true);
+            }
 
             ReDrawCheck(first, second);
 
@@ -209,6 +218,7 @@ namespace TextBasedRPG_v2
             }
         }
 
+        // this resets the cursor position 
         static void ReDrawCheck(Character A, Character B)
         {
             if (next > 36)
@@ -220,6 +230,7 @@ namespace TextBasedRPG_v2
             }
         }
 
+        // this handles the attack phase for both player and enemy
         static bool Attack(Character attacker, Character victim)
         {
             Random rand = new Random();
@@ -243,7 +254,7 @@ namespace TextBasedRPG_v2
                 damage += attacker.strength;
 
                 Console.SetCursorPosition(4, next);
-                Console.WriteLine(attacker.name + " hit " + victim.name + " for " + damage + " damage!");
+                Console.WriteLine(attacker.name + " " + attacker.power + " " + victim.name + " for " + damage + " damage!");
                 next += 2;
 
                 victim.health -= damage;
@@ -257,7 +268,7 @@ namespace TextBasedRPG_v2
 
                 if (victim.health <= 0)
                 {
-                    EventManager.redraw = true;
+                    MapManager.redraw = true;
                     return true;
                 }
 

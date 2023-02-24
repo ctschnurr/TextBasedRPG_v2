@@ -6,16 +6,10 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
-
-    // TO DO:
-    // Map - finalize map areas
-    // Items - 3 items. Potion, Coin, Shield?
-
     internal class Program
     {
 
         static public Player player = new Player();
-        static public EventManager e_manager = new EventManager();
 
         public static bool gameOver = false;
 
@@ -27,31 +21,30 @@ namespace TextBasedRPG_v2
             Enemy.initEnemies();
             MenuManager.MainMenu();
 
-            // game loop
+            // Game Manager / Game Loop:
 
             while (gameOver == false)
             {
                 // this redraws the map and characters when redraw is true
-                if (EventManager.redraw)
+                if (MapManager.redraw)
                 {
                     MapManager.DrawMap();
                     EventManager.MapMessage();
                     Enemy.DrawEnemies();
                     MapManager.DrawCharacter(player);
-                    EventManager.redraw = false;
+                    MapManager.redraw = false;
                 }
 
                 // this is the primary game loop essentials
                 player.ShowHud();
                 player.Update(player);
+                Enemy.UpdateEnemies(); // testing
                 Enemy.Check();
                 EventManager.RefreshWindow();
                 EventManager.MapMessage();
                 turn++;
             }
         }        
-
-
 
     }
 }

@@ -8,6 +8,8 @@ namespace TextBasedRPG_v2
 {
     internal class MenuManager
     {
+
+        // this displays the title and instruction screens when the game begins
         public static void MainMenu()
         {
             EventManager.RefreshWindow();
@@ -22,7 +24,7 @@ namespace TextBasedRPG_v2
                     EventManager.RefreshWindow();
                     MapManager.DrawMenu(EventManager.atlas.instructions);
 
-                    Console.SetCursorPosition(6, 7);
+                    Console.SetCursorPosition(6, 17);
                     Console.Write("Before we begin, please enter your name: ");
                     Program.player.name = Console.ReadLine();
 
@@ -34,6 +36,7 @@ namespace TextBasedRPG_v2
             }
         }
 
+        // this shows the pause / stats menu when escape is pressed
         public static void PauseMenu()
         {
             bool go = false;
@@ -99,7 +102,7 @@ namespace TextBasedRPG_v2
                         }
                         break;
 
-                    case ConsoleKey.C:
+                    case ConsoleKey.Escape:
                         go = true;
                         break;
                 }
@@ -108,6 +111,7 @@ namespace TextBasedRPG_v2
 
         }
 
+        // this displays the Game Over screen when lives reach 0, and sets the gameOver trigger
         public static void GameOver()
         {
                 EventManager.RefreshWindow();

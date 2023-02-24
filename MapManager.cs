@@ -8,12 +8,18 @@ namespace TextBasedRPG_v2
 {
     internal class MapManager
     {
+        // map related variables
+
         string[] mapData;
         public static List<char> walkables;
         static char[] enemyWalkables;
         int mapwidth;
         int mapheight;
         static bool firstTurn = true;
+        static public bool redraw = true;
+        public static bool gateLocked = true;
+
+        // menu related arrays
 
         public char[,] titleScreen;
         public char[,] menuFrame;
@@ -21,7 +27,11 @@ namespace TextBasedRPG_v2
         public char[,] pauseMenu;
         public char[,] gameOver;
 
+        // world array to hold map arrays
+
         public static char[,][,] world;
+
+        // map arrays
 
         public char[,] center_map;
         public char[,] north_map;
@@ -30,81 +40,103 @@ namespace TextBasedRPG_v2
         public char[,] northeast_map;
         public char[,] witchHut;
 
+        // variables to track which map we are in, which element within world array to read
+
         public static int worldX;
         public static int worldY;
 
-        public static ConsoleColor tilecolor;
+        // public static ConsoleColor tilecolor;
+
+        // stores map name temporarily to pass into error handler
+
+        public static string mapName;
+
+        // some characters used in making maps:
 
         // 148 176 ░ 177 ▒ 178 ▓
         // 179 │ 180 ┤ 191 ┐ 192 └ 193 ┴ 194 ┬ 195 ├ 196 ─ 197 ┼ 217 ┘ 218 ┌
         // 185 ╣ 186 ║ 187 ╗ 188 ╝ 200 ╚ 201 ╔ 202 ╩ 203 ╦ 204 ╠ 205 ═ 206 ╬ 207 ╧ 208 ╨ 209 ╤ 210 ╥ 211 ╙ 212 ╘ 213 ╒ 214 ╓ 215 ╫ 216 ╪ 217 ┘ 218 ┌
         // 219 █ 220 ▄ 223 ▀ 254 ■ Ø æ
+
         public MapManager()
         {
             worldX = 1;
             worldY = 1;
 
-            walkables = new List<char> { 'ō', ' ', '░', '▀', '▓', (char)1, '┼', '°' };
+            walkables = new List<char> { 'ō', ' ', '░', '▒', '▀', '▓', (char)1, '┼', '°' };
             enemyWalkables = new char[] { 'x' };
 
-            // menu related maps
+            // load in menu related maps from files
 
             mapData = System.IO.File.ReadAllLines("./Assets/titleScreen.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            titleScreen = mapEater(mapData, mapheight, mapwidth);
+            mapName = "titleScreen";
+            titleScreen = MapEater(mapData, mapheight, mapwidth, mapName);
 
             mapData = System.IO.File.ReadAllLines("./Assets/menuFrame.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            menuFrame = mapEater(mapData, mapheight, mapwidth);
+            mapName = "menuFrame";
+            menuFrame = MapEater(mapData, mapheight, mapwidth, mapName);
 
             mapData = System.IO.File.ReadAllLines("./Assets/instructions.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            instructions = mapEater(mapData, mapheight, mapwidth);
+            mapName = "instructions";
+            instructions = MapEater(mapData, mapheight, mapwidth, mapName);
 
             mapData = System.IO.File.ReadAllLines("./Assets/pauseMenu.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            pauseMenu = mapEater(mapData, mapheight, mapwidth);
+            mapName = "pauseMenu";
+            pauseMenu = MapEater(mapData, mapheight, mapwidth, mapName);
 
             mapData = System.IO.File.ReadAllLines("./Assets/gameOver.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            gameOver = mapEater(mapData, mapheight, mapwidth);
+            mapName = "gameOver";
+            gameOver = MapEater(mapData, mapheight, mapwidth, mapName);
 
-            // world maps
+            // load in world maps from files
 
             mapData = System.IO.File.ReadAllLines("./Assets/center_map.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            center_map = mapEater(mapData, mapheight, mapwidth);
+            mapName = "center_map";
+            center_map = MapEater(mapData, mapheight, mapwidth, mapName);
 
             mapData = System.IO.File.ReadAllLines("./Assets/north_map.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            north_map = mapEater(mapData, mapheight, mapwidth);
+            mapName = "north_map";
+            north_map = MapEater(mapData, mapheight, mapwidth, mapName);
 
             mapData = System.IO.File.ReadAllLines("./Assets/south_map.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            south_map = mapEater(mapData, mapheight, mapwidth);
+            mapName = "south_map";
+            south_map = MapEater(mapData, mapheight, mapwidth, mapName);
 
             mapData = System.IO.File.ReadAllLines("./Assets/east_map.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            east_map = mapEater(mapData, mapheight, mapwidth);
+            mapName = "east_map";
+            east_map = MapEater(mapData, mapheight, mapwidth, mapName);
 
             mapData = System.IO.File.ReadAllLines("./Assets/northeast_map.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            northeast_map = mapEater(mapData, mapheight, mapwidth);
+            mapName = "northeast_map";
+            northeast_map = MapEater(mapData, mapheight, mapwidth, mapName);
 
             mapData = System.IO.File.ReadAllLines("./Assets/witchHut.txt");
             mapwidth = mapData[0].Length;
             mapheight = mapData.Count();
-            witchHut = mapEater(mapData, mapheight, mapwidth);
+            mapName = "witchHut";
+            witchHut = MapEater(mapData, mapheight, mapwidth, mapName);
+
+            // set up and fill the List of world maps
 
             world = new char[3,3][,];
 
@@ -117,7 +149,8 @@ namespace TextBasedRPG_v2
 
         }
 
-        private char[,] mapEater(string[] data, int height, int width)
+        // take the file data and digest it into an array
+        private char[,] MapEater(string[] data, int height, int width, string name)
         {
             char[,] storage = new char[height, width];
 
@@ -126,6 +159,12 @@ namespace TextBasedRPG_v2
                 int next = 0;
                 foreach (char character in data[x])
                 {
+                    if (data[x].Length != width)
+                    {
+                        ErrorScreen(data[x], name);
+                        break;
+                    }
+
                     storage[x, next] = character;
                     next++;
                 }
@@ -134,6 +173,7 @@ namespace TextBasedRPG_v2
             return storage;
         }
 
+        // here we draw the map on the screen
         static public void DrawMap()
         {
             Console.Clear();
@@ -154,12 +194,15 @@ namespace TextBasedRPG_v2
                 }
             }
 
+            // here we make sure the hud areas are void of color
+
             Console.SetCursorPosition(3, 40);
             Console.Write("                                         ");
             Console.SetCursorPosition(45, 40);
             Console.Write("                                             ");
         }
 
+        // same as DrawMap but for menus so doesn't apply color
         static public void DrawMenu(char[,] input)
         {
             Console.Clear();
@@ -178,14 +221,16 @@ namespace TextBasedRPG_v2
             }
         }
 
+        // holds color info for each tile on the various maps. Set up so different maps can have different color schemes
+        // I'll likely build this out to be read from a file too and not hard coded, perhaps even built into the map files?
         public static string[] GetTileColor(char tile)
         {
             string[] instance = new string[2];
-            // Random rand = new Random();
-            // int roll;
 
             instance[0] = "Gray"; // foreground
             instance[1] = "Black"; // background
+
+            // northeast map, the graveyard
 
             if (worldX == 2 && worldY == 0)
             {
@@ -229,8 +274,15 @@ namespace TextBasedRPG_v2
                         instance[0] = "Yellow";
                         instance[1] = "DarkYellow";
                         break;
+
+                    case '▒':
+                        instance[0] = "Gray";
+                        instance[1] = "DarkYellow";
+                        break;
                 }
             }
+
+            // east side map
 
             if (worldX == 2 && worldY == 1)
             {
@@ -284,6 +336,8 @@ namespace TextBasedRPG_v2
                 }
             }
 
+            // currently this is the scheme for inside the witch's house
+
             if (worldX == 2 && worldY == 2)
             {
                 switch (tile)
@@ -313,6 +367,8 @@ namespace TextBasedRPG_v2
                         break;
                 }
             }
+
+            // scheme for the center and north maps
 
             if ((worldX == 1 && worldY == 1) || (worldX == 1 && worldY == 0))
             {
@@ -405,6 +461,8 @@ namespace TextBasedRPG_v2
             return goTime;
         }
 
+        // this method handles drawing characters on the map
+
         public static void DrawCharacter(Character subject)
         {
             char[,] map = world[worldY, worldX];
@@ -433,5 +491,21 @@ namespace TextBasedRPG_v2
 
             firstTurn = false;
         }
+
+        static void ErrorScreen(string badstring, string badname)
+        {
+            Console.Clear();
+            Console.WriteLine("There was an error loading map " + badname + ". This is the bad line:");
+            Console.WriteLine("");
+            Console.WriteLine(badstring);
+            Console.WriteLine("");
+            Console.WriteLine("This line will be omitted and the game may not work correctly. Please notify the developer.");
+            Console.ReadKey(true);
+            // Program.gameOver = true;
+        }
+
+
+
+
     }
 }

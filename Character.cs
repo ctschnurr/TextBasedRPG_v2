@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-// mid april to end of may - by june for summer job
-
 namespace TextBasedRPG_v2
 {
     internal class Character
@@ -16,7 +14,7 @@ namespace TextBasedRPG_v2
         public int strength;
         public string name;
         public int lives;
-        public string state = "alive";
+        public string power;
 
         public string type;
         public int[] spawn = new int[] { 0, 0 };

@@ -10,9 +10,9 @@ namespace TextBasedRPG_v2
     {
         public string[,] enemyTemplate = new string[,]
         {
-            {"Zombie","10","0", "Green" },
-            {"Skeleton","15","1", "Gray"},
-            {"Monster","20","3", "Red" },
+            {"Zombie","10","0", "Green", "bites" },
+            {"Skeleton","15","1", "Gray", "smacks"},
+            {"Monster","20","3", "Red", "scratches" },
         };
 
         static public Enemy enemyA;
@@ -43,46 +43,21 @@ namespace TextBasedRPG_v2
             health = Int32.Parse(enemyTemplate[roll, 1]);
             strength = Int32.Parse(enemyTemplate[roll, 2]);
             color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), enemyTemplate[roll, 3]);
+            power = enemyTemplate[roll, 4]; 
 
             behavior = (Behavior)rand.Next(0, 2);
 
-            character = (char)1;
+            character = (char)2;
             type = "npc";
             healthMax = health;
 
             x = rand.Next(20, 50);
             y = rand.Next(15, 35);
 
-            worldX = 1;
+            worldX = 0;
             worldY = 0;
 
             stunned = false;
-        }
-
-        public static void initEnemies()
-        {
-            enemies = new List<Enemy>();
-            deadEnemies = new List<Enemy>();
-        }
-
-        public static void DrawEnemies()
-        {
-            if (MapManager.worldX == 2 && MapManager.worldY == 0)
-                foreach (Enemy enemy in Enemy.enemies)
-                {
-                    MapManager.DrawCharacter(enemy);
-                }
-        }
-
-        public static void Check()
-        {
-            if (MapManager.worldX == 2 && MapManager.worldY == 0)
-            {
-                GenerateEnemy();
-                DrawEnemies();
-                UpdateEnemies();
-                CleanupEnemies();
-            }
         }
         
         public void Update(Character player, Character self)
@@ -249,6 +224,36 @@ namespace TextBasedRPG_v2
             }
         }
 
+
+
+
+
+        // These methods should go into an EnemyManager class when I expand
+
+        public static void initEnemies()
+        {
+            enemies = new List<Enemy>();
+            deadEnemies = new List<Enemy>();
+        }
+
+        public static void DrawEnemies()
+        {
+            if (MapManager.worldX == 2 && MapManager.worldY == 0)
+                foreach (Enemy enemy in Enemy.enemies)
+                {
+                    MapManager.DrawCharacter(enemy);
+                }
+        }
+
+        public static void Check()
+        {
+            if (MapManager.worldX == 2 && MapManager.worldY == 0)
+            {
+                CleanupEnemies();
+                DrawEnemies();
+            }
+        }
+
         public static void GenerateEnemy()
         {
             bool spawnTime;
@@ -294,13 +299,19 @@ namespace TextBasedRPG_v2
 
         public static void UpdateEnemies()
         {
-            if (enemies.Count != 0)
+            if (MapManager.worldX == 2 && MapManager.worldY == 0)
             {
-                foreach (Enemy enemy in enemies)
+                if (enemies.Count != 0)
                 {
-                    if (enemy.stunned == true) enemy.stunned = false;
-                    else if (enemy.stunned == false) enemy.Update(Program.player, enemy);
+                    foreach (Enemy enemy in enemies)
+                    {
+                        if (enemy.stunned == true) enemy.stunned = false;
+                        else if (enemy.stunned == false) enemy.Update(Program.player, enemy);
+
+                    }
                 }
+
+                GenerateEnemy();
             }
         }
 
