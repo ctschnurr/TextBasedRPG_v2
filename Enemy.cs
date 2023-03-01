@@ -15,16 +15,6 @@ namespace TextBasedRPG_v2
             {"Monster","20","3", "Red", "scratches" },
         };
 
-        static public Enemy enemyA;
-        static public Enemy enemyB;
-        static public Enemy enemyC;
-
-        static public Enemy enemysave1;
-        static public Enemy enemysave2;
-        static public Enemy enemysave3;
-
-        static public List<Enemy> enemies;
-        static public List<Enemy> deadEnemies;
 
         public enum Behavior
         {
@@ -224,107 +214,6 @@ namespace TextBasedRPG_v2
             }
         }
 
-
-
-
-
-        // These methods should go into an EnemyManager class when I expand
-
-        public static void initEnemies()
-        {
-            enemies = new List<Enemy>();
-            deadEnemies = new List<Enemy>();
-        }
-
-        public static void DrawEnemies()
-        {
-            if (MapManager.worldX == 2 && MapManager.worldY == 0)
-                foreach (Enemy enemy in Enemy.enemies)
-                {
-                    MapManager.DrawCharacter(enemy);
-                }
-        }
-
-        public static void Check()
-        {
-            if (MapManager.worldX == 2 && MapManager.worldY == 0)
-            {
-                CleanupEnemies();
-                DrawEnemies();
-            }
-        }
-
-        public static void GenerateEnemy()
-        {
-            bool spawnTime;
-            bool spawned = false;
-            string name = "baddie";
-
-            spawnTime = Program.turn % 30 == 0;
-
-            if (spawnTime)
-            {
-                if (enemies.Exists(x => enemies.Contains(enemyA)) == false)
-                {
-                    enemyA = new Enemy();
-                    enemies.Add(enemyA);
-                    name = enemyA.name;
-                    spawned = true;
-                }
-
-                else if (enemies.Exists(x => enemies.Contains(enemyB)) == false)
-                {
-                    enemyB = new Enemy();
-                    enemies.Add(enemyB);
-                    name = enemyB.name;
-                    spawned = true;
-                }
-
-                else if (enemies.Exists(x => enemies.Contains(enemyC)) == false)
-                {
-                    enemyC = new Enemy();
-                    enemies.Add(enemyC);
-                    name = enemyC.name;
-                    spawned = true;
-                }
-            }
-
-            if (spawned)
-            {
-                EventManager.messageContent = "A " + name + " has spawned!";
-                EventManager.messageNew = true;
-            }
-
-        }
-
-        public static void UpdateEnemies()
-        {
-            if (MapManager.worldX == 2 && MapManager.worldY == 0)
-            {
-                if (enemies.Count != 0)
-                {
-                    foreach (Enemy enemy in enemies)
-                    {
-                        if (enemy.stunned == true) enemy.stunned = false;
-                        else if (enemy.stunned == false) enemy.Update(Program.player, enemy);
-
-                    }
-                }
-
-                GenerateEnemy();
-            }
-        }
-
-        public static void CleanupEnemies()
-        {
-            foreach (Enemy enemy in deadEnemies)
-            {
-                enemies.Remove(enemy);
-            }
-
-            deadEnemies.Clear();
-
-        }
 
 
 

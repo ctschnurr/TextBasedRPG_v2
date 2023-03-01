@@ -46,7 +46,10 @@
     <Compile Include="BattleSystem.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="EnemyManager.cs" />
     <Compile Include="EventManager.cs" />
+    <Compile Include="GameManager.cs" />
+    <Compile Include="HUD.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="MenuManager.cs" />
     <Compile Include="Player.cs" />

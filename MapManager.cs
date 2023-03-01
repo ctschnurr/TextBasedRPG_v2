@@ -19,14 +19,6 @@ namespace TextBasedRPG_v2
         static public bool redraw = true;
         public static bool gateLocked = true;
 
-        // menu related arrays
-
-        public char[,] titleScreen;
-        public char[,] menuFrame;
-        public char[,] instructions;
-        public char[,] pauseMenu;
-        public char[,] gameOver;
-
         // world array to hold map arrays
 
         public static char[,][,] world;
@@ -44,6 +36,9 @@ namespace TextBasedRPG_v2
 
         public static int worldX;
         public static int worldY;
+
+        private static int windowWidth;
+        private static int windowHeight;
 
         // public static ConsoleColor tilecolor;
 
@@ -65,38 +60,6 @@ namespace TextBasedRPG_v2
 
             walkables = new List<char> { 'ō', ' ', '░', '▒', '▀', '▓', (char)1, '┼', '°' };
             enemyWalkables = new char[] { 'x' };
-
-            // load in menu related maps from files
-
-            mapData = System.IO.File.ReadAllLines("./Assets/titleScreen.txt");
-            mapwidth = mapData[0].Length;
-            mapheight = mapData.Count();
-            mapName = "titleScreen";
-            titleScreen = MapEater(mapData, mapheight, mapwidth, mapName);
-
-            mapData = System.IO.File.ReadAllLines("./Assets/menuFrame.txt");
-            mapwidth = mapData[0].Length;
-            mapheight = mapData.Count();
-            mapName = "menuFrame";
-            menuFrame = MapEater(mapData, mapheight, mapwidth, mapName);
-
-            mapData = System.IO.File.ReadAllLines("./Assets/instructions.txt");
-            mapwidth = mapData[0].Length;
-            mapheight = mapData.Count();
-            mapName = "instructions";
-            instructions = MapEater(mapData, mapheight, mapwidth, mapName);
-
-            mapData = System.IO.File.ReadAllLines("./Assets/pauseMenu.txt");
-            mapwidth = mapData[0].Length;
-            mapheight = mapData.Count();
-            mapName = "pauseMenu";
-            pauseMenu = MapEater(mapData, mapheight, mapwidth, mapName);
-
-            mapData = System.IO.File.ReadAllLines("./Assets/gameOver.txt");
-            mapwidth = mapData[0].Length;
-            mapheight = mapData.Count();
-            mapName = "gameOver";
-            gameOver = MapEater(mapData, mapheight, mapwidth, mapName);
 
             // load in world maps from files
 
@@ -147,10 +110,12 @@ namespace TextBasedRPG_v2
             world[0, 2] = northeast_map;
             world[2, 2] = witchHut;
 
+            windowWidth = titleScreen.GetLength(1) + 3;
+            windowHeight = titleScreen.GetLength(0) + 2;
         }
 
         // take the file data and digest it into an array
-        private char[,] MapEater(string[] data, int height, int width, string name)
+        public static char[,] MapEater(string[] data, int height, int width, string name)
         {
             char[,] storage = new char[height, width];
 
@@ -174,8 +139,10 @@ namespace TextBasedRPG_v2
         }
 
         // here we draw the map on the screen
-        static public void DrawMap()
+        static public void Draw()
         {
+            Console.SetWindowSize(windowWidth, windowHeight);
+
             Console.Clear();
             char[,] map = world[worldY, worldX];
 
@@ -202,24 +169,6 @@ namespace TextBasedRPG_v2
             Console.Write("                                             ");
         }
 
-        // same as DrawMap but for menus so doesn't apply color
-        static public void DrawMenu(char[,] input)
-        {
-            Console.Clear();
-            int mapHeight = input.GetLength(0);
-            int mapWidth = input.GetLength(1);
-
-            for (int mapX = 0; mapX < mapHeight; mapX++)
-            {
-                Console.SetCursorPosition(2, mapX + 1);
-                for (int mapY = 0; mapY < mapWidth; mapY++)
-                {
-                    char tile = input[mapX, mapY];
-
-                    Console.Write(tile);
-                }
-            }
-        }
 
         // holds color info for each tile on the various maps. Set up so different maps can have different color schemes
         // I'll likely build this out to be read from a file too and not hard coded, perhaps even built into the map files?

@@ -8,30 +8,103 @@ namespace TextBasedRPG_v2
 {
     internal class MenuManager
     {
+        private string[] mapData;
+        private int mapwidth;
+        private int mapheight;
+        private string mapName;
 
-        // this displays the title and instruction screens when the game begins
+        private static List<char[,]> menuList;
+
+        public char[,] titleScreen;
+        public char[,] menuFrame;
+        public char[,] instructions;
+        public char[,] pauseMenu;
+        public char[,] gameOver;
+
+        private static int windowWidth;
+        private static int windowHeight;
+
+        public enum Menu
+        {
+            titleScreen,
+            battle,
+            instructions,
+            pauseMenu,
+            gameOver,
+        }
+
+        public static Menu menu;
+
+        private static Character player = GameManager.GetPlayer();
+
+        private static List<Enemy> enemyReferences = null;
+
+        public static string taskMessage = "Explore!";
+
+        public MenuManager()
+        {
+            // load in menu related maps from files
+
+            mapData = System.IO.File.ReadAllLines("./Assets/titleScreen.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            mapName = "titleScreen";
+            titleScreen = MapManager.MapEater(mapData, mapheight, mapwidth, mapName);
+
+            mapData = System.IO.File.ReadAllLines("./Assets/menuFrame.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            mapName = "menuFrame";
+            menuFrame = MapManager.MapEater(mapData, mapheight, mapwidth, mapName);
+
+            mapData = System.IO.File.ReadAllLines("./Assets/instructions.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            mapName = "instructions";
+            instructions = MapManager.MapEater(mapData, mapheight, mapwidth, mapName);
+
+            mapData = System.IO.File.ReadAllLines("./Assets/pauseMenu.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            mapName = "pauseMenu";
+            pauseMenu = MapManager.MapEater(mapData, mapheight, mapwidth, mapName);
+
+            mapData = System.IO.File.ReadAllLines("./Assets/gameOver.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            mapName = "gameOver";
+            gameOver = MapManager.MapEater(mapData, mapheight, mapwidth, mapName);
+
+            menuList = new List<char[,]>();
+
+            menuList.Add(titleScreen);
+            menuList.Add(menuFrame);
+            menuList.Add(instructions);
+            menuList.Add(pauseMenu);
+            menuList.Add(gameOver);
+
+
+        }
         public static void MainMenu()
         {
-            EventManager.RefreshWindow();
-            MapManager.DrawMenu(EventManager.atlas.titleScreen);
+            menu = Menu.titleScreen;
+            Draw();
 
             ConsoleKeyInfo choice = Console.ReadKey(true);
 
             switch (choice.Key)
             {
                 default:
-
-                    EventManager.RefreshWindow();
-                    MapManager.DrawMenu(EventManager.atlas.instructions);
+                    menu = 1;
+                    Draw();
 
                     Console.SetCursorPosition(6, 17);
                     Console.Write("Before we begin, please enter your name: ");
-                    Program.player.name = Console.ReadLine();
-
+                    player.name = Console.ReadLine();
                     break;
 
                 case ConsoleKey.Q:
-                    Program.gameOver = true;
+                    GameManager.SetGameOver();
                     break;
             }
         }
@@ -43,49 +116,53 @@ namespace TextBasedRPG_v2
             while (go == false)
             {
 
-                EventManager.RefreshWindow();
-                MapManager.DrawMenu(EventManager.atlas.pauseMenu);
+                menu = Menu.pauseMenu;
+                Draw();
 
                 Console.SetCursorPosition(12, 5);
-                Console.Write(Program.player.name);
+                Console.Write(player.name);
 
                 Console.SetCursorPosition(42, 5);
-                Console.Write(Program.player.health + "/" + Program.player.healthMax);
+                Console.Write(player.health + "/" + player.healthMax);
 
                 Console.SetCursorPosition(13, 7);
-                Console.Write(Program.player.lives);
+                Console.Write(player.lives);
 
                 Console.SetCursorPosition(40, 7);
                 Console.Write(Player.gold);
 
                 Console.SetCursorPosition(12, 9);
-                Console.Write(EventManager.taskMessage);
+                Console.Write(taskMessage);
 
-                if (Enemy.enemysave1 != null)
+                enemyReferences = EnemyManager.GetRef();
+
+                if (enemyReferences.Count >= 1)
                 {
                     Console.SetCursorPosition(8, 13);
-                    Console.Write(Enemy.enemysave1.name + " - Health: " + Enemy.enemysave1.healthMax);
+                    Console.Write(enemyReferences[0].name + " - Health: " + enemyReferences[0].healthMax);
                 }
 
-                if (Enemy.enemysave2 != null)
+                if (enemyReferences.Count >= 2)
                 {
                     Console.SetCursorPosition(8, 14);
-                    Console.Write(Enemy.enemysave2.name + " - Health: " + Enemy.enemysave2.healthMax);
+                    Console.Write(enemyReferences[1].name + " - Health: " + enemyReferences[1].healthMax);
                 }
 
-                if (Enemy.enemysave3 != null)
+                if (enemyReferences.Count >= 3)
                 {
                     Console.SetCursorPosition(8, 15);
-                    Console.Write(Enemy.enemysave3.name + " - Health: " + Enemy.enemysave3.healthMax);
+                    Console.Write(enemyReferences[2].name + " - Health: " + enemyReferences[2].healthMax);
                 }
+                
 
                 ConsoleKeyInfo choice = Console.ReadKey(true);
 
                 switch (choice.Key)
                 {
                     case ConsoleKey.Q:
-                        EventManager.RefreshWindow();
-                        MapManager.DrawMenu(EventManager.atlas.menuFrame);
+
+                        menu = Menu.menuFrame;
+                        Draw();
 
                         Console.SetCursorPosition(6, 4);
                         Console.Write("Really quit? Save is not yet implimented.");
@@ -97,7 +174,7 @@ namespace TextBasedRPG_v2
 
                         if (choice2.Key == ConsoleKey.Q)
                         {
-                            Program.gameOver = true;
+                            GameManager.SetGameOver();
                             go = true;
                         }
                         break;
@@ -114,15 +191,44 @@ namespace TextBasedRPG_v2
         // this displays the Game Over screen when lives reach 0, and sets the gameOver trigger
         public static void GameOver()
         {
-                EventManager.RefreshWindow();
-                MapManager.DrawMenu(EventManager.atlas.gameOver);
+            menu = Menu.gameOver;
+            Draw();
 
-                Console.ReadKey(true);
+            Console.ReadKey(true);
 
-                Program.gameOver = true;           
+            GameManager.SetGameOver();          
         }
 
+        public static void SetTaskMessage(string message)
+        {
+            taskMessage = message;
+        }
 
+        static public void Draw()
+        {
+            int reference = Convert.ToInt32(menu);
+            char[,] data = menuList[reference];
 
+            Console.Clear();
+            Console.SetWindowSize(windowWidth, windowHeight);
+            int mapHeight = data.GetLength(0);
+            int mapWidth = data.GetLength(1);
+
+            for (int mapX = 0; mapX < mapHeight; mapX++)
+            {
+                Console.SetCursorPosition(2, mapX + 1);
+                for (int mapY = 0; mapY < mapWidth; mapY++)
+                {
+                    char tile = data[mapX, mapY];
+
+                    Console.Write(tile);
+                }
+            }
+        }
+
+        static public void SetMenu(Menu input)
+        {
+            menu = input;
+        }
     }
 }

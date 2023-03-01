@@ -14,6 +14,8 @@ namespace TextBasedRPG_v2
         static Random rand = new Random();
         static bool flee;
 
+        static string message;
+
         // battle handler and mini game loop
         public static void Battle(Character first, Character second)
         {
@@ -21,6 +23,7 @@ namespace TextBasedRPG_v2
 
             battleOver = false;
             flee = false;
+            MenuManager.SetMenu("battle");
             MapManager.DrawMenu(EventManager.atlas.menuFrame);
             first.ShowHud();
             second.ShowHud();
@@ -103,8 +106,8 @@ namespace TextBasedRPG_v2
                         MapManager.worldX = 2;
                         MapManager.worldY = 2;
 
-                        EventManager.messageContent = "\'I saved you! Please be careful!\'";
-                        EventManager.messageNew = true;
+                        message = "\'I saved you! Please be careful!\'";
+                        HUD.SetMessage(message);
                         MapManager.redraw = true;
                     }
 
@@ -126,12 +129,12 @@ namespace TextBasedRPG_v2
                     next += 2;
 
                     Enemy convert = null;
-                    foreach (Enemy enemy in Enemy.enemies)
+                    foreach (Enemy enemy in EnemyManager.enemies)
                     {
                         if (enemy.x == loser.x && enemy.y == loser.y) convert = enemy;
                     }
 
-                    Enemy.deadEnemies.Add(convert);
+                    EnemyManager.deadEnemies.Add(convert);
                     
                     int winnings = rand.Next(3, 13);
                     Player.gold += winnings;
@@ -139,35 +142,12 @@ namespace TextBasedRPG_v2
                     Console.WriteLine("You got " + winnings + " gold!");
                     Console.ReadKey(true);
 
-                    if (Enemy.enemysave1 == null)
-                    {
-                        Enemy.enemysave1 = convert;
-                    }
-
-                    else if (Enemy.enemysave2 == null)
-                    {
-                        Enemy.enemysave2 = convert;
-                    }
-
-                    else if (Enemy.enemysave3 == null)
-                    {
-                        Enemy.enemysave3 = convert;
-                    }
-
-                    else
-                    {
-                        Enemy.enemysave3 = Enemy.enemysave2;
-                        Enemy.enemysave2 = Enemy.enemysave1;
-                        Enemy.enemysave1 = convert;
-                    }
+                    EnemyManager.SetRef(convert);
                 }
             }
 
-            if (flee)
-            {
-                Program.player.x = Program.player.lastX;
-                Program.player.y = Program.player.lastY;
-            }
+            if (flee && first.type == "player") first.StepBack();
+            if (flee && second.type == "player") second.StepBack();
 
             MapManager.redraw = true;
         }

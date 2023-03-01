@@ -4,46 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// todo:
+
+// build Game Manager class
+// build item entity/class system
+// build Enemy Manager class
+// reorganize methods and classes, player should draw itself, HUD should draw itself, character draw should be in Character class - regular draw, optimized draw
+    // a class should 'ask' another class for things, not get its info - player should do all its own collision detection, only getting tiles from map 'get tile' etc
+// move redraw function out of Program/GameManager and into its own class
+// enemy movement method could be cleaner code-wise
+
+// rebuild map data and loading functions to hold tile and color info too?
+// make WorldManager that actually draws the game screen, while MapManager just handles map digestion and storage?
+
 namespace TextBasedRPG_v2
 {
     internal class Program
     {
 
-        static public Player player = new Player();
-
-        public static bool gameOver = false;
-
-        public static int turn = 1;
 
         static void Main(string[] args)
         {
-            Console.CursorVisible = false;
-            Enemy.initEnemies();
-            MenuManager.MainMenu();
-
-            // Game Manager / Game Loop:
-
-            while (gameOver == false)
-            {
-                // this redraws the map and characters when redraw is true
-                if (MapManager.redraw)
-                {
-                    MapManager.DrawMap();
-                    EventManager.MapMessage();
-                    Enemy.DrawEnemies();
-                    MapManager.DrawCharacter(player);
-                    MapManager.redraw = false;
-                }
-
-                // this is the primary game loop essentials
-                player.ShowHud();
-                player.Update(player);
-                Enemy.UpdateEnemies(); // testing
-                Enemy.Check();
-                EventManager.RefreshWindow();
-                EventManager.MapMessage();
-                turn++;
-            }
+            GameManager.GameLoop();
         }        
 
     }

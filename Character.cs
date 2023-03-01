@@ -42,5 +42,11 @@ namespace TextBasedRPG_v2
 
             if (type == "player") Console.Write("Lives: " + lives);
         }
+
+        public void StepBack()
+        {
+            x = lastX;
+            y = lastY;
+        }
     }
 }

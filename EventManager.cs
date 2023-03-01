@@ -9,29 +9,23 @@ namespace TextBasedRPG_v2
 {
     internal class EventManager
     {
+
+        private static Character player = GameManager.GetPlayer();
+
         // game fundamentals
-        static public MapManager atlas = new MapManager();
-        
-        // static public bool redraw = true;
+        // static public MapManager atlas = new MapManager();
 
-        public static int height = atlas.menuFrame.GetLength(0) + 2;
-        public static int width = atlas.menuFrame.GetLength(1) + 2;
-
-        // pop up message variables
-        static int messageCount = 0;
-        public static string messageContent = null;
-        public static bool messageNew = false;
-        public static string taskMessage = "Explore!";
+        static string message = null;
 
         //this handles the pickups and battle detection
         public static void EventCheck(char destination, Character subject)
         {
-            if (subject.type == "player")
+            if (subject == player)
             {
                 bool fight = false;
                 Enemy victim = null;
 
-                foreach (Enemy enemy in Enemy.enemies)
+                foreach (Enemy enemy in EnemyManager.enemies)
                 {
                     if (enemy.x == subject.x && enemy.y == subject.y && enemy.worldX == subject.worldX && enemy.worldY == subject.worldY)
                     {
@@ -47,61 +41,61 @@ namespace TextBasedRPG_v2
                     if (MapManager.worldY == 1 && MapManager.worldX == 2)
                     {
                         MapManager.worldY = 2;
-                        Program.player.y = 14;
-                        Program.player.x = 42;
+                        player.y = 14;
+                        player.x = 42;
                         MapManager.redraw = true;
                     }
 
                     else if (MapManager.worldY == 2 && MapManager.worldX == 2)
                     {
                         MapManager.worldY = 1;
-                        Program.player.y = 23;
-                        Program.player.x = 51;
+                        player.y = 23;
+                        player.x = 51;
                         MapManager.redraw = true;
                     }
                 }
 
                 if (destination == 'ō')
                 {
-                    if (Program.player.health == Program.player.healthMax)
+                    if (player.health == player.healthMax)
                     {
-                        messageContent = "You found a potion, but health is full!";
-                        messageNew = true;
+                        message = "You found a potion, but health is full!";
+                        HUD.SetMessage(message);
                     }
 
-                    if (Program.player.health != Program.player.healthMax)
+                    if (player.health != player.healthMax)
                     {
-                        messageContent = "You found a potion, health is restored!";
-                        messageNew = true;
+                        message = "You found a potion, health is restored!";
+                        HUD.SetMessage(message);
 
-                        Program.player.health = Program.player.healthMax;
+                        player.health = player.healthMax;
 
                         char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
-                        holder[Program.player.y, Program.player.x] = ' ';
+                        holder[player.y, player.x] = ' ';
                     }
                 }
 
                 if (destination == '┼')
                 {
-                        messageContent = "You found a sword! You deal 3 more damage!";
-                        messageNew = true;
+                        message= "You found a sword! You deal 3 more damage!";
+                        HUD.SetMessage(message);
 
-                        Program.player.strength += 3;
-                    Program.player.power = "slashes";
+                        player.strength += 3;
+                        player.power = "slashes";
 
                         char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
-                        holder[Program.player.y, Program.player.x] = ' ';                   
+                        holder[player.y, player.x] = ' ';                   
                 }
 
                 if (destination == '°')
                 {
-                        messageContent = "You found a gold coin!";
-                        messageNew = true;
+                        message = "You found a gold coin!";
+                        HUD.SetMessage(message);
 
                         Player.gold += 1;
 
                         char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
-                        holder[Program.player.y, Program.player.x] = ' ';
+                        holder[player.y, player.x] = ' ';
                  
                 }
 
@@ -110,7 +104,7 @@ namespace TextBasedRPG_v2
 
             if (subject.type == "npc")
             {
-                if (subject.x == Program.player.x && subject.y == Program.player.y) BattleSystem.Battle(subject, Program.player);
+                if (subject.x == player.x && subject.y == player.y) BattleSystem.Battle(subject, player);
             }
         }
 
@@ -124,15 +118,15 @@ namespace TextBasedRPG_v2
                     {
                         if (Player.hasKey == false)
                         {
-                            messageContent = "The gate is locked.. find the key!";
-                            taskMessage = "Find the key!";
-                            messageNew = true;
+                            message = "The gate is locked.. find the key!";
+                            MenuManager.SetTaskMessage(message);
+                            HUD.SetMessage(message);
                         }
                         
                         if (Player.hasKey)
                         {
-                            messageContent = "You unlocked the gate!";
-                            messageNew = true;
+                            message = "You unlocked the gate!";
+                            HUD.SetMessage(message);
                             MapManager.walkables.Add(destination);
                             MapManager.gateLocked = false;
                         }
@@ -146,25 +140,25 @@ namespace TextBasedRPG_v2
                         {
                             if (Player.gold < 100)
                             {
-                                messageContent = "\'I'll trade 100 gold for the key!\'";
-                                taskMessage = "Bring the witch 100 gold!";
-                                messageNew = true;
+                                message = "\'I'll trade 100 gold for the key!\'";
+                                MenuManager.SetTaskMessage(message);
+                                HUD.SetMessage(message);
                             }
 
                             if (Player.gold > 100)
                             {
-                                messageContent = "\'Here is your key!\'";
-                                taskMessage = "Use the key on the gate!";
-                                messageNew = true;
+                                message = "\'Here is your key!\'";
+                                MenuManager.SetTaskMessage(message);
+                                HUD.SetMessage(message);
                                 Player.hasKey = true;
                                 Player.gold -= 100;
                             }
                         }
 
-                        if (Player.hasKey)
+                        else if (Player.hasKey)
                         {
-                            messageContent = "\'You have your key! Now begone!\'";
-                            messageNew = true;
+                            message = "\'You have your key! Now begone!\'";
+                            HUD.SetMessage(message);
                         }
                     }
                     break;
@@ -172,41 +166,5 @@ namespace TextBasedRPG_v2
             }
         }
         
-        // this detects if the window size has been tampered with, and resets it
-        public static void RefreshWindow()
-        {
-            if (Console.WindowHeight != height || Console.WindowWidth != width)
-            {
-                Console.SetWindowSize(width, height);
-                Console.SetBufferSize(Console.WindowWidth, Console.WindowHeight);
-                MapManager.redraw = true;
-            }
-        }
-
-        // this handles the map's mini message
-        public static void MapMessage()
-        {
-            if (messageNew == true)
-            {
-                messageCount = 10;
-                messageNew = false;
-
-                Console.SetCursorPosition(45, 40);
-                Console.Write("                                             ");
-            }
-
-            if (messageCount > 0)
-            {
-                Console.SetCursorPosition(46, 40);
-                Console.Write(messageContent);
-                messageCount--;
-            }
-
-            if (messageCount == 0)
-            {
-                Console.SetCursorPosition(45, 40);
-                Console.Write("                                             ");
-            }
-        }
     }
 }

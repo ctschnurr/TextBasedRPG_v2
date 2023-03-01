@@ -11,6 +11,7 @@ namespace TextBasedRPG_v2
         public static bool hasKey;
         public static int gold;
 
+
         public Player()
         {
             character = (char)2;
@@ -34,7 +35,7 @@ namespace TextBasedRPG_v2
             type = "player";
             color = ConsoleColor.White;
             hasKey = false;
-            
+
         }
         public void Update(Character self)
         {
@@ -131,7 +132,7 @@ namespace TextBasedRPG_v2
 
             if (y == 0)
             {
-                MapManager.worldY --;
+                MapManager.worldY--;
                 worldY--;
                 y = 35;
                 MapManager.redraw = true;
