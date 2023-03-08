@@ -21,11 +21,9 @@ namespace TextBasedRPG_v2
             Console.Write(activeCharacter.name.PadRight(activeCharacter.name.Length + 1) + ": Health: " + hudHealth.PadRight(5));
 
             if (activeCharacter.type == "player") Console.Write("Lives: " + activeCharacter.lives);
-
-            Message();
         }
 
-        public static void Message()
+        public static void EventMessage()
         {
             if (messageNew == true)
             {

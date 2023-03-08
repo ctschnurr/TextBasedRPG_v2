@@ -8,13 +8,12 @@ namespace TextBasedRPG_v2
 {
     internal class BattleSystem
     {
-        public static bool battleOver;
-        public static Character loser;
-        public static int next;
-        static Random rand = new Random();
-        static bool flee;
-
-        static string message;
+        private static bool battleOver;
+        private static Character loser;
+        private static int next;
+        private static Random rand = new Random();
+        private static bool flee;
+        private static string message;
 
         // battle handler and mini game loop
         public static void Battle(Character first, Character second)
@@ -23,10 +22,12 @@ namespace TextBasedRPG_v2
 
             battleOver = false;
             flee = false;
-            MenuManager.SetMenu("battle");
-            MapManager.DrawMenu(EventManager.atlas.menuFrame);
-            first.ShowHud();
-            second.ShowHud();
+            MenuManager.SetMenu("menuFrame");
+            MenuManager.Draw();
+            HUD.Draw(first);
+            HUD.Draw(second);
+
+            List<Enemy> enemies = EnemyManager.GetEnemies();
 
             next = 3;
 
@@ -128,13 +129,14 @@ namespace TextBasedRPG_v2
                     Console.WriteLine(loser.name + " has DIED!");
                     next += 2;
 
+                    // convert from Character to Enemy
                     Enemy convert = null;
-                    foreach (Enemy enemy in EnemyManager.enemies)
+                    foreach (Enemy enemy in enemies)
                     {
                         if (enemy.x == loser.x && enemy.y == loser.y) convert = enemy;
                     }
 
-                    EnemyManager.deadEnemies.Add(convert);
+                    EnemyManager.SetDeadEnemy(convert);
                     
                     int winnings = rand.Next(3, 13);
                     Player.gold += winnings;
@@ -203,9 +205,9 @@ namespace TextBasedRPG_v2
         {
             if (next > 36)
             {
-                MapManager.DrawMenu(EventManager.atlas.menuFrame);
-                A.ShowHud();
-                B.ShowHud();
+                MenuManager.Draw();
+                HUD.Draw(A);
+                HUD.Draw(B);
                 next = 3;
             }
         }
@@ -239,8 +241,7 @@ namespace TextBasedRPG_v2
 
                 victim.health -= damage;
                 if (victim.health <= 0) victim.health = 0;
-                attacker.ShowHud();
-                victim.ShowHud();
+                HUD.Draw(victim);
 
                 if (attacker.type == "player") Console.ReadKey(true);
 

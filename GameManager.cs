@@ -8,35 +8,24 @@ namespace TextBasedRPG_v2
 {
     internal class GameManager
     {
-        static public Player player = new Player();
-
-        public static bool gameOver = false;
-
-        public static int turn = 1;
+        private static Player player = new Player();
+        private static bool gameOver = false;
+        private static int turn = 1;
         public static void GameLoop()
         {
             Console.CursorVisible = false;
-            EnemyManager.initEnemies();
+
+            MapManager atlas = new MapManager();
+            MenuManager menus = new MenuManager();
+
             MenuManager.MainMenu();
 
             while (gameOver == false)
             {
-                // this redraws the map and characters when redraw is true
-                if (MapManager.redraw)
-                {
-                    MapManager.Draw();
-                    HUD.Message();
-                    EnemyManager.DrawEnemies();
-                    MapManager.DrawCharacter(player);
-                    MapManager.redraw = false;
-                }
-
-                // this is the primary game loop essentials
-                HUD.Draw(player);
+                MapManager.Draw();
+                HUD.EventMessage();
                 player.Update(player);
-                EnemyManager.UpdateEnemies(); // testing
-                EnemyManager.Check();
-                // EventManager.RefreshWindow();
+                EnemyManager.Update();
                 turn++;
             }
         }

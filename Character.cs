@@ -30,23 +30,40 @@ namespace TextBasedRPG_v2
         public int worldY;
 
         public bool stunned;
-
-        public void ShowHud()
-        {
-
-            if (type == "player") Console.SetCursorPosition(4, 40);
-            if (type == "npc") Console.SetCursorPosition(46, 40);
-
-            string hudHealth = health.ToString();
-            Console.Write(name.PadRight(name.Length + 1) + ": Health: " + hudHealth.PadRight(5));
-
-            if (type == "player") Console.Write("Lives: " + lives);
-        }
+        public bool erase = false;
 
         public void StepBack()
         {
             x = lastX;
             y = lastY;
+        }
+
+        public static void Draw(Character subject)
+        {
+            char[,] map = MapManager.GetMap();
+            char tile;
+            string[] colorDat;
+
+            if (subject.erase == true)
+            {
+                // draw over character's last position on screen with the approapriate tile from the reference map
+
+                Console.SetCursorPosition(subject.lastX + 2, subject.lastY + 1);
+                tile = map[subject.lastY, subject.lastX];
+                MapManager.DrawTile(tile);
+
+            }
+
+            // draw the character on screen in set position
+
+            Console.SetCursorPosition(subject.x + 2, subject.y + 1);
+            tile = map[subject.y, subject.x];
+            colorDat = MapManager.GetTileColor(tile);
+            Console.BackgroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), colorDat[1]);
+            Console.ForegroundColor = subject.color;
+            Console.Write(subject.character);
+            Console.ResetColor();
+            subject.erase = false;
         }
     }
 }

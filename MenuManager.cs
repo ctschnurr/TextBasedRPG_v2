@@ -21,13 +21,15 @@ namespace TextBasedRPG_v2
         public char[,] pauseMenu;
         public char[,] gameOver;
 
-        private static int windowWidth;
-        private static int windowHeight;
+        public char[,] data;
+
+        // private static int windowWidth;
+        // private static int windowHeight;
 
         public enum Menu
         {
             titleScreen,
-            battle,
+            menuFrame,
             instructions,
             pauseMenu,
             gameOver,
@@ -83,6 +85,8 @@ namespace TextBasedRPG_v2
             menuList.Add(pauseMenu);
             menuList.Add(gameOver);
 
+            data = titleScreen;
+
 
         }
         public static void MainMenu()
@@ -95,12 +99,14 @@ namespace TextBasedRPG_v2
             switch (choice.Key)
             {
                 default:
-                    menu = 1;
+                    menu = Menu.instructions;
                     Draw();
 
                     Console.SetCursorPosition(6, 17);
                     Console.Write("Before we begin, please enter your name: ");
                     player.name = Console.ReadLine();
+
+                    MapManager.SetRedraw(true);
                     break;
 
                 case ConsoleKey.Q:
@@ -210,7 +216,7 @@ namespace TextBasedRPG_v2
             char[,] data = menuList[reference];
 
             Console.Clear();
-            Console.SetWindowSize(windowWidth, windowHeight);
+            Console.SetWindowSize(data.GetLength(1) + 3, data.GetLength(0) + 2);
             int mapHeight = data.GetLength(0);
             int mapWidth = data.GetLength(1);
 
@@ -226,9 +232,9 @@ namespace TextBasedRPG_v2
             }
         }
 
-        static public void SetMenu(Menu input)
+        static public void SetMenu(string input)
         {
-            menu = input;
+            menu = (Menu)Enum.Parse(typeof(Menu), input);
         }
     }
 }

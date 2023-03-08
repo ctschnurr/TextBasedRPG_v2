@@ -8,44 +8,30 @@ namespace TextBasedRPG_v2
 {
     internal class EnemyManager
     {
-        static public Enemy enemyA;
-        static public Enemy enemyB;
-        static public Enemy enemyC;
+        private static Enemy enemyA;
+        private static Enemy enemyB;
+        private static Enemy enemyC;
+                
+        private static Enemy enemyRef1;
+        private static Enemy enemyRef2;
+        private static Enemy enemyRef3;
+                
+        private static List<Enemy> enemies = new List<Enemy>();
+        private static List<Enemy> deadEnemies = new List<Enemy>();
 
-        static private Enemy enemyRef1;
-        static private Enemy enemyRef2;
-        static private Enemy enemyRef3;
+        private static List<Enemy> enemyReferences = new List<Enemy>();
 
-        static public List<Enemy> enemies;
-        static public List<Enemy> deadEnemies;
-
-        static private List<Enemy> enemyReferences = new List<Enemy>();
-
-        static string message = null;
+        private static string message = null;
 
         private static Character target;
-        public static void initEnemies()
-        {
-            enemies = new List<Enemy>();
-            deadEnemies = new List<Enemy>();
-        }
 
-        public static void DrawEnemies()
+        public static void Draw()
         {
             if (MapManager.worldX == 2 && MapManager.worldY == 0)
                 foreach (Enemy enemy in enemies)
                 {
-                    MapManager.DrawCharacter(enemy);
+                    Character.Draw(enemy);
                 }
-        }
-
-        public static void Check()
-        {
-            if (MapManager.worldX == 2 && MapManager.worldY == 0)
-            {
-                CleanupEnemies();
-                DrawEnemies();
-            }
         }
 
         public static void GenerateEnemy()
@@ -91,7 +77,7 @@ namespace TextBasedRPG_v2
 
         }
 
-        public static void UpdateEnemies()
+        public static void Update()
         {
             target = GameManager.GetPlayer();
 
@@ -109,6 +95,7 @@ namespace TextBasedRPG_v2
                 }
 
                 GenerateEnemy();
+                CleanupEnemies();
             }
         }
 
@@ -162,7 +149,15 @@ namespace TextBasedRPG_v2
             return enemyReferences;
         }
 
+        public static List<Enemy> GetEnemies()
+        {
+            return enemies;
+        }
 
+        public static void SetDeadEnemy(Enemy input)
+        {
+            deadEnemies.Add(input);
+        }
 
     }
 }

@@ -15,7 +15,6 @@ namespace TextBasedRPG_v2
         static char[] enemyWalkables;
         int mapwidth;
         int mapheight;
-        static bool firstTurn = true;
         static public bool redraw = true;
         public static bool gateLocked = true;
 
@@ -110,8 +109,8 @@ namespace TextBasedRPG_v2
             world[0, 2] = northeast_map;
             world[2, 2] = witchHut;
 
-            windowWidth = titleScreen.GetLength(1) + 3;
-            windowHeight = titleScreen.GetLength(0) + 2;
+            windowWidth = center_map.GetLength(1) + 3;
+            windowHeight = center_map.GetLength(0) + 2;
         }
 
         // take the file data and digest it into an array
@@ -141,32 +140,39 @@ namespace TextBasedRPG_v2
         // here we draw the map on the screen
         static public void Draw()
         {
-            Console.SetWindowSize(windowWidth, windowHeight);
-
-            Console.Clear();
-            char[,] map = world[worldY, worldX];
-
-            int mapHeight = map.GetLength(0);
-            int mapWidth = map.GetLength(1);
-
-            for (int mapX = 0; mapX < mapHeight; mapX++)
+            if (redraw == true)
             {
-                Console.SetCursorPosition(2, mapX + 1);
-                for (int mapY = 0; mapY < mapWidth; mapY++)
+                Console.Clear();
+                char[,] map = world[worldY, worldX];
+                Console.SetWindowSize(map.GetLength(1) + 3, map.GetLength(0) + 2);
+
+                int mapHeight = map.GetLength(0);
+                int mapWidth = map.GetLength(1);
+
+                for (int mapX = 0; mapX < mapHeight; mapX++)
                 {
-                    char tile = map[mapX, mapY];
+                    Console.SetCursorPosition(2, mapX + 1);
+                    for (int mapY = 0; mapY < mapWidth; mapY++)
+                    {
+                        char tile = map[mapX, mapY];
 
-                    DrawTile(tile);
-
+                        DrawTile(tile);
+                    }
                 }
+
+                // here we make sure the hud areas are void of color
+
+                Console.SetCursorPosition(3, 40);
+                Console.Write("                                         ");
+                Console.SetCursorPosition(45, 40);
+                Console.Write("                                             ");
+
+                redraw = false;
+
+                Character player = GameManager.GetPlayer();
+                Character.Draw(player);
+                HUD.Draw(player);
             }
-
-            // here we make sure the hud areas are void of color
-
-            Console.SetCursorPosition(3, 40);
-            Console.Write("                                         ");
-            Console.SetCursorPosition(45, 40);
-            Console.Write("                                             ");
         }
 
 
@@ -410,37 +416,6 @@ namespace TextBasedRPG_v2
             return goTime;
         }
 
-        // this method handles drawing characters on the map
-
-        public static void DrawCharacter(Character subject)
-        {
-            char[,] map = world[worldY, worldX];
-            char tile;
-            string[] colorDat;
-
-            if (firstTurn == false)
-            {
-                // draw over character's last position on screen with the approapriate tile from the reference map
-
-                Console.SetCursorPosition(subject.lastX + 2, subject.lastY + 1);
-                tile = map[subject.lastY, subject.lastX];
-                DrawTile(tile);
-
-            }
-
-            // draw the character on screen in set position
-
-            Console.SetCursorPosition(subject.x + 2, subject.y + 1);
-            tile = map[subject.y, subject.x];
-            colorDat = GetTileColor(tile);
-            Console.BackgroundColor = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), colorDat[1]);
-            Console.ForegroundColor = subject.color;
-            Console.Write(subject.character);
-            Console.ResetColor();
-
-            firstTurn = false;
-        }
-
         static void ErrorScreen(string badstring, string badname)
         {
             Console.Clear();
@@ -453,8 +428,14 @@ namespace TextBasedRPG_v2
             // Program.gameOver = true;
         }
 
+        public static char[,] GetMap()
+        {
+            return world[worldY, worldX];
+        }
 
-
-
+        public static void SetRedraw(bool input)
+        {
+            redraw = input;
+        }
     }
 }

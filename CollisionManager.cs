@@ -3,29 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace TextBasedRPG_v2
 {
-    internal class EventManager
+    internal class CollisionManager
     {
-
         private static Character player = GameManager.GetPlayer();
 
-        // game fundamentals
-        // static public MapManager atlas = new MapManager();
-
-        static string message = null;
+        private static string message = null;
+        private static List<Enemy> enemies;
 
         //this handles the pickups and battle detection
-        public static void EventCheck(char destination, Character subject)
+        public static void CollisionCheck(char destination, Character subject)
         {
+            enemies = EnemyManager.GetEnemies();
+
             if (subject == player)
             {
                 bool fight = false;
                 Enemy victim = null;
 
-                foreach (Enemy enemy in EnemyManager.enemies)
+                foreach (Enemy enemy in enemies)
                 {
                     if (enemy.x == subject.x && enemy.y == subject.y && enemy.worldX == subject.worldX && enemy.worldY == subject.worldY)
                     {
@@ -77,26 +75,26 @@ namespace TextBasedRPG_v2
 
                 if (destination == '┼')
                 {
-                        message= "You found a sword! You deal 3 more damage!";
-                        HUD.SetMessage(message);
+                    message = "You found a sword! You deal 3 more damage!";
+                    HUD.SetMessage(message);
 
-                        player.strength += 3;
-                        player.power = "slashes";
+                    player.strength += 3;
+                    player.power = "slashes";
 
-                        char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
-                        holder[player.y, player.x] = ' ';                   
+                    char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
+                    holder[player.y, player.x] = ' ';
                 }
 
                 if (destination == '°')
                 {
-                        message = "You found a gold coin!";
-                        HUD.SetMessage(message);
+                    message = "You found a gold coin!";
+                    HUD.SetMessage(message);
 
-                        Player.gold += 1;
+                    Player.gold += 1;
 
-                        char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
-                        holder[player.y, player.x] = ' ';
-                 
+                    char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
+                    holder[player.y, player.x] = ' ';
+
                 }
 
 
@@ -122,7 +120,7 @@ namespace TextBasedRPG_v2
                             MenuManager.SetTaskMessage(message);
                             HUD.SetMessage(message);
                         }
-                        
+
                         if (Player.hasKey)
                         {
                             message = "You unlocked the gate!";
@@ -165,6 +163,5 @@ namespace TextBasedRPG_v2
 
             }
         }
-        
     }
 }

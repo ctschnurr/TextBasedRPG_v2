@@ -56,6 +56,7 @@ namespace TextBasedRPG_v2
             char destination = ' ';
             char[,] map = MapManager.world[MapManager.worldY, MapManager.worldX];
             bool move = false;
+            erase = false;
             int walk;
             Random rnd = new Random();
 
@@ -209,8 +210,9 @@ namespace TextBasedRPG_v2
 
             if (move)
             {
-                EventManager.EventCheck(destination, self);
-                MapManager.DrawCharacter(self);
+                CollisionManager.CollisionCheck(destination, self);
+                erase = true;
+                Draw(self);
             }
         }
 

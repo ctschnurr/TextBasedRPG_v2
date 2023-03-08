@@ -43,6 +43,7 @@ namespace TextBasedRPG_v2
             char destination = ' ';
             char[,] map = MapManager.world[MapManager.worldY, MapManager.worldX];
             bool move = false;
+            erase = false;
 
             ConsoleKeyInfo choice = Console.ReadKey(true);
 
@@ -56,7 +57,7 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.W:
                     destination = map[y - 1, x];
                     isWalkable = MapManager.CheckWalkable(destination, self);
-                    EventManager.Triggers(destination);
+                    CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {
@@ -74,7 +75,7 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.S:
                     destination = map[y + 1, x];
                     isWalkable = MapManager.CheckWalkable(destination, self);
-                    EventManager.Triggers(destination);
+                    CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {
@@ -92,7 +93,7 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.A:
                     destination = map[y, x - 1];
                     isWalkable = MapManager.CheckWalkable(destination, self);
-                    EventManager.Triggers(destination);
+                    CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {
@@ -110,7 +111,7 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.D:
                     destination = map[y, x + 1];
                     isWalkable = MapManager.CheckWalkable(destination, self);
-                    EventManager.Triggers(destination);
+                    CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {
@@ -162,11 +163,18 @@ namespace TextBasedRPG_v2
                 MapManager.redraw = true;
             }
 
+
+
             if (move)
             {
-                EventManager.EventCheck(destination, self);
-                MapManager.DrawCharacter(self);
+                CollisionManager.CollisionCheck(destination, self);
+                erase = true;
+                Draw(self);
             }
+        }
+
+        public void CollisionCheck()
+        {
 
         }
     }
