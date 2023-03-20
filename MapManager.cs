@@ -10,31 +10,31 @@ namespace TextBasedRPG_v2
     {
         // map related variables
 
-        string[] mapData;
-        public static List<char> walkables;
-        static char[] enemyWalkables;
-        int mapwidth;
-        int mapheight;
-        static public bool redraw = true;
-        public static bool gateLocked = true;
+        private string[] mapData;
+        private static List<char> walkables;
+        private static char[] enemyWalkables;
+        private int mapwidth;
+        private int mapheight;
+        private static bool redraw = true;
+        private static bool gateLocked = true;
 
         // world array to hold map arrays
 
-        public static char[,][,] world;
+        private static char[,][,] world;
 
         // map arrays
 
-        public char[,] center_map;
-        public char[,] north_map;
-        public char[,] south_map;
-        public char[,] east_map;
-        public char[,] northeast_map;
-        public char[,] witchHut;
+        private char[,] center_map;
+        private char[,] north_map;
+        private char[,] south_map;
+        private char[,] east_map;
+        private char[,] northeast_map;
+        private char[,] witchHut;
 
         // variables to track which map we are in, which element within world array to read
 
-        public static int worldX;
-        public static int worldY;
+        private static int worldX;
+        private static int worldY;
 
         private static int windowWidth;
         private static int windowHeight;
@@ -436,6 +436,39 @@ namespace TextBasedRPG_v2
         public static void SetRedraw(bool input)
         {
             redraw = input;
+        }
+
+        public static bool GetGateLocked()
+        {
+            return gateLocked;
+        }
+        public static void SetGateLocked(bool input)
+        {
+            gateLocked = input;
+        }
+
+        public static void AddWalkables(char input)
+        {
+            walkables.Add(input);
+        }
+
+        public static char[,] GetWorld()
+        {
+            return world[worldY, worldX];
+        }
+
+        public static void SetWorld(int X, int Y)
+        {
+            worldX = X;
+            worldY = Y;
+        }
+
+        public static int[] GetWorldCoords()
+        {
+            int[] coords = new int[2];
+            coords[0] = worldX;
+            coords[1] = worldY;
+            return coords;
         }
     }
 }

@@ -84,17 +84,21 @@ namespace TextBasedRPG_v2
 
             if (battleOver == true && turn != 1 && flee == false)
             {
+                Player player = GameManager.GetPlayer();
+
                 if (loser.type == "player")
                 {
+
                     Console.SetCursorPosition(4, next);
                     Console.WriteLine("You are critically injured!");
                     next += 2;
 
                     Console.ReadKey(true);
                     loser.health = loser.healthMax;
-                    loser.lives --;
+                    player.SetLives(-1);
+                    int lives = player.GetLives();
 
-                    if (loser.lives != 0)
+                    if (lives != 0)
                     {
                         Console.SetCursorPosition(4, next);
                         Console.WriteLine("You lost conciousness!");
@@ -104,12 +108,11 @@ namespace TextBasedRPG_v2
 
                         loser.x = 33;
                         loser.y = 10;
-                        MapManager.worldX = 2;
-                        MapManager.worldY = 2;
+                        MapManager.SetWorld(2, 2);
 
                         message = "\'I saved you! Please be careful!\'";
                         HUD.SetMessage(message);
-                        MapManager.redraw = true;
+                        MapManager.SetRedraw(true);
                     }
 
                     else
@@ -139,7 +142,7 @@ namespace TextBasedRPG_v2
                     EnemyManager.SetDeadEnemy(convert);
                     
                     int winnings = rand.Next(3, 13);
-                    Player.gold += winnings;
+                    player.AddGold(winnings);
                     Console.SetCursorPosition(4, next);
                     Console.WriteLine("You got " + winnings + " gold!");
                     Console.ReadKey(true);
@@ -151,7 +154,7 @@ namespace TextBasedRPG_v2
             if (flee && first.type == "player") first.StepBack();
             if (flee && second.type == "player") second.StepBack();
 
-            MapManager.redraw = true;
+            MapManager.SetRedraw(true);
         }
 
         // this handles the player's turn and their choice to attack or flee
@@ -200,7 +203,7 @@ namespace TextBasedRPG_v2
             }
         }
 
-        // this resets the cursor position 
+        // this resets the cursor position in the menu
         static void ReDrawCheck(Character A, Character B)
         {
             if (next > 36)
@@ -249,7 +252,7 @@ namespace TextBasedRPG_v2
 
                 if (victim.health <= 0)
                 {
-                    MapManager.redraw = true;
+                    MapManager.SetRedraw(true);
                     return true;
                 }
 

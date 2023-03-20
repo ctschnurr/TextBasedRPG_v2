@@ -23,8 +23,8 @@ namespace TextBasedRPG_v2
             while (gameOver == false)
             {
                 MapManager.Draw();
-                HUD.EventMessage();
-                player.Update(player);
+                HUD.Update();
+                player.Update();
                 EnemyManager.Update();
                 turn++;
             }
@@ -35,7 +35,7 @@ namespace TextBasedRPG_v2
             return turn;
         }
 
-        public static Character GetPlayer()
+        public static Player GetPlayer()
         {
             return player;
         }

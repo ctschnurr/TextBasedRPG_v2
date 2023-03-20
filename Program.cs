@@ -6,25 +6,21 @@ using System.Threading.Tasks;
 
 // todo:
 
-// build item entity/class system
-
 // optimise classes:
-    // a class should 'ask' another class for things, not get its info - player should do all its own collision detection, only getting tiles from map 'get tile' etc
-    // TODO:
-    // BattleSystem
-    // Character
-    // Enemy
-    // HUD
-    // MapManager
-    // MenuManager
-    // Player
+// a class should 'ask' another class for things, not get its info - player should do all its own collision detection, only getting tiles from map 'get tile' etc
+// TODO:
+// Character: ask about if the variables need to be private to adhere to OOP principles
+// Player
 
 // enemy movement method could be cleaner code-wise
 
-// rebuild map data and loading functions to hold tile and color info too?
 // make WorldManager that actually draws the game screen, while MapManager just handles map digestion and storage?
 
-// POLYMORPHISM
+// global or settings class that stores game data (alleviates hardcoding) - variables could be set as constants
+
+// build item entity/class system < POLYMORPHISM
+
+// Build in more maps and story, improve menu screens and game over
 
 namespace TextBasedRPG_v2
 {

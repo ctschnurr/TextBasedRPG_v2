@@ -8,9 +8,9 @@ namespace TextBasedRPG_v2
 {
     internal class Player : Character
     {
-        public static bool hasKey;
-        public static int gold;
-
+        private bool hasKey;
+        private int gold;
+        private int lives;
 
         public Player()
         {
@@ -37,11 +37,11 @@ namespace TextBasedRPG_v2
             hasKey = false;
 
         }
-        public void Update(Character self)
+        public void Update()
         {
             bool isWalkable;
             char destination = ' ';
-            char[,] map = MapManager.world[MapManager.worldY, MapManager.worldX];
+            char[,] map = MapManager.GetWorld();
             bool move = false;
             erase = false;
 
@@ -51,12 +51,12 @@ namespace TextBasedRPG_v2
             {
                 case ConsoleKey.Escape:
                     MenuManager.PauseMenu();
-                    MapManager.redraw = true;
+                    MapManager.SetRedraw(true);
                     break;
 
                 case ConsoleKey.W:
                     destination = map[y - 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination, self);
+                    isWalkable = MapManager.CheckWalkable(destination, this);
                     CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
@@ -74,7 +74,7 @@ namespace TextBasedRPG_v2
 
                 case ConsoleKey.S:
                     destination = map[y + 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination, self);
+                    isWalkable = MapManager.CheckWalkable(destination, this);
                     CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
@@ -92,7 +92,7 @@ namespace TextBasedRPG_v2
 
                 case ConsoleKey.A:
                     destination = map[y, x - 1];
-                    isWalkable = MapManager.CheckWalkable(destination, self);
+                    isWalkable = MapManager.CheckWalkable(destination, this);
                     CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
@@ -110,7 +110,7 @@ namespace TextBasedRPG_v2
 
                 case ConsoleKey.D:
                     destination = map[y, x + 1];
-                    isWalkable = MapManager.CheckWalkable(destination, self);
+                    isWalkable = MapManager.CheckWalkable(destination, this);
                     CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
@@ -133,49 +133,79 @@ namespace TextBasedRPG_v2
 
             if (y == 0)
             {
-                MapManager.worldY--;
                 worldY--;
+                MapManager.SetWorld(worldX, worldY);
                 y = 35;
-                MapManager.redraw = true;
+                MapManager.SetRedraw(true);
             }
 
             if (y == 36)
             {
-                MapManager.worldY++;
                 worldY++;
+                MapManager.SetWorld(worldX, worldY);
                 y = 1;
-                MapManager.redraw = true;
+                MapManager.SetRedraw(true);
             }
 
             if (x == 0)
             {
-                MapManager.worldX--;
                 worldX--;
+                MapManager.SetWorld(worldX, worldY);
                 x = 87;
-                MapManager.redraw = true;
+                MapManager.SetRedraw(true);
             }
 
             if (x == 88)
             {
-                MapManager.worldX++;
-                worldX--;
+                worldX++;
+                MapManager.SetWorld(worldX, worldY);
                 x = 1;
-                MapManager.redraw = true;
+                MapManager.SetRedraw(true);
             }
 
 
 
             if (move)
             {
-                CollisionManager.CollisionCheck(destination, self);
+                CollisionManager.CollisionCheck(destination, this);
                 erase = true;
-                Draw(self);
+                Draw(this);
             }
         }
 
         public void CollisionCheck()
         {
 
+        }
+
+        public void SetLives(int change)
+        {
+            lives = lives + change;
+        }
+
+        public int GetLives()
+        {
+            return lives;
+        }
+
+        public void AddGold(int change)
+        {
+            gold += change;
+        }
+
+        public int GetGold()
+        {
+            return gold;
+        }
+
+        public bool GetKeyStatus()
+        {
+            return hasKey;
+        }
+
+        public void SetKeyStatus(bool status)
+        {
+            hasKey = status;
         }
     }
 }

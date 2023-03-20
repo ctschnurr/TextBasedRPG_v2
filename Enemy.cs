@@ -50,90 +50,26 @@ namespace TextBasedRPG_v2
             stunned = false;
         }
         
-        public void Update(Character player, Character self)
+        public void Update()
         {
+            Character player = GameManager.GetPlayer();
+
             bool isWalkable;
             char destination = ' ';
-            char[,] map = MapManager.world[MapManager.worldY, MapManager.worldX];
+            char[,] map = MapManager.GetWorld();
             bool move = false;
             erase = false;
-            int walk;
-            Random rnd = new Random();
 
             string choice = "blank";
             
             switch (behavior)
             {
                 case Behavior.chase:
-                    if (player.y == y)
-                    {
-                        if (player.x > x)
-                        {
-                            choice = "right";
-                        }
-
-                        if (player.x < x)
-                        {
-                            choice = "left";
-                        }
-                    }
-
-                    if (player.x == x)
-                    {
-                        if (player.y > y)
-                        {
-                            choice = "down";
-                        }
-                        if (player.y < y)
-                        {
-                            choice = "up";
-                        }
-                    }
-
-                    else
-                    {
-                        walk = rnd.Next(1, 3);
-
-                        switch (walk)
-                        {
-                            case 1:
-                                {
-                                    if (player.x > x)
-                                    {
-                                        choice = "right";
-                                    }
-
-                                    if (player.x < x)
-                                    {
-                                        choice = "left";
-                                    }
-                                    break;
-                                }
-
-                            case 2:
-                                {
-                                    if (player.y > y)
-                                    {
-                                        choice = "down";
-                                    }
-
-                                    if (player.y < y)
-                                    {
-                                        choice = "up";
-                                    }
-                                    break;
-                                }
-                        }
-                    }
-
+                    choice = Chase(player);
                     break;
 
                 case Behavior.wander:
-                    walk = rnd.Next(1, 5);
-                    if (walk == 1) choice = "right";
-                    if (walk == 2) choice = "left";
-                    if (walk == 3) choice = "up";
-                    if (walk == 4) choice = "down";
+                    choice = Wander();
                     break;
             }
             
@@ -141,7 +77,7 @@ namespace TextBasedRPG_v2
             {
                 case "left":
                     destination = map[y, x - 1];
-                    isWalkable = MapManager.CheckWalkable(destination, self);
+                    isWalkable = MapManager.CheckWalkable(destination, this);
 
                     if (isWalkable == true)
                     {
@@ -158,7 +94,7 @@ namespace TextBasedRPG_v2
 
                 case "right":
                     destination = map[y, x + 1];
-                    isWalkable = MapManager.CheckWalkable(destination, self);
+                    isWalkable = MapManager.CheckWalkable(destination, this);
 
                     if (isWalkable == true)
                     {
@@ -175,7 +111,7 @@ namespace TextBasedRPG_v2
 
                 case "up":
                     destination = map[y - 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination, self);
+                    isWalkable = MapManager.CheckWalkable(destination, this);
 
                     if (isWalkable == true)
                     {
@@ -192,7 +128,7 @@ namespace TextBasedRPG_v2
 
                 case "down":
                     destination = map[y + 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination, self);
+                    isWalkable = MapManager.CheckWalkable(destination, this);
 
                     if (isWalkable == true)
                     {
@@ -210,14 +146,66 @@ namespace TextBasedRPG_v2
 
             if (move)
             {
-                CollisionManager.CollisionCheck(destination, self);
+                CollisionManager.CollisionCheck(destination, this);
                 erase = true;
-                Draw(self);
+                Draw(this);
             }
         }
 
+        string Chase(Character player)
+        {
+            Random rnd = new Random();
+            string choice = "blank";
 
+            if (player.y == y)
+            {
+                if (player.x > x) choice = "right";
+                if (player.x < x) choice = "left";
+            }
 
+            if (player.x == x)
+            {
+                if (player.y > y) choice = "down";
+                if (player.y < y) choice = "up";
+            }
 
+            else
+            {
+                int walk = rnd.Next(1, 3);
+
+                switch (walk)
+                {
+                    case 1:
+                        {
+                            if (player.x > x) choice = "right";
+                            if (player.x < x) choice = "left";
+                            break;
+                        }
+
+                    case 2:
+                        {
+                            if (player.y > y) choice = "down";
+                            if (player.y < y) choice = "up";
+                            break;
+                        }
+                }
+            }
+
+            return choice;
+        }
+
+        string Wander()
+        {
+            Random rnd = new Random();
+            string choice = "blank";
+
+            int walk = rnd.Next(1, 5);
+            if (walk == 1) choice = "right";
+            if (walk == 2) choice = "left";
+            if (walk == 3) choice = "up";
+            if (walk == 4) choice = "down";
+
+            return choice;
+        }
     }
 }

@@ -13,7 +13,6 @@ namespace TextBasedRPG_v2
 
         public int strength;
         public string name;
-        public int lives;
         public string power;
 
         public string type;
@@ -36,6 +35,16 @@ namespace TextBasedRPG_v2
         {
             x = lastX;
             y = lastY;
+        }
+
+        public void SetX(int set)
+        {
+            x = set;
+        }
+
+        public void SetY(int set)
+        {
+            y = set;
         }
 
         public static void Draw(Character subject)

@@ -15,18 +15,15 @@ namespace TextBasedRPG_v2
 
         private static List<char[,]> menuList;
 
-        public char[,] titleScreen;
-        public char[,] menuFrame;
-        public char[,] instructions;
-        public char[,] pauseMenu;
-        public char[,] gameOver;
+        private char[,] titleScreen;
+        private char[,] menuFrame;
+        private char[,] instructions;
+        private char[,] pauseMenu;
+        private char[,] gameOver;
 
-        public char[,] data;
+        private char[,] data;
 
-        // private static int windowWidth;
-        // private static int windowHeight;
-
-        public enum Menu
+        private enum Menu
         {
             titleScreen,
             menuFrame,
@@ -35,13 +32,13 @@ namespace TextBasedRPG_v2
             gameOver,
         }
 
-        public static Menu menu;
+        private static Menu menu;
 
-        private static Character player = GameManager.GetPlayer();
+        private static Player player = GameManager.GetPlayer();
 
         private static List<Enemy> enemyReferences = null;
 
-        public static string taskMessage = "Explore!";
+        private static string taskMessage = "Explore!";
 
         public MenuManager()
         {
@@ -118,6 +115,9 @@ namespace TextBasedRPG_v2
         // this shows the pause / stats menu when escape is pressed
         public static void PauseMenu()
         {
+            int lives = player.GetLives();
+            int gold = player.GetGold();
+
             bool go = false;
             while (go == false)
             {
@@ -132,10 +132,10 @@ namespace TextBasedRPG_v2
                 Console.Write(player.health + "/" + player.healthMax);
 
                 Console.SetCursorPosition(13, 7);
-                Console.Write(player.lives);
+                Console.Write(lives);
 
                 Console.SetCursorPosition(40, 7);
-                Console.Write(Player.gold);
+                Console.Write(gold);
 
                 Console.SetCursorPosition(12, 9);
                 Console.Write(taskMessage);

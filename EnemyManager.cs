@@ -23,11 +23,13 @@ namespace TextBasedRPG_v2
 
         private static string message = null;
 
-        private static Character target;
-
         public static void Draw()
         {
-            if (MapManager.worldX == 2 && MapManager.worldY == 0)
+            int[] worldCoords = MapManager.GetWorldCoords();
+            int worldX = worldCoords[0];
+            int worldY = worldCoords[1];
+
+            if (worldX == 2 && worldY == 0)
                 foreach (Enemy enemy in enemies)
                 {
                     Character.Draw(enemy);
@@ -79,9 +81,11 @@ namespace TextBasedRPG_v2
 
         public static void Update()
         {
-            target = GameManager.GetPlayer();
+            int[] worldCoords = MapManager.GetWorldCoords();
+            int worldX = worldCoords[0];
+            int worldY = worldCoords[1];
 
-            if (MapManager.worldX == 2 && MapManager.worldY == 0)
+            if (worldX == 2 && worldY == 0)
             {
 
                 if (enemies.Count != 0)
@@ -89,8 +93,7 @@ namespace TextBasedRPG_v2
                     foreach (Enemy enemy in enemies)
                     {
                         if (enemy.stunned == true) enemy.stunned = false;
-                        else if (enemy.stunned == false) enemy.Update(target, enemy);
-
+                        else if (enemy.stunned == false) enemy.Update();
                     }
                 }
 

@@ -8,7 +8,7 @@ namespace TextBasedRPG_v2
 {
     internal class CollisionManager
     {
-        private static Character player = GameManager.GetPlayer();
+        // private static Character playerChar = GameManager.GetPlayer();
 
         private static string message = null;
         private static List<Enemy> enemies;
@@ -17,6 +17,12 @@ namespace TextBasedRPG_v2
         public static void CollisionCheck(char destination, Character subject)
         {
             enemies = EnemyManager.GetEnemies();
+            char[,] holder = MapManager.GetWorld();
+            int[] worldCoords = MapManager.GetWorldCoords();
+            int worldX = worldCoords[0];
+            int worldY = worldCoords[1];
+
+            Player player = GameManager.GetPlayer();
 
             if (subject == player)
             {
@@ -36,20 +42,22 @@ namespace TextBasedRPG_v2
 
                 if (destination == '▀')
                 {
-                    if (MapManager.worldY == 1 && MapManager.worldX == 2)
+                    if (worldY == 1 && worldX == 2)
                     {
-                        MapManager.worldY = 2;
-                        player.y = 14;
-                        player.x = 42;
-                        MapManager.redraw = true;
+                        worldY = 2;
+                        MapManager.SetWorld(worldX, worldY);
+                        player.SetY(14);
+                        player.SetX(42);
+                        MapManager.SetRedraw(true);
                     }
 
-                    else if (MapManager.worldY == 2 && MapManager.worldX == 2)
+                    else if (worldY == 2 && worldX == 2)
                     {
-                        MapManager.worldY = 1;
-                        player.y = 23;
-                        player.x = 51;
-                        MapManager.redraw = true;
+                        worldY = 1;
+                        MapManager.SetWorld(worldX, worldY);
+                        player.SetY(23);
+                        player.SetX(51);
+                        MapManager.SetRedraw(true);
                     }
                 }
 
@@ -68,7 +76,6 @@ namespace TextBasedRPG_v2
 
                         player.health = player.healthMax;
 
-                        char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
                         holder[player.y, player.x] = ' ';
                     }
                 }
@@ -81,7 +88,6 @@ namespace TextBasedRPG_v2
                     player.strength += 3;
                     player.power = "slashes";
 
-                    char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
                     holder[player.y, player.x] = ' ';
                 }
 
@@ -90,14 +96,10 @@ namespace TextBasedRPG_v2
                     message = "You found a gold coin!";
                     HUD.SetMessage(message);
 
-                    Player.gold += 1;
+                    player.AddGold(1);
 
-                    char[,] holder = MapManager.world[MapManager.worldY, MapManager.worldX];
                     holder[player.y, player.x] = ' ';
-
                 }
-
-
             }
 
             if (subject.type == "npc")
@@ -109,51 +111,62 @@ namespace TextBasedRPG_v2
         // this handles things you can interact with, but not pickup
         public static void Triggers(char destination)
         {
+            Player player = GameManager.GetPlayer();
+
+            int[] worldCoords = MapManager.GetWorldCoords();
+            int worldX = worldCoords[0];
+            int worldY = worldCoords[1];
+
+            bool hasKey = player.GetKeyStatus();
+            int gold = player.GetGold();
+
             switch (destination)
             {
                 case '─':
-                    if (MapManager.worldY == 1 && MapManager.worldX == 1 && MapManager.gateLocked == true)
+                    bool isLocked = MapManager.GetGateLocked();
+
+                    if (worldY == 1 && worldX == 1 && isLocked)
                     {
-                        if (Player.hasKey == false)
+                        if (!hasKey)
                         {
                             message = "The gate is locked.. find the key!";
                             MenuManager.SetTaskMessage(message);
                             HUD.SetMessage(message);
                         }
 
-                        if (Player.hasKey)
+                        if (hasKey)
                         {
                             message = "You unlocked the gate!";
                             HUD.SetMessage(message);
-                            MapManager.walkables.Add(destination);
-                            MapManager.gateLocked = false;
+                            MapManager.AddWalkables(destination);
+                            MapManager.SetGateLocked(false);
                         }
                     }
                     break;
 
                 case '☻':
-                    if (MapManager.worldY == 2 && MapManager.worldX == 2)
+                    if (worldY == 2 && worldX == 2)
                     {
-                        if (Player.hasKey == false)
+                        if (hasKey == false)
                         {
-                            if (Player.gold < 100)
+                            if (gold < 100)
                             {
                                 message = "\'I'll trade 100 gold for the key!\'";
                                 MenuManager.SetTaskMessage(message);
                                 HUD.SetMessage(message);
                             }
 
-                            if (Player.gold > 100)
+                            if (gold > 100)
                             {
                                 message = "\'Here is your key!\'";
                                 MenuManager.SetTaskMessage(message);
                                 HUD.SetMessage(message);
-                                Player.hasKey = true;
-                                Player.gold -= 100;
+                                player.SetKeyStatus(true);
+                                player.AddGold(-100);
                             }
                         }
 
-                        else if (Player.hasKey)
+                        else if (hasKey)
                         {
                             message = "\'You have your key! Now begone!\'";
                             HUD.SetMessage(message);
