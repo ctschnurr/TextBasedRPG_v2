@@ -9,11 +9,12 @@ namespace TextBasedRPG_v2
     internal class BattleSystem
     {
         private static bool battleOver;
-        private static Character loser;
         private static int next;
         private static Random rand = new Random();
         private static bool flee;
         private static string message;
+
+        static Character loser;
 
         // battle handler and mini game loop
         public static void Battle(Character first, Character second)
@@ -29,16 +30,21 @@ namespace TextBasedRPG_v2
 
             List<Enemy> enemies = EnemyManager.GetEnemies();
 
-            next = 3;
+            loser = null;
 
-            loser = null; 
+            string firstName = first.GetName();
+            string secondName = second.GetName();
+            string loserName;
+
+            next = 3;
+ 
 
             while (battleOver == false)
             {
                 if (turn == 1)
                 {
                     Console.SetCursorPosition(4, next);
-                    Console.WriteLine(first.name + " attacks " + second.name + "! " + first.name + " goes first!");
+                    Console.WriteLine(firstName + " attacks " + secondName + "! " + firstName + " goes first!");
                     next += 2;
 
                     battleOver = Attack(first, second);
@@ -94,7 +100,7 @@ namespace TextBasedRPG_v2
                     next += 2;
 
                     Console.ReadKey(true);
-                    loser.health = loser.healthMax;
+                    player.RestoreHealth();
                     player.SetLives(-1);
                     int lives = player.GetLives();
 
@@ -128,8 +134,10 @@ namespace TextBasedRPG_v2
 
                 if (loser.type == "npc")
                 {
+                    loserName = loser.GetName();
+
                     Console.SetCursorPosition(4, next);
-                    Console.WriteLine(loser.name + " has DIED!");
+                    Console.WriteLine(loserName + " has DIED!");
                     next += 2;
 
                     // convert from Character to Enemy
@@ -222,10 +230,13 @@ namespace TextBasedRPG_v2
             int swing = rand.Next(1, 4);
             int damage;
 
+            string attackerName = attacker.GetName();
+            string victimName = victim.GetName();
+
             if (swing == 1)
             {
                 Console.SetCursorPosition(4, next);
-                Console.WriteLine(attacker.name + " missed!");
+                Console.WriteLine(attackerName + " missed!");
                 next += 2;
 
                 if (attacker.type == "player") Console.ReadKey(true);
@@ -235,22 +246,27 @@ namespace TextBasedRPG_v2
 
             else
             {
+                int strength = attacker.GetStrength();
+                string power = attacker.GetPower();
+
                 damage = rand.Next(1, 11);
-                damage += attacker.strength;
+                damage += strength;
 
                 Console.SetCursorPosition(4, next);
-                Console.WriteLine(attacker.name + " " + attacker.power + " " + victim.name + " for " + damage + " damage!");
+                Console.WriteLine(attackerName + " " + power + " " + victimName + " for " + damage + " damage!");
                 next += 2;
 
-                victim.health -= damage;
-                if (victim.health <= 0) victim.health = 0;
+
+                int health = victim.GetHealth();
+                health -= damage;
+                if (health <= 0) victim.SetHealth(0);
                 HUD.Draw(victim);
 
                 if (attacker.type == "player") Console.ReadKey(true);
 
                 // if (attacker.type == "npc") ReDrawCheck();
 
-                if (victim.health <= 0)
+                if (health <= 0)
                 {
                     MapManager.SetRedraw(true);
                     return true;

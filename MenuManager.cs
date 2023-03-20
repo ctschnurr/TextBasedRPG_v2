@@ -101,7 +101,8 @@ namespace TextBasedRPG_v2
 
                     Console.SetCursorPosition(6, 17);
                     Console.Write("Before we begin, please enter your name: ");
-                    player.name = Console.ReadLine();
+                    string name = Console.ReadLine();
+                    player.SetName(name);
 
                     MapManager.SetRedraw(true);
                     break;
@@ -117,6 +118,9 @@ namespace TextBasedRPG_v2
         {
             int lives = player.GetLives();
             int gold = player.GetGold();
+            int health = player.GetHealth();
+            int healthMax = player.GetHealthMax();
+            string name;
 
             bool go = false;
             while (go == false)
@@ -126,10 +130,11 @@ namespace TextBasedRPG_v2
                 Draw();
 
                 Console.SetCursorPosition(12, 5);
-                Console.Write(player.name);
+                name = player.GetName();
+                Console.Write(name);
 
                 Console.SetCursorPosition(42, 5);
-                Console.Write(player.health + "/" + player.healthMax);
+                Console.Write(health + "/" + healthMax);
 
                 Console.SetCursorPosition(13, 7);
                 Console.Write(lives);
@@ -144,20 +149,26 @@ namespace TextBasedRPG_v2
 
                 if (enemyReferences.Count >= 1)
                 {
+                    healthMax = enemyReferences[0].GetHealthMax();
                     Console.SetCursorPosition(8, 13);
-                    Console.Write(enemyReferences[0].name + " - Health: " + enemyReferences[0].healthMax);
+                    name = enemyReferences[0].GetName();
+                    Console.Write(name + " - Health: " + healthMax);
                 }
 
                 if (enemyReferences.Count >= 2)
                 {
+                    healthMax = enemyReferences[1].GetHealthMax();
                     Console.SetCursorPosition(8, 14);
-                    Console.Write(enemyReferences[1].name + " - Health: " + enemyReferences[1].healthMax);
+                    name = enemyReferences[1].GetName();
+                    Console.Write(name + " - Health: " + healthMax);
                 }
 
                 if (enemyReferences.Count >= 3)
                 {
+                    healthMax = enemyReferences[2].GetHealthMax();
                     Console.SetCursorPosition(8, 15);
-                    Console.Write(enemyReferences[2].name + " - Health: " + enemyReferences[2].healthMax);
+                    name = enemyReferences[2].GetName();
+                    Console.Write(name + " - Health: " + healthMax);
                 }
                 
 

@@ -24,6 +24,9 @@ namespace TextBasedRPG_v2
 
             Player player = GameManager.GetPlayer();
 
+            int health = player.GetHealth();
+            int healthMax = player.GetHealthMax();
+
             if (subject == player)
             {
                 bool fight = false;
@@ -63,18 +66,18 @@ namespace TextBasedRPG_v2
 
                 if (destination == 'ō')
                 {
-                    if (player.health == player.healthMax)
+                    if (health == healthMax)
                     {
                         message = "You found a potion, but health is full!";
                         HUD.SetMessage(message);
                     }
 
-                    if (player.health != player.healthMax)
+                    if (health != healthMax)
                     {
                         message = "You found a potion, health is restored!";
                         HUD.SetMessage(message);
 
-                        player.health = player.healthMax;
+                        health = healthMax;
 
                         holder[player.y, player.x] = ' ';
                     }
@@ -85,8 +88,8 @@ namespace TextBasedRPG_v2
                     message = "You found a sword! You deal 3 more damage!";
                     HUD.SetMessage(message);
 
-                    player.strength += 3;
-                    player.power = "slashes";
+                    player.AddStrength(3);
+                    player.SetPower("slashes");
 
                     holder[player.y, player.x] = ' ';
                 }

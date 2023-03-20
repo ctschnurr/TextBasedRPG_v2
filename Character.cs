@@ -8,12 +8,12 @@ namespace TextBasedRPG_v2
 {
     internal class Character
     {
-        public int health;
-        public int healthMax;
+        protected int health;
+        protected int healthMax;
 
-        public int strength;
-        public string name;
-        public string power;
+        protected int strength;
+        protected string name;
+        protected string power;
 
         public string type;
         public int[] spawn = new int[] { 0, 0 };
@@ -73,6 +73,61 @@ namespace TextBasedRPG_v2
             Console.Write(subject.character);
             Console.ResetColor();
             subject.erase = false;
+        }
+
+        public void AddHealth(int add)
+        {
+            health += add;
+        }
+
+        public void RestoreHealth()
+        {
+            health = healthMax;
+        }
+
+        public int GetHealth()
+        {
+            return health;
+        }
+
+        public int GetHealthMax()
+        {
+            return healthMax;
+        }
+
+        public void SetHealth(int set)
+        {
+            health = set;
+        }
+
+        public string GetName()
+        {
+            return name;
+        }
+
+        public void SetName(string set)
+        {
+            name = set;
+        }
+
+        public int GetStrength()
+        {
+            return strength;
+        }
+
+        public void AddStrength(int add)
+        {
+            strength += add;
+        }
+
+        public void SetPower(string set)
+        {
+            power = set;
+        }
+
+        public string GetPower()
+        {
+            return power;
         }
     }
 }

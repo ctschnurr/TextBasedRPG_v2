@@ -50,7 +50,7 @@ namespace TextBasedRPG_v2
                 {
                     enemyA = new Enemy();
                     enemies.Add(enemyA);
-                    name = enemyA.name;
+                    name = enemyA.GetName();
                     spawned = true;
                 }
 
@@ -58,7 +58,7 @@ namespace TextBasedRPG_v2
                 {
                     enemyB = new Enemy();
                     enemies.Add(enemyB);
-                    name = enemyB.name;
+                    name = enemyB.GetName();
                     spawned = true;
                 }
 
@@ -66,7 +66,7 @@ namespace TextBasedRPG_v2
                 {
                     enemyC = new Enemy();
                     enemies.Add(enemyC);
-                    name = enemyC.name;
+                    name = enemyC.GetName();
                     spawned = true;
                 }
             }
