@@ -402,7 +402,9 @@ namespace TextBasedRPG_v2
                 }
             }
 
-            if (walker.type == "npc")
+            string walkerType = walker.GetType();
+
+            if (walkerType == "npc")
             {
                 foreach (char walkable in enemyWalkables)
                 {

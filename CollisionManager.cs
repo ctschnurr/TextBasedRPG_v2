@@ -105,7 +105,9 @@ namespace TextBasedRPG_v2
                 }
             }
 
-            if (subject.type == "npc")
+            string subjectType = subject.GetType();
+
+            if (subjectType == "npc")
             {
                 if (subject.x == player.x && subject.y == player.y) BattleSystem.Battle(subject, player);
             }

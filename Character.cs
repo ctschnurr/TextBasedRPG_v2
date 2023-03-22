@@ -15,15 +15,15 @@ namespace TextBasedRPG_v2
         protected string name;
         protected string power;
 
-        public string type;
-        public int[] spawn = new int[] { 0, 0 };
-        public ConsoleColor color;
-        public char character;
+        protected string type;
+        protected int[] spawn = new int[] { 0, 0 };
+        protected ConsoleColor color;
+        protected char character;
 
-        public int x;
-        public int y;
-        public int lastX;
-        public int lastY;
+        protected int x;
+        protected int y;
+        protected int lastX;
+        protected int lastY;
 
         public int worldX;
         public int worldY;
@@ -42,9 +42,19 @@ namespace TextBasedRPG_v2
             x = set;
         }
 
+        public int GetX()
+        {
+            return x;
+        }
+
         public void SetY(int set)
         {
             y = set;
+        }
+
+        public int GetY()
+        {
+            return y;
         }
 
         public static void Draw(Character subject)
@@ -108,6 +118,11 @@ namespace TextBasedRPG_v2
         public void SetName(string set)
         {
             name = set;
+        }
+
+        public string GetType()
+        {
+            return type;
         }
 
         public int GetStrength()

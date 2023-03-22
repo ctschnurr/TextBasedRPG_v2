@@ -36,6 +36,9 @@ namespace TextBasedRPG_v2
             string secondName = second.GetName();
             string loserName;
 
+            string firstType = first.GetType();
+            string secondType = second.GetType();
+
             next = 3;
  
 
@@ -52,26 +55,26 @@ namespace TextBasedRPG_v2
                     turn++;
                 }
 
-                if (battleOver == false && second.type == "player")
+                if (battleOver == false && secondType == "player")
                 {
                     Console.SetCursorPosition(4, next);
 
                     PlayerChoice(second, first);
                 }
 
-                if (battleOver == false && first.type == "npc")
+                if (battleOver == false && firstType == "npc")
                 {
                     battleOver = Attack(first, second);
                     if (battleOver == true) loser = second;
                 }
 
-                if (battleOver == false && second.type == "npc")
+                if (battleOver == false && secondType == "npc")
                 {
                     battleOver = Attack(second, first);
                     if (battleOver == true) loser = first;
                 }
 
-                if (battleOver == false && first.type == "player")
+                if (battleOver == false && firstType == "player")
                 {
                     Console.SetCursorPosition(4, next);
 
@@ -83,8 +86,8 @@ namespace TextBasedRPG_v2
             
             // if the player successfully flees, it is caught here
 
-            if (flee == true && first.type == "npc") first.stunned = true;
-            if (flee == true && second.type == "npc") second.stunned = true;
+            if (flee == true && firstType == "npc") first.stunned = true;
+            if (flee == true && secondType == "npc") second.stunned = true;
 
             // if the battle ends without the player fleeing it is handled here
 
@@ -92,7 +95,9 @@ namespace TextBasedRPG_v2
             {
                 Player player = GameManager.GetPlayer();
 
-                if (loser.type == "player")
+                string loserType = loser.GetType();
+
+                if (loserType == "player")
                 {
 
                     Console.SetCursorPosition(4, next);
@@ -112,8 +117,8 @@ namespace TextBasedRPG_v2
 
                         Console.ReadKey(true);
 
-                        loser.x = 33;
-                        loser.y = 10;
+                        loser.SetX(33);
+                        loser.SetY(10);
                         MapManager.SetWorld(2, 2);
 
                         message = "\'I saved you! Please be careful!\'";
@@ -132,7 +137,7 @@ namespace TextBasedRPG_v2
                     }
                 }
 
-                if (loser.type == "npc")
+                if (loserType == "npc")
                 {
                     loserName = loser.GetName();
 
@@ -144,7 +149,13 @@ namespace TextBasedRPG_v2
                     Enemy convert = null;
                     foreach (Enemy enemy in enemies)
                     {
-                        if (enemy.x == loser.x && enemy.y == loser.y) convert = enemy;
+                        int enemyX = enemy.GetX();
+                        int loserX = loser.GetX();
+
+                        int enemyY = enemy.GetY();
+                        int loserY = loser.GetY();
+
+                        if (enemyX == loserX && enemyY == loserY) convert = enemy;
                     }
 
                     EnemyManager.SetDeadEnemy(convert);
@@ -159,8 +170,8 @@ namespace TextBasedRPG_v2
                 }
             }
 
-            if (flee && first.type == "player") first.StepBack();
-            if (flee && second.type == "player") second.StepBack();
+            if (flee && firstType == "player") first.StepBack();
+            if (flee && secondType == "player") second.StepBack();
 
             MapManager.SetRedraw(true);
         }
@@ -226,6 +237,8 @@ namespace TextBasedRPG_v2
         // this handles the attack phase for both player and enemy
         static bool Attack(Character attacker, Character victim)
         {
+            string attackerType = attacker.GetType();
+
             Random rand = new Random();
             int swing = rand.Next(1, 4);
             int damage;
@@ -239,7 +252,7 @@ namespace TextBasedRPG_v2
                 Console.WriteLine(attackerName + " missed!");
                 next += 2;
 
-                if (attacker.type == "player") Console.ReadKey(true);
+                if (attackerType == "player") Console.ReadKey(true);
 
                 return false;
             }
@@ -262,7 +275,7 @@ namespace TextBasedRPG_v2
                 if (health <= 0) victim.SetHealth(0);
                 HUD.Draw(victim);
 
-                if (attacker.type == "player") Console.ReadKey(true);
+                if (attackerType == "player") Console.ReadKey(true);
 
                 // if (attacker.type == "npc") ReDrawCheck();
 

@@ -13,18 +13,19 @@ namespace TextBasedRPG_v2
         private static bool messageNew = false;
         public static void Draw(Character activeCharacter)
         {
+            string activeType = activeCharacter.GetType();
             Player player = GameManager.GetPlayer();
             int lives = player.GetLives();
             int health = activeCharacter.GetHealth();
             string name = activeCharacter.GetName();
 
-            if (activeCharacter.type == "player") Console.SetCursorPosition(4, 40);
-            if (activeCharacter.type == "npc") Console.SetCursorPosition(46, 40);
+            if (activeType == "player") Console.SetCursorPosition(4, 40);
+            if (activeType == "npc") Console.SetCursorPosition(46, 40);
 
             string hudHealth = health.ToString();
             Console.Write(name.PadRight(name.Length + 1) + ": Health: " + hudHealth.PadRight(5));
 
-            if (activeCharacter.type == "player") Console.Write("Lives: " + lives);
+            if (activeType == "player") Console.Write("Lives: " + lives);
 
         }
 
