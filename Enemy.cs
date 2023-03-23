@@ -157,16 +157,19 @@ namespace TextBasedRPG_v2
             Random rnd = new Random();
             string choice = "blank";
 
-            if (player.y == y)
+            int playerX = player.GetX();
+            int playerY = player.GetY();
+
+            if (playerY == y)
             {
-                if (player.x > x) choice = "right";
-                if (player.x < x) choice = "left";
+                if (playerX > x) choice = "right";
+                if (playerX < x) choice = "left";
             }
 
-            if (player.x == x)
+            if (playerX == x)
             {
-                if (player.y > y) choice = "down";
-                if (player.y < y) choice = "up";
+                if (playerY > y) choice = "down";
+                if (playerY < y) choice = "up";
             }
 
             else
@@ -177,15 +180,15 @@ namespace TextBasedRPG_v2
                 {
                     case 1:
                         {
-                            if (player.x > x) choice = "right";
-                            if (player.x < x) choice = "left";
+                            if (playerX > x) choice = "right";
+                            if (playerX < x) choice = "left";
                             break;
                         }
 
                     case 2:
                         {
-                            if (player.y > y) choice = "down";
-                            if (player.y < y) choice = "up";
+                            if (playerY > y) choice = "down";
+                            if (playerY < y) choice = "up";
                             break;
                         }
                 }

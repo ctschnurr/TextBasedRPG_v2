@@ -22,7 +22,13 @@ namespace TextBasedRPG_v2
             int worldX = worldCoords[0];
             int worldY = worldCoords[1];
 
+            int subjectX = subject.GetX();
+            int subjectY = subject.GetY();
+
             Player player = GameManager.GetPlayer();
+
+            int playerX = player.GetX();
+            int playerY = player.GetY();
 
             int health = player.GetHealth();
             int healthMax = player.GetHealthMax();
@@ -34,7 +40,10 @@ namespace TextBasedRPG_v2
 
                 foreach (Enemy enemy in enemies)
                 {
-                    if (enemy.x == subject.x && enemy.y == subject.y && enemy.worldX == subject.worldX && enemy.worldY == subject.worldY)
+                    int enemyX = enemy.GetX();
+                    int enemyY = enemy.GetY();
+
+                    if (enemyX == playerX && enemyY == playerY && enemy.worldX == player.worldX && enemy.worldY == player.worldY)
                     {
                         victim = enemy;
                         fight = true;
@@ -79,7 +88,7 @@ namespace TextBasedRPG_v2
 
                         health = healthMax;
 
-                        holder[player.y, player.x] = ' ';
+                        holder[playerY, playerX] = ' ';
                     }
                 }
 
@@ -91,7 +100,7 @@ namespace TextBasedRPG_v2
                     player.AddStrength(3);
                     player.SetPower("slashes");
 
-                    holder[player.y, player.x] = ' ';
+                    holder[playerY, playerX] = ' ';
                 }
 
                 if (destination == '°')
@@ -101,7 +110,7 @@ namespace TextBasedRPG_v2
 
                     player.AddGold(1);
 
-                    holder[player.y, player.x] = ' ';
+                    holder[playerY, playerX] = ' ';
                 }
             }
 
@@ -109,7 +118,7 @@ namespace TextBasedRPG_v2
 
             if (subjectType == "npc")
             {
-                if (subject.x == player.x && subject.y == player.y) BattleSystem.Battle(subject, player);
+                if (subjectX == playerX && subjectY == playerY) BattleSystem.Battle(subject, player);
             }
         }
 

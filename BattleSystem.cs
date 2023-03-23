@@ -273,6 +273,7 @@ namespace TextBasedRPG_v2
                 int health = victim.GetHealth();
                 health -= damage;
                 if (health <= 0) victim.SetHealth(0);
+                else victim.SetHealth(health);
                 HUD.Draw(victim);
 
                 if (attackerType == "player") Console.ReadKey(true);

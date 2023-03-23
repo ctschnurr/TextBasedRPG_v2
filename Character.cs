@@ -37,26 +37,6 @@ namespace TextBasedRPG_v2
             y = lastY;
         }
 
-        public void SetX(int set)
-        {
-            x = set;
-        }
-
-        public int GetX()
-        {
-            return x;
-        }
-
-        public void SetY(int set)
-        {
-            y = set;
-        }
-
-        public int GetY()
-        {
-            return y;
-        }
-
         public static void Draw(Character subject)
         {
             char[,] map = MapManager.GetMap();
@@ -84,7 +64,25 @@ namespace TextBasedRPG_v2
             Console.ResetColor();
             subject.erase = false;
         }
+        public void SetX(int set)
+        {
+            x = set;
+        }
 
+        public int GetX()
+        {
+            return x;
+        }
+
+        public void SetY(int set)
+        {
+            y = set;
+        }
+
+        public int GetY()
+        {
+            return y;
+        }
         public void AddHealth(int add)
         {
             health += add;
