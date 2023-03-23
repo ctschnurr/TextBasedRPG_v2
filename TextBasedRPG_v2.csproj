@@ -50,13 +50,20 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyManager.cs" />
     <Compile Include="GameManager.cs" />
+    <Compile Include="Door.cs" />
     <Compile Include="HUD.cs" />
+    <Compile Include="Interactable.cs" />
     <Compile Include="Item.cs" />
+    <Compile Include="ItemManager.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="MenuManager.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="Potion.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Sword.cs" />
+    <Compile Include="WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

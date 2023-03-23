@@ -36,8 +36,8 @@ namespace TextBasedRPG_v2
             string secondName = second.GetName();
             string loserName;
 
-            string firstType = first.GetType();
-            string secondType = second.GetType();
+            string firstType = first.GetCharType();
+            string secondType = second.GetCharType();
 
             next = 3;
  
@@ -86,8 +86,10 @@ namespace TextBasedRPG_v2
             
             // if the player successfully flees, it is caught here
 
-            if (flee == true && firstType == "npc") first.stunned = true;
-            if (flee == true && secondType == "npc") second.stunned = true;
+
+
+            if (flee == true && firstType == "npc") first.SetStunned(true);
+            if (flee == true && secondType == "npc") second.SetStunned(true);
 
             // if the battle ends without the player fleeing it is handled here
 
@@ -95,7 +97,7 @@ namespace TextBasedRPG_v2
             {
                 Player player = GameManager.GetPlayer();
 
-                string loserType = loser.GetType();
+                string loserType = loser.GetCharType();
 
                 if (loserType == "player")
                 {
@@ -161,7 +163,7 @@ namespace TextBasedRPG_v2
                     EnemyManager.SetDeadEnemy(convert);
                     
                     int winnings = rand.Next(3, 13);
-                    player.AddGold(winnings);
+                    Player.AddGold(winnings);
                     Console.SetCursorPosition(4, next);
                     Console.WriteLine("You got " + winnings + " gold!");
                     Console.ReadKey(true);
@@ -237,7 +239,7 @@ namespace TextBasedRPG_v2
         // this handles the attack phase for both player and enemy
         static bool Attack(Character attacker, Character victim)
         {
-            string attackerType = attacker.GetType();
+            string attackerType = attacker.GetCharType();
 
             Random rand = new Random();
             int swing = rand.Next(1, 4);

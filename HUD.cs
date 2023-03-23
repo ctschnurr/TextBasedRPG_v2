@@ -13,7 +13,7 @@ namespace TextBasedRPG_v2
         private static bool messageNew = false;
         public static void Draw(Character activeCharacter)
         {
-            string activeType = activeCharacter.GetType();
+            string activeType = activeCharacter.GetCharType();
             Player player = GameManager.GetPlayer();
             int lives = player.GetLives();
             int health = activeCharacter.GetHealth();

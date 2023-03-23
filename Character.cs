@@ -25,16 +25,26 @@ namespace TextBasedRPG_v2
         protected int lastX;
         protected int lastY;
 
-        public int worldX;
-        public int worldY;
+        protected int worldX;
+        protected int worldY;
 
-        public bool stunned;
-        public bool erase = false;
+        protected bool stunned;
+        protected bool erase = false;
 
         public void StepBack()
         {
             x = lastX;
             y = lastY;
+        }
+
+        public void SetStunned(bool input)
+        {
+            stunned = input;
+        }
+
+        public bool GetStunned()
+        {
+            return stunned;
         }
 
         public static void Draw(Character subject)
@@ -83,6 +93,16 @@ namespace TextBasedRPG_v2
         {
             return y;
         }
+
+        public int GetWorldX()
+        {
+            return worldX;
+        }
+
+        public int GetWorldY()
+        {
+            return worldY;
+        }
         public void AddHealth(int add)
         {
             health += add;
@@ -118,7 +138,7 @@ namespace TextBasedRPG_v2
             name = set;
         }
 
-        public string GetType()
+        public string GetCharType()
         {
             return type;
         }
@@ -142,5 +162,55 @@ namespace TextBasedRPG_v2
         {
             return power;
         }
+
+        public bool CollisionCheck(int inputY, int inputX)
+        {
+            char destination = MapManager.GetTile(inputY, inputX);
+            bool isWalkable = MapManager.CheckWalkable(destination);
+
+            return isWalkable;
+        }
+
+        public void FightCheck(Character instigator)
+        {
+            Player player = GameManager.GetPlayer();
+
+            int playerX = player.GetX();
+            int playerY = player.GetY();
+
+            int instigatorX = instigator.GetX();
+            int instigatorY = instigator.GetY();
+
+            int instigatorWX = instigator.GetWorldX();
+            int instigatorWY = instigator.GetWorldY();
+
+            string instigatorType = instigator.GetCharType();
+
+            List<Enemy> enemies = EnemyManager.GetEnemies();
+
+            if (instigator == player)
+            {
+                foreach (Enemy enemy in enemies)
+                {
+                    int enemyX = enemy.GetX();
+                    int enemyY = enemy.GetY();
+
+                    int enemyWX = enemy.GetWorldX();
+                    int enemyWY = enemy.GetWorldY();
+
+                    if (enemyX == instigatorX && enemyY == instigatorY && enemyWX == instigatorWX && enemyWY == instigatorWY)
+                    {
+                        BattleSystem.Battle(instigator, enemy);
+                    }
+                }
+            }
+
+            if (instigatorType == "npc")
+            {
+                if (instigatorX == playerX && instigatorY == playerY) BattleSystem.Battle(instigator, player);
+            }
+        }
+
+
     }
 }

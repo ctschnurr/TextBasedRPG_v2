@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
-    internal class Coin : Item
+    internal class Potion : Item
     {
-        public Coin()
+        public Potion()
         {
             bool isWalkable = false;
             char tile = ' ';
 
-            name = "coin";
-            color = ConsoleColor.Yellow;
-            icon = '°';
+            name = "potion";
+            color = ConsoleColor.Blue;
+            icon = 'ö';
 
             worldX = 1;
             worldY = 1;

@@ -8,25 +8,25 @@ namespace TextBasedRPG_v2
 {
     internal class Enemy : Character
     {
-        public string[,] enemyTemplate = new string[,]
+        static Random rand = new Random();
+
+        protected string[,] enemyTemplate = new string[,]
         {
             {"Zombie","10","0", "Green", "bites" },
             {"Skeleton","15","1", "Gray", "smacks"},
             {"Monster","20","3", "Red", "scratches" },
         };
 
-
-        public enum Behavior
+        protected enum Behavior
         {
             chase,
             wander
         }
 
-        public Behavior behavior;
+        protected Behavior behavior;
 
         public Enemy()
         {
-            Random rand = new Random();
             int roll = rand.Next(0, 3);
 
             name = enemyTemplate[roll, 0];
@@ -44,7 +44,7 @@ namespace TextBasedRPG_v2
             x = rand.Next(20, 50);
             y = rand.Next(15, 35);
 
-            worldX = 0;
+            worldX = 2;
             worldY = 0;
 
             stunned = false;
@@ -55,8 +55,6 @@ namespace TextBasedRPG_v2
             Character player = GameManager.GetPlayer();
 
             bool isWalkable;
-            char destination = ' ';
-            char[,] map = MapManager.GetWorld();
             bool move = false;
             erase = false;
 
@@ -76,8 +74,7 @@ namespace TextBasedRPG_v2
             switch (choice)
             {
                 case "left":
-                    destination = map[y, x - 1];
-                    isWalkable = MapManager.CheckWalkable(destination, this);
+                    isWalkable = CollisionCheck(y, x - 1);
 
                     if (isWalkable == true)
                     {
@@ -93,8 +90,7 @@ namespace TextBasedRPG_v2
                     }
 
                 case "right":
-                    destination = map[y, x + 1];
-                    isWalkable = MapManager.CheckWalkable(destination, this);
+                    isWalkable = CollisionCheck(y, x + 1);
 
                     if (isWalkable == true)
                     {
@@ -110,8 +106,7 @@ namespace TextBasedRPG_v2
                     }
 
                 case "up":
-                    destination = map[y - 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination, this);
+                    isWalkable = CollisionCheck(y - 1, x);
 
                     if (isWalkable == true)
                     {
@@ -127,8 +122,7 @@ namespace TextBasedRPG_v2
                     }
 
                 case "down":
-                    destination = map[y + 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination, this);
+                    isWalkable = CollisionCheck(y + 1, x);
 
                     if (isWalkable == true)
                     {
@@ -146,7 +140,7 @@ namespace TextBasedRPG_v2
 
             if (move)
             {
-                CollisionManager.CollisionCheck(destination, this);
+                FightCheck(this);
                 erase = true;
                 Draw(this);
             }
@@ -154,7 +148,6 @@ namespace TextBasedRPG_v2
 
         string Chase(Character player)
         {
-            Random rnd = new Random();
             string choice = "blank";
 
             int playerX = player.GetX();
@@ -174,7 +167,7 @@ namespace TextBasedRPG_v2
 
             else
             {
-                int walk = rnd.Next(1, 3);
+                int walk = rand.Next(1, 3);
 
                 switch (walk)
                 {
@@ -199,10 +192,9 @@ namespace TextBasedRPG_v2
 
         string Wander()
         {
-            Random rnd = new Random();
             string choice = "blank";
 
-            int walk = rnd.Next(1, 5);
+            int walk = rand.Next(1, 5);
             if (walk == 1) choice = "right";
             if (walk == 2) choice = "left";
             if (walk == 3) choice = "up";

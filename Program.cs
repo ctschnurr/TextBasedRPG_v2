@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 // todo:
 
-// optimise classes:
-// a class should 'ask' another class for things, not get its info - player should do all its own collision detection, only getting tiles from map 'get tile' etc
-// TODO:
-// Character: ask about if the variables need to be private to adhere to OOP principles
-// Player
-
-// enemy movement method could be cleaner code-wise
-
 // make WorldManager that actually draws the game screen, while MapManager just handles map digestion and storage?
 
 // global or settings class that stores game data (alleviates hardcoding) - variables could be set as constants

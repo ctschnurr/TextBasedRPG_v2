@@ -11,116 +11,6 @@ namespace TextBasedRPG_v2
         // private static Character playerChar = GameManager.GetPlayer();
 
         private static string message = null;
-        private static List<Enemy> enemies;
-
-        //this handles the pickups and battle detection
-        public static void CollisionCheck(char destination, Character subject)
-        {
-            enemies = EnemyManager.GetEnemies();
-            char[,] holder = MapManager.GetWorld();
-            int[] worldCoords = MapManager.GetWorldCoords();
-            int worldX = worldCoords[0];
-            int worldY = worldCoords[1];
-
-            int subjectX = subject.GetX();
-            int subjectY = subject.GetY();
-
-            Player player = GameManager.GetPlayer();
-
-            int playerX = player.GetX();
-            int playerY = player.GetY();
-
-            int health = player.GetHealth();
-            int healthMax = player.GetHealthMax();
-
-            if (subject == player)
-            {
-                bool fight = false;
-                Enemy victim = null;
-
-                foreach (Enemy enemy in enemies)
-                {
-                    int enemyX = enemy.GetX();
-                    int enemyY = enemy.GetY();
-
-                    if (enemyX == playerX && enemyY == playerY && enemy.worldX == player.worldX && enemy.worldY == player.worldY)
-                    {
-                        victim = enemy;
-                        fight = true;
-                    }
-                }
-
-                if (fight) BattleSystem.Battle(subject, victim);
-
-                if (destination == '▀')
-                {
-                    if (worldY == 1 && worldX == 2)
-                    {
-                        worldY = 2;
-                        MapManager.SetWorld(worldX, worldY);
-                        player.SetY(14);
-                        player.SetX(42);
-                        MapManager.SetRedraw(true);
-                    }
-
-                    else if (worldY == 2 && worldX == 2)
-                    {
-                        worldY = 1;
-                        MapManager.SetWorld(worldX, worldY);
-                        player.SetY(23);
-                        player.SetX(51);
-                        MapManager.SetRedraw(true);
-                    }
-                }
-
-                if (destination == 'ō')
-                {
-                    if (health == healthMax)
-                    {
-                        message = "You found a potion, but health is full!";
-                        HUD.SetMessage(message);
-                    }
-
-                    if (health != healthMax)
-                    {
-                        message = "You found a potion, health is restored!";
-                        HUD.SetMessage(message);
-
-                        health = healthMax;
-
-                        holder[playerY, playerX] = ' ';
-                    }
-                }
-
-                if (destination == '┼')
-                {
-                    message = "You found a sword! You deal 3 more damage!";
-                    HUD.SetMessage(message);
-
-                    player.AddStrength(3);
-                    player.SetPower("slashes");
-
-                    holder[playerY, playerX] = ' ';
-                }
-
-                if (destination == '°')
-                {
-                    message = "You found a gold coin!";
-                    HUD.SetMessage(message);
-
-                    player.AddGold(1);
-
-                    holder[playerY, playerX] = ' ';
-                }
-            }
-
-            string subjectType = subject.GetType();
-
-            if (subjectType == "npc")
-            {
-                if (subjectX == playerX && subjectY == playerY) BattleSystem.Battle(subject, player);
-            }
-        }
 
         // this handles things you can interact with, but not pickup
         public static void Triggers(char destination)
@@ -176,7 +66,7 @@ namespace TextBasedRPG_v2
                                 MenuManager.SetTaskMessage(message);
                                 HUD.SetMessage(message);
                                 player.SetKeyStatus(true);
-                                player.AddGold(-100);
+                                Player.AddGold(-100);
                             }
                         }
 

@@ -20,12 +20,17 @@ namespace TextBasedRPG_v2
 
             MenuManager.MainMenu();
 
+            ItemManager.InitItems();
+            WorldManager.ConstructInteractables();
+
             while (gameOver == false)
             {
                 MapManager.Draw();
                 HUD.Update();
                 player.Update();
                 EnemyManager.Update();
+                ItemManager.Update();
+                WorldManager.Update();
                 turn++;
             }
         }

@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static TextBasedRPG_v2.Settings;
 
 namespace TextBasedRPG_v2
 {
     internal class EnemyManager
     {
-        private static Enemy enemyA;
-        private static Enemy enemyB;
-        private static Enemy enemyC;
-                
         private static Enemy enemyRef1;
         private static Enemy enemyRef2;
         private static Enemy enemyRef3;
@@ -46,27 +43,11 @@ namespace TextBasedRPG_v2
 
             if (spawnTime)
             {
-                if (enemies.Exists(x => enemies.Contains(enemyA)) == false)
+                if (enemies.Count <= enemyMax)
                 {
-                    enemyA = new Enemy();
-                    enemies.Add(enemyA);
-                    name = enemyA.GetName();
-                    spawned = true;
-                }
-
-                else if (enemies.Exists(x => enemies.Contains(enemyB)) == false)
-                {
-                    enemyB = new Enemy();
-                    enemies.Add(enemyB);
-                    name = enemyB.GetName();
-                    spawned = true;
-                }
-
-                else if (enemies.Exists(x => enemies.Contains(enemyC)) == false)
-                {
-                    enemyC = new Enemy();
-                    enemies.Add(enemyC);
-                    name = enemyC.GetName();
+                    enemies.Add(new Enemy());
+                    int last = enemies.Count - 1;
+                    name = enemies[last].GetName();
                     spawned = true;
                 }
             }
@@ -92,8 +73,9 @@ namespace TextBasedRPG_v2
                 {
                     foreach (Enemy enemy in enemies)
                     {
-                        if (enemy.stunned == true) enemy.stunned = false;
-                        else if (enemy.stunned == false) enemy.Update();
+                        bool stunned = enemy.GetStunned();
+                        if (stunned == true) enemy.SetStunned(false);
+                        else if (stunned == false) enemy.Update();
                     }
                 }
 

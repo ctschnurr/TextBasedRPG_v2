@@ -12,11 +12,13 @@ namespace TextBasedRPG_v2
 
         private string[] mapData;
         private static List<char> walkables;
-        private static char[] enemyWalkables;
         private int mapwidth;
         private int mapheight;
         private static bool redraw = true;
         private static bool gateLocked = true;
+
+        private int windowWidth;
+        private int windowHeight;
 
         // world array to hold map arrays
 
@@ -36,11 +38,6 @@ namespace TextBasedRPG_v2
         private static int worldX;
         private static int worldY;
 
-        private static int windowWidth;
-        private static int windowHeight;
-
-        // public static ConsoleColor tilecolor;
-
         // stores map name temporarily to pass into error handler
 
         public static string mapName;
@@ -50,15 +47,14 @@ namespace TextBasedRPG_v2
         // 148 176 ░ 177 ▒ 178 ▓
         // 179 │ 180 ┤ 191 ┐ 192 └ 193 ┴ 194 ┬ 195 ├ 196 ─ 197 ┼ 217 ┘ 218 ┌
         // 185 ╣ 186 ║ 187 ╗ 188 ╝ 200 ╚ 201 ╔ 202 ╩ 203 ╦ 204 ╠ 205 ═ 206 ╬ 207 ╧ 208 ╨ 209 ╤ 210 ╥ 211 ╙ 212 ╘ 213 ╒ 214 ╓ 215 ╫ 216 ╪ 217 ┘ 218 ┌
-        // 219 █ 220 ▄ 223 ▀ 254 ■ Ø æ
+        // 219 █ 220 ▄ 223 ▀ 254 ■ Ø æ ö
 
         public MapManager()
         {
             worldX = 1;
             worldY = 1;
 
-            walkables = new List<char> { 'ō', ' ', '░', '▒', '▀', '▓', (char)1, '┼', '°' };
-            enemyWalkables = new char[] { 'x' };
+            walkables = new List<char> { ' ', '░', '▒', '▀', '▓', (char)1, '┼', '°' };
 
             // load in world maps from files
 
@@ -171,6 +167,8 @@ namespace TextBasedRPG_v2
 
                 Character player = GameManager.GetPlayer();
                 Character.Draw(player);
+                ItemManager.Draw();
+                WorldManager.Update();
                 HUD.Draw(player);
             }
         }
@@ -390,7 +388,7 @@ namespace TextBasedRPG_v2
             Console.ResetColor();
         }
 
-        public static bool CheckWalkable(char destination, Character walker)
+        public static bool CheckWalkable(char destination)
         {
             bool goTime = false;
 
@@ -402,20 +400,14 @@ namespace TextBasedRPG_v2
                 }
             }
 
-            string walkerType = walker.GetType();
-
-            if (walkerType == "npc")
-            {
-                foreach (char walkable in enemyWalkables)
-                {
-                    if (destination == walkable)
-                    {
-                        goTime = true;
-                    }
-                }
-            }
-
             return goTime;
+        }
+
+        public static char GetTile(int characterY, int characterX)
+        {
+            char[,] referenceMap = GetWorld();
+            char tile = referenceMap[characterY, characterX];
+            return tile;
         }
 
         static void ErrorScreen(string badstring, string badname)

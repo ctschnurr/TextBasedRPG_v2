@@ -9,7 +9,7 @@ namespace TextBasedRPG_v2
     internal class Player : Character
     {
         private bool hasKey;
-        private int gold;
+        private static int gold;
         private int lives;
 
         public Player()
@@ -55,8 +55,8 @@ namespace TextBasedRPG_v2
                     break;
 
                 case ConsoleKey.W:
-                    destination = map[y - 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination, this);
+                    isWalkable = CollisionCheck(y - 1, x);
+
                     CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
@@ -73,8 +73,8 @@ namespace TextBasedRPG_v2
                     }
 
                 case ConsoleKey.S:
-                    destination = map[y + 1, x];
-                    isWalkable = MapManager.CheckWalkable(destination, this);
+                    isWalkable = CollisionCheck(y + 1, x);
+
                     CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
@@ -91,8 +91,8 @@ namespace TextBasedRPG_v2
                     }
 
                 case ConsoleKey.A:
-                    destination = map[y, x - 1];
-                    isWalkable = MapManager.CheckWalkable(destination, this);
+                    isWalkable = CollisionCheck(y, x - 1);
+
                     CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
@@ -109,8 +109,8 @@ namespace TextBasedRPG_v2
                     }
 
                 case ConsoleKey.D:
-                    destination = map[y, x + 1];
-                    isWalkable = MapManager.CheckWalkable(destination, this);
+                    isWalkable = CollisionCheck(y, x + 1);
+
                     CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
@@ -163,19 +163,14 @@ namespace TextBasedRPG_v2
                 MapManager.SetRedraw(true);
             }
 
-
-
             if (move)
             {
-                CollisionManager.CollisionCheck(destination, this);
+                FightCheck(this);
+                PickupCheck();
+                InteractableCheck();
                 erase = true;
                 Draw(this);
             }
-        }
-
-        public void CollisionCheck()
-        {
-
         }
 
         public void SetLives(int change)
@@ -188,7 +183,7 @@ namespace TextBasedRPG_v2
             return lives;
         }
 
-        public void AddGold(int change)
+        public static void AddGold(int change)
         {
             gold += change;
         }
@@ -206,6 +201,54 @@ namespace TextBasedRPG_v2
         public void SetKeyStatus(bool status)
         {
             hasKey = status;
+        }
+
+        public void SetWorldX(int x)
+        {
+            worldX = x;
+        }
+
+        public void SetWorldY(int y)
+        {
+            worldY = y;
+        }
+
+        public void PickupCheck()
+        {
+            List<Item> items = ItemManager.GetItems();
+
+            foreach (Item item in items)
+            {
+                int itemX = item.GetX();
+                int itemY = item.GetY();
+
+                int itemWX = item.GetWorldX();
+                int itemWY = item.GetWorldY();
+
+                if (itemX == x && itemY == y && itemWX == worldX && itemWY == worldY)
+                {
+                    item.PickUp(item);
+                }
+            }
+        }
+
+        public void InteractableCheck()
+        {
+            List<Interactable> interactables = WorldManager.GetInteractables();
+
+            foreach (Interactable interactable in interactables)
+            {
+                int interactableX = interactable.GetX();
+                int interactableY = interactable.GetY();
+
+                int interactableWX = interactable.GetWorldX();
+                int interactableWY = interactable.GetWorldY();
+
+                if (interactableX == x && interactableY == y && interactableWX == worldX && interactableWY == worldY)
+                {
+                    interactable.Interact(interactable);
+                }
+            }
         }
     }
 }
