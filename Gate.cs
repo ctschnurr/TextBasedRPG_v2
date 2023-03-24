@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
-    internal class Door : Interactable
+    internal class Gate : Door
     {
-        protected int destinationWorldX = 0;
-        protected int destinationWorldY = 0;
-        protected int destinationLocalX = 0;
-        protected int destinationLocalY = 0;
+        bool isLocked = true;
 
-        public Door()
+        public Gate()
         {
             type = "door";
             worldX = 0;
@@ -22,47 +19,13 @@ namespace TextBasedRPG_v2
             localY = 0;
 
             icon = '▀';
-            color = ConsoleColor.DarkGray;
-        }
+            color = ConsoleColor.Gray;
 
-        public int GetDestinationWorldX()
-        {
-            return destinationWorldX;
-        }
+            destinationWorldX = 0;
+            destinationWorldY = 0;
+            destinationLocalX = 0;
+            destinationLocalY = 0;
 
-        public int GetDestinationWorldY()
-        {
-            return destinationWorldY;
-        }
-
-        public int GetDestinationLocalX()
-        {
-            return destinationLocalX;
-        }
-
-        public int GetDestinationLocalY()
-        {
-            return destinationLocalY;
-        }
-
-        public void SetDestinationWorldX(int x)
-        {
-            destinationWorldX = x;
-        }
-
-        public void SetDestinationWorldY(int y)
-        {
-           destinationWorldY = y;
-        }
-
-        public void SetDestinationLocalX(int x)
-        {
-            destinationLocalX = x;
-        }
-
-        public void SetDestinationLocalY(int y)
-        {
-            destinationLocalY = y;
         }
 
         public override void Interact(Interactable input)
@@ -92,7 +55,7 @@ namespace TextBasedRPG_v2
             player.SetY(destinationLocalY);
             MapManager.SetWorld(destinationWorldX, destinationWorldY);
             MapManager.SetRedraw(true);
-            
+
         }
     }
 }

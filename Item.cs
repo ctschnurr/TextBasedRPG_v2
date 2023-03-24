@@ -92,12 +92,13 @@ namespace TextBasedRPG_v2
                         HUD.SetMessage(message);HUD.SetMessage(message);
                     }
 
-                    if (health != healthMax)
+                    else if (health != healthMax)
                     {
                         player.RestoreHealth();
                         ItemManager.SetUsedItem(input);
                         message = "You found a potion, health is restored!";
-                        HUD.SetMessage(message);                        
+                        HUD.SetMessage(message);
+                        HUD.Draw(player);
                     }
                     break;
             }

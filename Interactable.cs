@@ -80,38 +80,38 @@ namespace TextBasedRPG_v2
 
         public virtual void Interact(Interactable input)
         {
-            Player player = GameManager.GetPlayer();
-            string inputType = input.GetType();
-            switch (inputType)
-            {
-                case "door":
-                    List<Door> doors = WorldManager.GetDoors();
-                    int destinationWorldX = 1;
-                    int destinationWorldY = 1;
-                    int destinationLocalX = 1;
-                    int destinationLocalY = 1;
-
-                    foreach (Door door in doors)
-                    {
-                        if (door == input)
-                        {
-                            destinationWorldX = door.GetDestinationWorldX();
-                            destinationWorldY = door.GetDestinationWorldY();
-                            destinationLocalX = door.GetDestinationLocalX();
-                            destinationLocalY = door.GetDestinationLocalY();
-                        }
-                    }
-
-                    player.SetWorldX(destinationWorldX);
-                    player.SetWorldY(destinationWorldY);
-                    player.SetX(destinationLocalX);
-                    player.SetY(destinationLocalY);
-                    MapManager.SetWorld(destinationWorldX, destinationWorldY);
-                    MapManager.SetRedraw(true);
-                    break;
-
-                // case "gate":
-            }
+            // Player player = GameManager.GetPlayer();
+            // string inputType = input.GetType();
+            // switch (inputType)
+            // {
+            //     case "door":
+            //         List<Door> doors = WorldManager.GetDoors();
+            //         int destinationWorldX = 1;
+            //         int destinationWorldY = 1;
+            //         int destinationLocalX = 1;
+            //         int destinationLocalY = 1;
+            // 
+            //         foreach (Door door in doors)
+            //         {
+            //             if (door == input)
+            //             {
+            //                 destinationWorldX = door.GetDestinationWorldX();
+            //                 destinationWorldY = door.GetDestinationWorldY();
+            //                 destinationLocalX = door.GetDestinationLocalX();
+            //                 destinationLocalY = door.GetDestinationLocalY();
+            //             }
+            //         }
+            // 
+            //         player.SetWorldX(destinationWorldX);
+            //         player.SetWorldY(destinationWorldY);
+            //         player.SetX(destinationLocalX);
+            //         player.SetY(destinationLocalY);
+            //         MapManager.SetWorld(destinationWorldX, destinationWorldY);
+            //         MapManager.SetRedraw(true);
+            //         break;
+            // 
+            //     // case "gate":
+            // }
         }
     }
 }

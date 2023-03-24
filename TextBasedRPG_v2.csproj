@@ -51,6 +51,7 @@
     <Compile Include="EnemyManager.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Door.cs" />
+    <Compile Include="Gate.cs" />
     <Compile Include="HUD.cs" />
     <Compile Include="Interactable.cs" />
     <Compile Include="Item.cs" />
