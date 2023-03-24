@@ -19,7 +19,7 @@ namespace TextBasedRPG_v2
             MapManager atlas = new MapManager();
             MenuManager menus = new MenuManager();
 
-            ResetWindowSize();
+            //ResetWindowSize();
 
             MenuManager.MainMenu();
 
@@ -35,7 +35,7 @@ namespace TextBasedRPG_v2
                 ItemManager.Update();
                 WorldManager.Update();
                 turn++;
-                ResetWindowSize();
+                //ResetWindowSize();
             }
 
             MenuManager.GameOver();
