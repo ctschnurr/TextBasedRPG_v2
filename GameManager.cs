@@ -11,12 +11,15 @@ namespace TextBasedRPG_v2
         private static Player player = new Player();
         private static bool gameOver = false;
         private static int turn = 1;
+        private static string winState = "quit";
         public static void GameLoop()
         {
             Console.CursorVisible = false;
 
             MapManager atlas = new MapManager();
             MenuManager menus = new MenuManager();
+
+            ResetWindowSize();
 
             MenuManager.MainMenu();
 
@@ -32,7 +35,10 @@ namespace TextBasedRPG_v2
                 ItemManager.Update();
                 WorldManager.Update();
                 turn++;
+                ResetWindowSize();
             }
+
+            MenuManager.GameOver();
         }
 
         public static int GetTurn()
@@ -50,5 +56,20 @@ namespace TextBasedRPG_v2
             gameOver = true;
         }
 
+        public static string GetWinState()
+        {
+            return winState;
+        }
+
+        public static void SetWinState(string input)
+        {
+            winState = input;
+        }
+
+        public static void ResetWindowSize()
+        {
+            char[,] data = MapManager.GetMap();
+            Console.SetWindowSize(data.GetLength(1) + 3, data.GetLength(0) + 2);
+        }
     }
 }

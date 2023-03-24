@@ -105,8 +105,8 @@ namespace TextBasedRPG_v2
             world[0, 2] = northeast_map;
             world[2, 2] = witchHut;
 
-            windowWidth = center_map.GetLength(1) + 3;
-            windowHeight = center_map.GetLength(0) + 2;
+            // windowWidth = center_map.GetLength(1) + 3;
+            // windowHeight = center_map.GetLength(0) + 2;
         }
 
         // take the file data and digest it into an array
@@ -140,7 +140,6 @@ namespace TextBasedRPG_v2
             {
                 Console.Clear();
                 char[,] map = world[worldY, worldX];
-                Console.SetWindowSize(map.GetLength(1) + 3, map.GetLength(0) + 2);
 
                 int mapHeight = map.GetLength(0);
                 int mapWidth = map.GetLength(1);
@@ -167,6 +166,7 @@ namespace TextBasedRPG_v2
 
                 Character player = GameManager.GetPlayer();
                 Character.Draw(player);
+                EnemyManager.Draw();
                 ItemManager.Draw();
                 WorldManager.Update();
                 HUD.Draw(player);
@@ -185,7 +185,7 @@ namespace TextBasedRPG_v2
 
             // northeast map, the graveyard
 
-            if (worldX == 2 && worldY == 0)
+            if ((worldX == 2 && worldY == 0)  || (worldX == 1 && worldY == 0))
             {
                 switch (tile)
                 {
@@ -230,6 +230,13 @@ namespace TextBasedRPG_v2
 
                     case '▒':
                         instance[0] = "Gray";
+                        instance[1] = "DarkYellow";
+                        break;
+
+                    case '▀':
+                    case '█':
+                    case '▄':
+                        instance[0] = "DarkGray";
                         instance[1] = "DarkYellow";
                         break;
                 }
@@ -321,9 +328,9 @@ namespace TextBasedRPG_v2
                 }
             }
 
-            // scheme for the center and north maps
+            // scheme for the center map
 
-            if ((worldX == 1 && worldY == 1) || (worldX == 1 && worldY == 0))
+            if (worldX == 1 && worldY == 1)
             {
                 switch (tile)
                 {

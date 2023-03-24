@@ -1,18 +1,5 @@
 ╔═══════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                       ║
-║   Your goal is to unlock the gate in the first area.                                  ║
-║                                                                                       ║
-║   Use WASD to move.                                                                   ║
-║                                                                                       ║
-║   Press escape from the map to reach the menu.                                        ║
-║                                                                                       ║
-║   Keep an eye out for:                                                                ║
-║                                                                                       ║
-║   ō Potions                                                                           ║
-║                                                                                       ║
-║   ° Coins                                                                             ║
-║                                                                                       ║
-║   ┼ Weapons                                                                           ║
 ║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║
@@ -22,6 +9,19 @@
 ║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║
+║                                                                                       ║
+║                                                                                       ║
+║              You must defeat the Skeleton King and save the land!                     ║
+║                                                                                       ║
+║              Unlock the great gate in the graveyard to reach his lair!                ║
+║                                                                                       ║
+║              The witch to the East will sell you the gate key for $100!               ║
+║                                                                                       ║
+║              Watch out for:                                                           ║
+║                                                                                       ║
+║              ° Coins               ö Potions                                          ║
+║                                                                                       ║
+║              ┼ Weapons                                                                ║
 ║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║

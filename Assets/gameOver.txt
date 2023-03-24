@@ -1,12 +1,12 @@
 ╔═══════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                       ║
-║   I'm afraid you are out of lives.                                                    ║
+║   I'm afraid you are out of lives, that means game over!                              ║
 ║                                                                                       ║
-║   That means Game over.                                                               ║
+║   Press escape to exit. Thanks for playing!                                           ║
 ║                                                                                       ║
-║   I will soon build a 'continue' option, but for now you must quit!                   ║
 ║                                                                                       ║
-║   Press any key to exit. Thanks for playing!                                          ║
+║                                                                                       ║
+║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║

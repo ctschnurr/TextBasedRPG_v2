@@ -14,6 +14,7 @@ namespace TextBasedRPG_v2
         private static Enemy enemyRef3;
                 
         private static List<Enemy> enemies = new List<Enemy>();
+        private static List<Boss> bosses = new List<Boss>();
         private static List<Enemy> deadEnemies = new List<Enemy>();
 
         private static List<Enemy> enemyReferences = new List<Enemy>();
@@ -27,35 +28,47 @@ namespace TextBasedRPG_v2
             int worldY = worldCoords[1];
 
             if (worldX == 2 && worldY == 0)
+            {
                 foreach (Enemy enemy in enemies)
                 {
                     Character.Draw(enemy);
                 }
+            }
+
+            else if (worldX == 2 && worldY == 0)
+            {
+                foreach (Boss boss in bosses)
+                {
+                    Character.Draw(boss);
+                }
+            }
+
         }
 
         public static void GenerateEnemy()
         {
             bool spawned = false;
-            string name = "baddie";
 
             int turn = GameManager.GetTurn();
             bool spawnTime = turn % 30 == 0;
 
             if (spawnTime)
             {
-                if (enemies.Count <= enemyMax)
+                for(int i = 0; i <= spawnGroupSize; i++)
                 {
-                    enemies.Add(new Enemy());
-                    int last = enemies.Count - 1;
-                    name = enemies[last].GetName();
-                    spawned = true;
+                    if (enemies.Count <= enemyMax)
+                    {
+                        enemies.Add(new Enemy());
+                        spawned = true;
+                    }
                 }
             }
 
             if (spawned)
             {
-                message = "A " + name + " has spawned!";
+                message = "Enemies have spawned!";
                 HUD.SetMessage(message);
+                Draw();
             }
 
         }
@@ -81,6 +94,19 @@ namespace TextBasedRPG_v2
 
                 GenerateEnemy();
                 CleanupEnemies();
+            }
+
+            if (worldX == 1 && worldY == 0)
+            {
+                if (bosses.Count == 0)
+                {
+                    bosses.Add(new Boss());
+                }
+
+                foreach (Boss boss in bosses)
+                {
+                    boss.Update();
+                }
             }
         }
 
@@ -137,6 +163,11 @@ namespace TextBasedRPG_v2
         public static List<Enemy> GetEnemies()
         {
             return enemies;
+        }
+
+        public static List<Boss> GetBosses()
+        {
+            return bosses;
         }
 
         public static void SetDeadEnemy(Enemy input)

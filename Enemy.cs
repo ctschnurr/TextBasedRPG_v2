@@ -50,7 +50,7 @@ namespace TextBasedRPG_v2
             stunned = false;
         }
         
-        public void Update()
+        public virtual void Update()
         {
             Character player = GameManager.GetPlayer();
 
@@ -146,7 +146,7 @@ namespace TextBasedRPG_v2
             }
         }
 
-        string Chase(Character player)
+        public string Chase(Character player)
         {
             string choice = "blank";
 

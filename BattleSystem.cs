@@ -62,13 +62,13 @@ namespace TextBasedRPG_v2
                     PlayerChoice(second, first);
                 }
 
-                if (battleOver == false && firstType == "npc")
+                if (battleOver == false && firstType != "player")
                 {
                     battleOver = Attack(first, second);
                     if (battleOver == true) loser = second;
                 }
 
-                if (battleOver == false && secondType == "npc")
+                if (battleOver == false && secondType != "player")
                 {
                     battleOver = Attack(second, first);
                     if (battleOver == true) loser = first;
@@ -86,10 +86,8 @@ namespace TextBasedRPG_v2
             
             // if the player successfully flees, it is caught here
 
-
-
-            if (flee == true && firstType == "npc") first.SetStunned(true);
-            if (flee == true && secondType == "npc") second.SetStunned(true);
+            if (flee == true && firstType != "player") first.SetStunned(true);
+            if (flee == true && secondType != "player") second.SetStunned(true);
 
             // if the battle ends without the player fleeing it is handled here
 
@@ -121,6 +119,7 @@ namespace TextBasedRPG_v2
 
                         loser.SetX(33);
                         loser.SetY(10);
+                        loser.SetWorld(2, 2);
                         MapManager.SetWorld(2, 2);
 
                         message = "\'I saved you! Please be careful!\'";
@@ -135,7 +134,8 @@ namespace TextBasedRPG_v2
 
                         Console.ReadKey(true);
 
-                        MenuManager.GameOver();
+                        GameManager.SetWinState("death");
+                        GameManager.SetGameOver();
                     }
                 }
 
@@ -169,6 +169,20 @@ namespace TextBasedRPG_v2
                     Console.ReadKey(true);
 
                     EnemyManager.SetRef(convert);
+                }
+
+                if (loserType == "boss")
+                {
+                    loserName = loser.GetName();
+
+                    Console.SetCursorPosition(4, next);
+                    Console.WriteLine("You have defeated the evil " + loserName + "!");
+                    next += 2;
+
+                    Console.ReadKey(true);
+
+                    GameManager.SetWinState("winner");
+                    GameManager.SetGameOver();
                 }
             }
 

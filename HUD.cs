@@ -20,7 +20,7 @@ namespace TextBasedRPG_v2
             string name = activeCharacter.GetName();
 
             if (activeType == "player") Console.SetCursorPosition(4, 40);
-            if (activeType == "npc") Console.SetCursorPosition(46, 40);
+            if (activeType != "player") Console.SetCursorPosition(46, 40);
 
             string hudHealth = health.ToString();
             Console.Write(name.PadRight(name.Length + 1) + ": Health: " + hudHealth.PadRight(5));

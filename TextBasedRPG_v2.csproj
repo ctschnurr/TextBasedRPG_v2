@@ -44,9 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BattleSystem.cs" />
+    <Compile Include="Boss.cs" />
     <Compile Include="Character.cs" />
     <Compile Include="Coin.cs" />
-    <Compile Include="CollisionManager.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyManager.cs" />
     <Compile Include="GameManager.cs" />
@@ -58,6 +58,7 @@
     <Compile Include="ItemManager.cs" />
     <Compile Include="MapManager.cs" />
     <Compile Include="MenuManager.cs" />
+    <Compile Include="NPC.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Potion.cs" />
     <Compile Include="Program.cs" />
@@ -70,6 +71,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\gameWin.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Assets\titleScreen.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static TextBasedRPG_v2.Settings;
 
 namespace TextBasedRPG_v2
 {
@@ -20,7 +21,7 @@ namespace TextBasedRPG_v2
             healthMax = 100;
             health = healthMax;
             lives = 3;
-            gold = 0;
+            gold = startingGold;
 
             x = 10;
             lastX = 10;
@@ -40,7 +41,6 @@ namespace TextBasedRPG_v2
         public void Update()
         {
             bool isWalkable;
-            char destination = ' ';
             char[,] map = MapManager.GetWorld();
             bool move = false;
             erase = false;
@@ -56,8 +56,6 @@ namespace TextBasedRPG_v2
 
                 case ConsoleKey.W:
                     isWalkable = CollisionCheck(y - 1, x);
-
-                    CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {
@@ -75,8 +73,6 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.S:
                     isWalkable = CollisionCheck(y + 1, x);
 
-                    CollisionManager.Triggers(destination);
-
                     if (isWalkable == true)
                     {
                         move = true;
@@ -93,8 +89,6 @@ namespace TextBasedRPG_v2
                 case ConsoleKey.A:
                     isWalkable = CollisionCheck(y, x - 1);
 
-                    CollisionManager.Triggers(destination);
-
                     if (isWalkable == true)
                     {
                         move = true;
@@ -110,8 +104,6 @@ namespace TextBasedRPG_v2
 
                 case ConsoleKey.D:
                     isWalkable = CollisionCheck(y, x + 1);
-
-                    CollisionManager.Triggers(destination);
 
                     if (isWalkable == true)
                     {

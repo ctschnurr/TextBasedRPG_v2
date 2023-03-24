@@ -1,10 +1,10 @@
 ╔═══════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                       ║
-║   Welcome to "Wrath of the Skeleton King!"                                            ║
+║   You've defeated the evil Skeleton King and saved the land!                          ║
 ║                                                                                       ║
-║   Please choose from the following options:                                           ║
+║   You are a true hero!                                                                ║
 ║                                                                                       ║
-║   (S)tart     (Q)uit                                                                  ║
+║   Press escape to exit. Thanks for playing!                                           ║
 ║                                                                                       ║
 ║                                                                                       ║
 ║                                                                                       ║

@@ -8,7 +8,7 @@ namespace TextBasedRPG_v2
 {
     internal class Potion : Item
     {
-        public Potion()
+        public Potion(int x, int y)
         {
             bool isWalkable = false;
             char tile = ' ';
@@ -17,8 +17,8 @@ namespace TextBasedRPG_v2
             color = ConsoleColor.Blue;
             icon = 'ö';
 
-            worldX = 1;
-            worldY = 1;
+            worldX = x;
+            worldY = y;
 
             Random rand = ItemManager.GetRandom();
 

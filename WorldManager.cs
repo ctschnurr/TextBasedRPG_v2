@@ -10,6 +10,8 @@ namespace TextBasedRPG_v2
     {
         private static List<Interactable> interactables = new List<Interactable>();
         private static List<Door> doors = new List<Door>();
+        private static List<Gate> gates = new List<Gate>();
+        private static List<NPC> npcs = new List<NPC>();
 
         public static void ConstructInteractables()
         {
@@ -40,6 +42,28 @@ namespace TextBasedRPG_v2
 
             doors.Add(witchDoorOut);
             interactables.Add(witchDoorOut);
+
+            Gate bossGate = new Gate();
+            bossGate.SetName("bossGate");
+            bossGate.SetIcon('|');
+            bossGate.SetWorldX(2);
+            bossGate.SetWorldY(0);
+            bossGate.SetX(2);
+            bossGate.SetY(18);
+
+            gates.Add(bossGate);
+            interactables.Add(bossGate);
+
+            NPC witch = new NPC();
+            witch.SetName("witch");
+            witch.SetWorldX(2);
+            witch.SetWorldY(2);
+            witch.SetX(43);
+            witch.SetY(10);
+            witch.SetMyGate(bossGate);
+
+            npcs.Add(witch);
+            interactables.Add(witch);
         }
 
         public static List<Interactable> GetInteractables()
@@ -50,6 +74,16 @@ namespace TextBasedRPG_v2
         public static List<Door> GetDoors()
         {
             return doors;
+        }
+
+        public static List<Gate> GetGates()
+        {
+            return gates;
+        }
+
+        public static List<NPC> GetNPCs()
+        {
+            return npcs;
         }
 
         public static void Update()

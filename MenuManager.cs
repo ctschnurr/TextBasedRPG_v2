@@ -20,6 +20,7 @@ namespace TextBasedRPG_v2
         private char[,] instructions;
         private char[,] pauseMenu;
         private char[,] gameOver;
+        private char[,] gameWin;
 
         private char[,] data;
 
@@ -30,6 +31,7 @@ namespace TextBasedRPG_v2
             instructions,
             pauseMenu,
             gameOver,
+            gameWin,
         }
 
         private static Menu menu;
@@ -74,6 +76,12 @@ namespace TextBasedRPG_v2
             mapName = "gameOver";
             gameOver = MapManager.MapEater(mapData, mapheight, mapwidth, mapName);
 
+            mapData = System.IO.File.ReadAllLines("./Assets/gameWin.txt");
+            mapwidth = mapData[0].Length;
+            mapheight = mapData.Count();
+            mapName = "gameWin";
+            gameWin = MapManager.MapEater(mapData, mapheight, mapwidth, mapName);
+
             menuList = new List<char[,]>();
 
             menuList.Add(titleScreen);
@@ -81,6 +89,7 @@ namespace TextBasedRPG_v2
             menuList.Add(instructions);
             menuList.Add(pauseMenu);
             menuList.Add(gameOver);
+            menuList.Add(gameWin);
 
             data = titleScreen;
 
@@ -99,7 +108,7 @@ namespace TextBasedRPG_v2
                     menu = Menu.instructions;
                     Draw();
 
-                    Console.SetCursorPosition(6, 17);
+                    Console.SetCursorPosition(17, 28);
                     Console.Write("Before we begin, please enter your name: ");
                     string name = Console.ReadLine();
                     player.SetName(name);
@@ -208,12 +217,35 @@ namespace TextBasedRPG_v2
         // this displays the Game Over screen when lives reach 0, and sets the gameOver trigger
         public static void GameOver()
         {
-            menu = Menu.gameOver;
-            Draw();
+            bool proceed = false;
+            while (!proceed)
+            {
+                string winState = GameManager.GetWinState();
 
-            Console.ReadKey(true);
+                if (winState == "quit")
+                {
+                    proceed = true;
+                }
 
-            GameManager.SetGameOver();          
+                else
+                {
+                    if (winState == "death")
+                    {
+                        menu = Menu.gameOver;
+                        Draw();
+                    }
+
+                    else if (winState == "winner")
+                    {
+                        menu = Menu.gameWin;
+                        Draw();
+                    }
+
+                    ConsoleKeyInfo choice = Console.ReadKey(true);
+
+                    if (choice.Key == ConsoleKey.Escape) proceed = true;
+                }
+            }                  
         }
 
         public static void SetTaskMessage(string message)
@@ -227,7 +259,6 @@ namespace TextBasedRPG_v2
             char[,] data = menuList[reference];
 
             Console.Clear();
-            Console.SetWindowSize(data.GetLength(1) + 3, data.GetLength(0) + 2);
             int mapHeight = data.GetLength(0);
             int mapWidth = data.GetLength(1);
 

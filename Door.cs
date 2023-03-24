@@ -13,6 +13,9 @@ namespace TextBasedRPG_v2
         protected int destinationLocalX = 0;
         protected int destinationLocalY = 0;
 
+        protected bool isLocked;
+        protected bool playerHasKey;
+
         public Door()
         {
             type = "door";
@@ -65,11 +68,10 @@ namespace TextBasedRPG_v2
             destinationLocalY = y;
         }
 
-        public override void Interact(Interactable input)
+        public static void UseDoor(Interactable input)
         {
-            Player player = GameManager.GetPlayer();
-
             List<Door> doors = WorldManager.GetDoors();
+            Door reference = null;
             int destinationWorldX = 1;
             int destinationWorldY = 1;
             int destinationLocalX = 1;
@@ -83,8 +85,17 @@ namespace TextBasedRPG_v2
                     destinationWorldY = door.GetDestinationWorldY();
                     destinationLocalX = door.GetDestinationLocalX();
                     destinationLocalY = door.GetDestinationLocalY();
+                    reference = door;
+
                 }
             }
+
+            reference.RunDoor(destinationWorldX, destinationWorldY, destinationLocalX, destinationLocalY);
+        }
+
+        public virtual void RunDoor(int WX, int WY, int LX, int LY)
+        {
+            Player player = GameManager.GetPlayer();
 
             player.SetWorldX(destinationWorldX);
             player.SetWorldY(destinationWorldY);
@@ -92,7 +103,6 @@ namespace TextBasedRPG_v2
             player.SetY(destinationLocalY);
             MapManager.SetWorld(destinationWorldX, destinationWorldY);
             MapManager.SetRedraw(true);
-            
         }
     }
 }

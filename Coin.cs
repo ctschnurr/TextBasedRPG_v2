@@ -8,7 +8,7 @@ namespace TextBasedRPG_v2
 {
     internal class Coin : Item
     {
-        public Coin()
+        public Coin(int x, int y)
         {
             bool isWalkable = false;
             char tile = ' ';
@@ -17,14 +17,14 @@ namespace TextBasedRPG_v2
             color = ConsoleColor.Yellow;
             icon = '°';
 
-            worldX = 1;
-            worldY = 1;
+            worldX = x;
+            worldY = y;
 
             Random rand = ItemManager.GetRandom();
 
             while (isWalkable == false)
             {
-                localX = rand.Next(50, 70);
+                localX = rand.Next(10, 80);
                 localY = rand.Next(10, 30);
 
                 tile = MapManager.GetTile(localY, localX);

@@ -6,56 +6,71 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
-    internal class Gate : Door
+    internal class Gate : Interactable
     {
-        bool isLocked = true;
+        bool isLocked;
+        bool playerHasKey;
 
         public Gate()
         {
-            type = "door";
+
+            type = "gate";
             worldX = 0;
             worldY = 0;
             localX = 0;
             localY = 0;
 
-            icon = '▀';
-            color = ConsoleColor.Gray;
+            icon = '-';
+            color = ConsoleColor.DarkGray;
 
-            destinationWorldX = 0;
-            destinationWorldY = 0;
-            destinationLocalX = 0;
-            destinationLocalY = 0;
-
+            isLocked = true;
+            playerHasKey = false;
         }
 
-        public override void Interact(Interactable input)
+        public void SetIcon(char input)
         {
-            Player player = GameManager.GetPlayer();
+            icon = input;
+        }
+        public bool CheckHasKey()
+        {
+            return playerHasKey;
+        }
 
-            List<Door> doors = WorldManager.GetDoors();
-            int destinationWorldX = 1;
-            int destinationWorldY = 1;
-            int destinationLocalX = 1;
-            int destinationLocalY = 1;
+        public void SetHasKey(bool input)
+        {
+            playerHasKey = input;
+        }
 
-            foreach (Door door in doors)
+        public static void UseGate(Interactable input)
+        {
+            List<Gate> gates = WorldManager.GetGates();
+            Gate reference = null;
+            foreach (Gate gate in gates)
             {
-                if (door == input)
+                if (gate == input)
                 {
-                    destinationWorldX = door.GetDestinationWorldX();
-                    destinationWorldY = door.GetDestinationWorldY();
-                    destinationLocalX = door.GetDestinationLocalX();
-                    destinationLocalY = door.GetDestinationLocalY();
+                    reference = gate;
+
                 }
             }
 
-            player.SetWorldX(destinationWorldX);
-            player.SetWorldY(destinationWorldY);
-            player.SetX(destinationLocalX);
-            player.SetY(destinationLocalY);
-            MapManager.SetWorld(destinationWorldX, destinationWorldY);
-            MapManager.SetRedraw(true);
+            string message = " ";
+            Player player = GameManager.GetPlayer();
 
+            if (reference.isLocked && !reference.playerHasKey)
+            {
+                message = "The gate is locked!";
+                HUD.SetMessage(message);
+                player.StepBack();
+            }
+
+            if (reference.isLocked && reference.playerHasKey)
+            {
+                message = "You unlocked the gate!";
+                HUD.SetMessage(message);
+                player.StepBack();
+                reference.isLocked = false;
+            }
         }
     }
 }

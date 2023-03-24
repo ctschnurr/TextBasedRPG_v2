@@ -49,6 +49,7 @@ namespace TextBasedRPG_v2
 
         public static void Draw(Character subject)
         {
+            GameManager.ResetWindowSize();
             char[,] map = MapManager.GetMap();
             char tile;
             string[] colorDat;
@@ -102,6 +103,12 @@ namespace TextBasedRPG_v2
         public int GetWorldY()
         {
             return worldY;
+        }
+
+        public void SetWorld(int x, int y)
+        {
+            worldX = x;
+            worldY = y;
         }
         public void AddHealth(int add)
         {
@@ -187,6 +194,7 @@ namespace TextBasedRPG_v2
             string instigatorType = instigator.GetCharType();
 
             List<Enemy> enemies = EnemyManager.GetEnemies();
+            List<Boss> bosses = EnemyManager.GetBosses();
 
             if (instigator == player)
             {
@@ -203,9 +211,28 @@ namespace TextBasedRPG_v2
                         BattleSystem.Battle(instigator, enemy);
                     }
                 }
+
+                foreach (Boss boss in bosses)
+                {
+                    int bossX = boss.GetX();
+                    int bossY = boss.GetY();
+                        
+                    int bossWX = boss.GetWorldX();
+                    int bossWY = boss.GetWorldY();
+
+                    if (bossX == instigatorX && bossY == instigatorY && bossWX == instigatorWX && bossWY == instigatorWY)
+                    {
+                        BattleSystem.Battle(instigator, boss);
+                    }
+                }
             }
 
             if (instigatorType == "npc")
+            {
+                if (instigatorX == playerX && instigatorY == playerY) BattleSystem.Battle(instigator, player);
+            }
+
+            if (instigatorType == "boss")
             {
                 if (instigatorX == playerX && instigatorY == playerY) BattleSystem.Battle(instigator, player);
             }

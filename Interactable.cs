@@ -16,6 +16,7 @@ namespace TextBasedRPG_v2
 
         protected ConsoleColor color;
         protected char icon;
+        protected string name;
         public static void Draw(Interactable subject)
         {
             char[,] map = MapManager.GetMap();
@@ -78,40 +79,34 @@ namespace TextBasedRPG_v2
             return type;
         }
 
-        public virtual void Interact(Interactable input)
+        public void SetName(string inputName)
         {
-            // Player player = GameManager.GetPlayer();
-            // string inputType = input.GetType();
-            // switch (inputType)
-            // {
-            //     case "door":
-            //         List<Door> doors = WorldManager.GetDoors();
-            //         int destinationWorldX = 1;
-            //         int destinationWorldY = 1;
-            //         int destinationLocalX = 1;
-            //         int destinationLocalY = 1;
-            // 
-            //         foreach (Door door in doors)
-            //         {
-            //             if (door == input)
-            //             {
-            //                 destinationWorldX = door.GetDestinationWorldX();
-            //                 destinationWorldY = door.GetDestinationWorldY();
-            //                 destinationLocalX = door.GetDestinationLocalX();
-            //                 destinationLocalY = door.GetDestinationLocalY();
-            //             }
-            //         }
-            // 
-            //         player.SetWorldX(destinationWorldX);
-            //         player.SetWorldY(destinationWorldY);
-            //         player.SetX(destinationLocalX);
-            //         player.SetY(destinationLocalY);
-            //         MapManager.SetWorld(destinationWorldX, destinationWorldY);
-            //         MapManager.SetRedraw(true);
-            //         break;
-            // 
-            //     // case "gate":
-            // }
+            name = inputName;
+        }
+
+        public string GetName()
+        {
+            return name;
+        }
+
+        public void Interact(Interactable input)
+        {
+            string inputType = input.GetType();
+
+            switch (inputType)
+            {
+                case "door":
+                    Door.UseDoor(input);
+                    return;
+
+                case "gate":
+                    Gate.UseGate(input);
+                    return;
+
+                case "npc":
+                    NPC.TalkTo(input);
+                    return;
+            }
         }
     }
 }
