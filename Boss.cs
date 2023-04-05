@@ -29,6 +29,7 @@ namespace TextBasedRPG_v2
             worldY = 0;
         }
 
+        // Boss gets a modified version of Update from the Enemy class, as he only ever chases
         public override void Update()
         {
             Character player = GameManager.GetPlayer();

@@ -191,7 +191,7 @@ namespace TextBasedRPG_v2
                         Draw();
 
                         Console.SetCursorPosition(6, 4);
-                        Console.Write("Really quit? Save is not yet implimented.");
+                        Console.Write("Really quit?");
 
                         Console.SetCursorPosition(4, 40);
                         Console.Write("(C)ontinue                    (Q)uit");
