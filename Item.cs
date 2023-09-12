@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
+    // Item class, parent class for all items
     internal class Item
     {
         protected string name;

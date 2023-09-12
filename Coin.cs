@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
+    // Coin class, inherits from Item
     internal class Coin : Item
     {
         public Coin(int x, int y)

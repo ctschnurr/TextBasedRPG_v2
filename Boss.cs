@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace TextBasedRPG_v2
 {
+
+    // Boss class, inherits from Enemy
     internal class Boss : Enemy
     {
         public Boss()
