@@ -123,6 +123,25 @@ namespace TextBasedRPG_v2
             foreach (Enemy enemy in deadEnemies)
             {
                 enemies.Remove(enemy);
+                // Check if there is an active quest.
+                if (QuestManager.HasActiveQuest())
+                {
+                    Quest activeQuest = QuestManager.GetActiveQuest();
+
+                    // Check if this enemy's name matches the active quest's target.
+                    if (activeQuest.GetName() == enemy.GetName())
+                    {
+                        // This enemy fulfills the active quest's target.
+                        // Update quest progress and check if the quest is completed.
+                        activeQuest.UpdateProgress(1);
+
+                        // Check if the quest is completed and announce it.
+                        if (QuestManager.CheckQuest())
+                        {
+                            // QuestManager.CheckQuest() will handle announcements.
+                        }
+                    }
+                }
             }
 
             deadEnemies.Clear();

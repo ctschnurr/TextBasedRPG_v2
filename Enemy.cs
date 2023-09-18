@@ -24,7 +24,6 @@ namespace TextBasedRPG_v2
         }
 
         protected Behavior behavior;
-
         public Enemy()
         {
             int roll = rand.Next(0, 3);

@@ -39,9 +39,18 @@ namespace TextBasedRPG_v2
         // This will select a random quest from the list of available quests and set it as the active quest.
         public static void SelectQuest()
         {
-            int randomQuest = Random.Next(0, availableQuests.Count);
-            activeQuest = availableQuests[randomQuest];
-            SetMessage("You have selected a new quest: Kill " + activeQuest.GetTargetCount() + " " + activeQuest.GetName() + "s");
+            // if statement to check if there are any quests left to give out.
+            if (availableQuests.Count > 0)
+            {
+                int randomQuest = Random.Next(0, availableQuests.Count);
+                activeQuest = availableQuests[randomQuest];
+                SetMessage("You have selected a new quest: Kill " + activeQuest.GetTargetCount() + " " + activeQuest.GetName() + "s");
+            }
+            else
+            {
+                // Handle the case where there are no available quests.
+                SetMessage("No available quests.");
+            }
         }
 
         // This will remove the active quest from the list of available quests.
@@ -80,7 +89,7 @@ namespace TextBasedRPG_v2
         {
             if (activeQuest.GetTargetCount() >= activeQuest.GetTarget())
             {
-                SetMessage("You have completed the quest: Kill " + activeQuest.GetTarget() + " " + activeQuest.GetName() + "s killed. You have been rewarded " + activeQuest.GetReward() + " coins.");
+                SetMessage("Task Complete! You have been rewarded " + activeQuest.GetReward() + " coins.");
                 CompleteQuest();
                 SelectQuest();
                 return true;
@@ -90,7 +99,17 @@ namespace TextBasedRPG_v2
                 return false;
             }
         }
-        
+        public static bool HasActiveQuest()
+        {
+            return activeQuest != null;
+        }
+
+        public static Quest GetActiveQuest()
+        {
+            return activeQuest;
+        }
+
+
         // This will generate a random list of five quests. Each quest will have a target enemy chosen from the list of enemies, a target count, and a random reward in the form of coins.
         // This will be called from the main game loop.
         public static void GenerateQuests()
