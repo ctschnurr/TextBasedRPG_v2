@@ -39,8 +39,7 @@ namespace TextBasedRPG_v2
         // This will select a random quest from the list of available quests and set it as the active quest.
         public static void SelectQuest()
         {
-            Random random = new Random();
-            int randomQuest = random.Next(0, availableQuests.Count);
+            int randomQuest = Random.Next(0, availableQuests.Count);
             activeQuest = availableQuests[randomQuest];
             SetMessage("You have selected a new quest: Kill " + activeQuest.GetTargetCount() + " " + activeQuest.GetName() + "s");
         }
@@ -60,13 +59,28 @@ namespace TextBasedRPG_v2
                 SetMessage("No active quest to complete.");
             }
         }
+
+        public static string CurrentQuest()
+        {
+            if (activeQuest != null)
+            {
+                string questInfo = string.Format("Kill {1} {0}s, to receive {2} gold.",
+                    activeQuest.GetName(), activeQuest.GetTarget(), activeQuest.GetReward());
+
+                return questInfo;
+            }
+            else
+            {
+                return "No active quest.";
+            }
+        }
         
         // This will check if the active quest has been completed.
         public static bool CheckQuest()
         {
             if (activeQuest.GetTargetCount() >= activeQuest.GetTarget())
             {
-                SetMessage("You have completed the quest: Kill " + activeQuest.GetTargetCount() + " " + activeQuest.GetName() + "s killed. You have been rewarded " + activeQuest.GetReward() + " coins.");
+                SetMessage("You have completed the quest: Kill " + activeQuest.GetTarget() + " " + activeQuest.GetName() + "s killed. You have been rewarded " + activeQuest.GetReward() + " coins.");
                 CompleteQuest();
                 SelectQuest();
                 return true;
@@ -83,11 +97,10 @@ namespace TextBasedRPG_v2
         {
             for (int i = 0; i < 5; i++)
             {
-                Random random = new Random();
-                int randomEnemy = random.Next(0, EnemyManager.GetRef().Count);
-                int randomTarget = random.Next(1, 10);
-                int randomReward = random.Next(randomTarget, randomTarget * 10);
-                Quest quest = new Quest(EnemyManager.GetRef()[randomEnemy], randomTarget, randomReward);
+                int randomEnemy = Random.Next(0, EnemyManager.GetEnemies().Count);
+                int randomTarget = Random.Next(1, 10);
+                int randomReward = Random.Next(randomTarget, randomTarget * 10);
+                Quest quest = new Quest(EnemyManager.GetEnemies()[randomEnemy].GetName(), randomTarget, randomReward);
                 availableQuests.Add(quest);
             }
         }

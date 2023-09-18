@@ -41,6 +41,7 @@ namespace TextBasedRPG_v2
         private static List<Enemy> enemyReferences = null;
 
         private static string taskMessage = "Explore!";
+        private static string questMessage = null;
 
         public MenuManager()
         {
@@ -130,6 +131,7 @@ namespace TextBasedRPG_v2
             int health = player.GetHealth();
             int healthMax = player.GetHealthMax();
             string name;
+            questMessage = QuestManager.CurrentQuest();
 
             bool go = false;
             while (go == false)
@@ -152,7 +154,7 @@ namespace TextBasedRPG_v2
                 Console.Write(gold);
 
                 Console.SetCursorPosition(12, 9);
-                Console.Write(taskMessage);
+                Console.Write(questMessage);
 
                 enemyReferences = EnemyManager.GetRef();
 

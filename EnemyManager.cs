@@ -162,7 +162,7 @@ namespace TextBasedRPG_v2
 
             }
         }
-
+        // Enemy references are used in the pause menu to track the last three defeated enemies
         public static List<Enemy> GetRef()
         {
             return enemyReferences;
