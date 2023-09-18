@@ -21,7 +21,7 @@ namespace TextBasedRPG_v2
 
         private static string message = null;
 
-        private bool firstSpawn = false;
+        private static bool firstSpawn = false;
 
         public static void Draw()
         {

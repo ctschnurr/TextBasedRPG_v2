@@ -10,10 +10,26 @@ namespace TextBasedRPG_v2
     // This class will be used to manage quests, and will be called from the main game loop.
     internal class QuestManager
     {
+        private static QuestManager instance;
         // This is the list of all possible quests.
         private static List<Quest> availableQuests = new List<Quest>();
         // This is the currently active quest.
         private static Quest activeQuest = null;
+        private static Random Random = new Random();
+
+        public static QuestManager Instance
+        { get {
+                if (instance == null)
+                {
+                    instance = new QuestManager();
+                }
+                return instance; 
+            } 
+        }
+        public QuestManager()
+        {
+            availableQuests = new List<Quest>();
+        }
         
         // This will send a message to the HUD.
         private static void SetMessage(string message)
@@ -32,10 +48,17 @@ namespace TextBasedRPG_v2
         // This will remove the active quest from the list of available quests.
         public static void CompleteQuest()
         {
-            // reward player
-            Player.AddCoins(activeQuest.GetReward());
-            availableQuests.Remove(activeQuest);
-            activeQuest = null;
+            if (activeQuest != null)
+            {
+                // reward player
+                Player.AddGold(activeQuest.GetReward());
+                availableQuests.Remove(activeQuest);
+                activeQuest = null;
+            }
+            else
+            {
+                SetMessage("No active quest to complete.");
+            }
         }
         
         // This will check if the active quest has been completed.
@@ -61,10 +84,10 @@ namespace TextBasedRPG_v2
             for (int i = 0; i < 5; i++)
             {
                 Random random = new Random();
-                int randomEnemy = random.Next(0, EnemyManager.GetEnemyReferences().Count);
+                int randomEnemy = random.Next(0, EnemyManager.GetRef().Count);
                 int randomTarget = random.Next(1, 10);
                 int randomReward = random.Next(randomTarget, randomTarget * 10);
-                Quest quest = new Quest(EnemyManager.GetEnemyReferences()[randomEnemy], randomTarget, randomReward);
+                Quest quest = new Quest(EnemyManager.GetRef()[randomEnemy], randomTarget, randomReward);
                 availableQuests.Add(quest);
             }
         }
