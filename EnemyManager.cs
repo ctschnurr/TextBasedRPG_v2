@@ -21,6 +21,8 @@ namespace TextBasedRPG_v2
 
         private static string message = null;
 
+        private bool firstSpawn = false;
+
         public static void Draw()
         {
             int[] worldCoords = MapManager.GetWorldCoords();
@@ -60,6 +62,12 @@ namespace TextBasedRPG_v2
                     {
                         enemies.Add(new Enemy());
                         spawned = true;
+                        if (firstSpawn == false)
+                        {
+                            QuestManager.GenerateQuests();
+                            QuestManager.SelectQuest();
+                            firstSpawn = true;
+                        }
                     }
                 }
             }
