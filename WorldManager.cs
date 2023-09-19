@@ -64,6 +64,18 @@ namespace TextBasedRPG_v2
 
             npcs.Add(witch);
             interactables.Add(witch);
+
+            // Adding a shopkeeper NPC
+            NPC shopkeep = new NPC();
+            shopkeep.SetName("shopkeep");
+            shopkeep.SetWorldX(2);
+            shopkeep.SetWorldY(2);
+            shopkeep.SetX(41);
+            shopkeep.SetY(13);
+            shopkeep.SetMyGate(null);
+
+            npcs.Add(shopkeep); 
+            interactables.Add(shopkeep);
         }
 
         public static List<Interactable> GetInteractables()

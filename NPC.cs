@@ -46,34 +46,56 @@ namespace TextBasedRPG_v2
                     reference = npc;
                 }
             }
-
-            bool hasKey = reference.myGate.CheckHasKey();
-            int gold = player.GetGold();
-
-            if (hasKey == false)
+            // checks if the reference is null
+            if (reference.GetName() == "witch")
             {
-                if (gold < 100)
+                bool hasKey = reference.myGate.CheckHasKey();
+                int gold = player.GetGold();
+
+                if (hasKey == false)
                 {
-                    reference.message = "\'I'll trade 100 gold for the key!\'";
+                    if (gold < 100)
+                    {
+                        reference.message = "\'I'll trade 100 gold for the key!\'";
+                        HUD.SetMessage(reference.message);
+                    }
+
+                    if (gold >= 100)
+                    {
+                        reference.message = "\'Here is your key!\'";
+                        HUD.SetMessage(reference.message);
+                        reference.myGate.SetHasKey(true);
+                        Player.AddGold(-100);
+                    }
+                }
+
+                else if (hasKey)
+                {
+                    reference.message = "\'You have your key! Now begone!\'";
                     HUD.SetMessage(reference.message);
                 }
 
-                if (gold >= 100)
-                {
-                    reference.message = "\'Here is your key!\'";
-                    HUD.SetMessage(reference.message);
-                    reference.myGate.SetHasKey(true);
-                    Player.AddGold(-100);
-                }
+                player.StepBack();                
             }
-
-            else if (hasKey)
+            else
             {
-                reference.message = "\'You have your key! Now begone!\'";
-                HUD.SetMessage(reference.message);
-            }
+                int gold = player.GetGold();
+                
+                if (gold < 20)
+                {
+                    reference.message = "\'20 gold for a potion of power!\'";
+                    HUD.SetMessage(reference.message);
+                }
 
-            player.StepBack();
+                if (gold >= 20)
+                {
+                    reference.message = "\'Here is your potion!\'";
+                    HUD.SetMessage(reference.message);
+                    Player.AddGold(-20);
+                    Player.AddStrength(1);
+                }
+                player.StepBack();
+            }
         }
     }
 }
