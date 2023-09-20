@@ -130,6 +130,7 @@ namespace TextBasedRPG_v2
             int gold = player.GetGold();
             int health = player.GetHealth();
             int healthMax = player.GetHealthMax();
+            int playerStrength = player.GetStrength();
             string name;
             questMessage = QuestManager.CurrentQuest();
 
@@ -146,6 +147,9 @@ namespace TextBasedRPG_v2
 
                 Console.SetCursorPosition(42, 5);
                 Console.Write(health + "/" + healthMax);
+
+                Console.SetCursorPosition(52, 5);
+                Console.Write("Strength: " + playerStrength);
 
                 Console.SetCursorPosition(13, 7);
                 Console.Write(lives);

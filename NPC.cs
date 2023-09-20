@@ -92,7 +92,7 @@ namespace TextBasedRPG_v2
                     reference.message = "\'Here is your potion!\'";
                     HUD.SetMessage(reference.message);
                     Player.AddGold(-20);
-                    Player.AddStrength(1);
+                    GameManager.GetPlayer().AddStrength(1);
                 }
                 player.StepBack();
             }
