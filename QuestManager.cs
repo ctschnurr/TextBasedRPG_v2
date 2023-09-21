@@ -44,7 +44,7 @@ namespace TextBasedRPG_v2
             {
                 int randomQuest = Random.Next(0, availableQuests.Count);
                 activeQuest = availableQuests[randomQuest];
-                SetMessage("You have selected a new quest: Kill " + activeQuest.GetTargetCount() + " " + activeQuest.GetName() + "s");
+                SetMessage("You have selected a new quest: Kill " + activeQuest.GetTarget() + " " + activeQuest.GetName() + "s");
             }
             else
             {
