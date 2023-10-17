@@ -15,8 +15,8 @@ namespace TextBasedRPG_v2
                 
         private static List<Enemy> enemies = new List<Enemy>();
         private static List<Boss> bosses = new List<Boss>();
-        private static List<Enemy> deadEnemies = new List<Enemy>();
 
+        private static List<Enemy> deadEnemies = new List<Enemy>();
         private static List<Enemy> enemyReferences = new List<Enemy>();
 
         private static string message = null;
@@ -56,9 +56,9 @@ namespace TextBasedRPG_v2
 
             if (spawnTime)
             {
-                for(int i = 0; i <= spawnGroupSize; i++)
+                for(int i = 0; i <= GameManager.settings.SpawnGroupSize; i++)
                 {
-                    if (enemies.Count <= enemyMax)
+                    if (enemies.Count <= GameManager.settings.EnemyMax)
                     {
                         enemies.Add(new Enemy());
                         spawned = true;

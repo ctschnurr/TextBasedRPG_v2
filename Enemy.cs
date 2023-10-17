@@ -3,19 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static TextBasedRPG_v2.Settings;
 
 namespace TextBasedRPG_v2
 {
     internal class Enemy : Character
     {
         static Random rand = new Random();
-
-        protected string[,] enemyTemplate = new string[,]
-        {
-            {"Zombie","10","0", "Green", "bites" },
-            {"Skeleton","15","1", "Gray", "smacks"},
-            {"Monster","20","3", "Red", "scratches" },
-        };
 
         protected enum Behavior
         {
@@ -26,17 +20,17 @@ namespace TextBasedRPG_v2
         protected Behavior behavior;
         public Enemy()
         {
-            int roll = rand.Next(0, 3);
+            int roll = rand.Next(0, GameManager.settings.EnemyTemplate.Length);
 
-            name = enemyTemplate[roll, 0];
-            health = Int32.Parse(enemyTemplate[roll, 1]);
-            strength = Int32.Parse(enemyTemplate[roll, 2]);
-            color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), enemyTemplate[roll, 3]);
-            power = enemyTemplate[roll, 4]; 
+            name = GameManager.settings.EnemyTemplate[roll][0];
+            health = Int32.Parse(GameManager.settings.EnemyTemplate[roll][1]);
+            strength = Int32.Parse(GameManager.settings.EnemyTemplate[roll][2]);
+            color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), GameManager.settings.EnemyTemplate[roll][3]);
+            power = GameManager.settings.EnemyTemplate[roll][4]; 
 
             behavior = (Behavior)rand.Next(0, 2);
 
-            character = (char)2;
+            character = GameManager.settings.EnemyTemplate[roll][5];
             type = "npc";
             healthMax = health;
 

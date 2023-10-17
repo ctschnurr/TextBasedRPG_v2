@@ -15,18 +15,19 @@ namespace TextBasedRPG_v2
 
         public Player()
         {
-            character = (char)2;
             name = "Player";
-            power = "punches";
-            healthMax = 100;
-            health = healthMax;
-            lives = 3;
-            gold = startingGold;
 
-            x = 10;
-            lastX = 10;
-            y = 10;
-            lastY = 10;
+            character = GameManager.settings.PlayerIcon;
+            power = GameManager.settings.PlayerAttack;
+            healthMax = GameManager.settings.PlayerHealth;
+            health = healthMax;
+            lives = GameManager.settings.PlayerLives;
+            gold = GameManager.settings.StartingGold;
+
+            x = GameManager.settings.StartingX;
+            lastX = x;
+            y = GameManager.settings.StartingY;
+            lastY = y;
 
             worldX = 1;
             worldY = 1;
@@ -34,7 +35,7 @@ namespace TextBasedRPG_v2
             spawn[0] = 5;
             spawn[1] = 5;
             type = "player";
-            color = ConsoleColor.White;
+            color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), GameManager.settings.PlayerColor);
             hasKey = false;
 
         }

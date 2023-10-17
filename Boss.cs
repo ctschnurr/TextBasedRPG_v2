@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static TextBasedRPG_v2.Settings;
 
 namespace TextBasedRPG_v2
 {
@@ -15,12 +16,12 @@ namespace TextBasedRPG_v2
             name = "Skeleton King";
             health = 80;
             strength = 5;
-            color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), enemyTemplate[1, 3]);
-            power = enemyTemplate[1, 4];
+            color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), GameManager.settings.EnemyTemplate[1][3]);
+            power = GameManager.settings.EnemyTemplate[1][4];
 
             behavior = Behavior.chase;
 
-            character = (char)2;
+            character = "☻";
             type = "boss";
             healthMax = health;
 

@@ -18,7 +18,7 @@ namespace TextBasedRPG_v2
         protected string type;
         protected int[] spawn = new int[] { 0, 0 };
         protected ConsoleColor color;
-        protected char character;
+        protected string character;
 
         protected int x;
         protected int y;

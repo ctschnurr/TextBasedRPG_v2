@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static TextBasedRPG_v2.Settings;
 
 namespace TextBasedRPG_v2
 {
@@ -57,25 +56,25 @@ namespace TextBasedRPG_v2
         public static void InitItems()
         {
             // random coins on maps
-            for(int n = 0; n <= coinCap; n++)
+            for(int n = 0; n <= GameManager.settings.CoinCap; n++)
             {
                 items.Add(new Coin(1, 1));
             }
-            for (int n = 0; n <= coinCap; n++)
+            for (int n = 0; n <= GameManager.settings.CoinCap; n++)
             {
                 items.Add(new Coin(2, 0));
             }
-            for (int n = 0; n <= coinCap; n++)
+            for (int n = 0; n <= GameManager.settings.CoinCap; n++)
             {
                 items.Add(new Coin(2, 1));
             }
 
             //randomly placed potions
-            for (int n = 1; n <= potionCap; n++)
+            for (int n = 1; n <= GameManager.settings.PotionCap; n++)
             {
                 items.Add(new Potion(1, 0));
             }
-            for (int n = 1; n <= potionCap; n++)
+            for (int n = 1; n <= GameManager.settings.PotionCap; n++)
             {
                 items.Add(new Potion(2, 0));
             }
