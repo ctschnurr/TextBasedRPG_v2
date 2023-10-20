@@ -13,15 +13,15 @@ namespace TextBasedRPG_v2
     {
         public Boss()
         {
-            name = "Skeleton King";
-            health = 80;
-            strength = 5;
-            color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), GameManager.settings.EnemyTemplate[1][3]);
-            power = GameManager.settings.EnemyTemplate[1][4];
+            name = GameManager.settings.BossTemplate[0];
+            health = Int32.Parse(GameManager.settings.BossTemplate[1]);
+            strength = Int32.Parse(GameManager.settings.BossTemplate[2]);
+            color = (ConsoleColor)Enum.Parse(typeof(ConsoleColor), GameManager.settings.BossTemplate[3]);
+            power = GameManager.settings.BossTemplate[4];
 
             behavior = Behavior.chase;
 
-            character = "☻";
+            character = GameManager.settings.BossTemplate[5];
             type = "boss";
             healthMax = health;
 
